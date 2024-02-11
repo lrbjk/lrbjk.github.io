@@ -331,11 +331,11 @@
       </p>
       <p class="main-left--subtitle">
         <span>最近动态：</span>
-        <span>今天</span>
+        <span>3天前</span>
       </p>
       <p class="main-left--subtitle">
         <span>上线时间：</span>
-        <span>723天</span>
+        <span>726天</span>
       </p>
       <p class="main-left--subtitle">
         <span>当前版本：</span>
@@ -352,6 +352,34 @@
 
 
 <div class="log">
+  
+    <div class="log-item">
+      <h2 class="log-title">
+        <span>2024-02-11 17:37:49</span>
+        <span>星期天</span>
+      </h2>
+      <h1 class="log-main-title"><a href="/./log/Java-1.html">Java数据类型转换的细节</a></h1>
+      <div class="log-wrapper more" style="max-height: 1000px;">
+        <article class="article-content"><p>在Java中，有多种类型的数据混合运算时，系统首先自动将所有数据转换成容量最大的那种数据类型，然后再计算</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">n1</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line"><span class="type">float</span> <span class="variable">d1</span> <span class="operator">=</span> n1 + <span class="number">1.1</span>;<span class="comment">//错误，n1 + 1.1 =&gt; 结果是double</span></span><br><span class="line"><span class="type">double</span> <span class="variable">d1</span> <span class="operator">=</span> n1 + <span class="number">1.1</span>;<span class="comment">//对</span></span><br><span class="line"><span class="type">float</span> <span class="variable">d1</span> <span class="operator">=</span> n1 + <span class="number">1.1f</span>;<span class="comment">//对，将 1.1 double转float</span></span><br></pre></td></tr></table></figure>
+
+<p>把精度（容量）大的数据类型赋值给精度（容量）小的数据类型就会报错，反之就会进行自动类型转换。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">n2</span> <span class="operator">=</span> <span class="number">1.1</span>;<span class="comment">//错误 double -&gt; int</span></span><br></pre></td></tr></table></figure>
+
+<p>(byte, short)和 char之间不会相互自动转换</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="number">10</span>;<span class="comment">//对，-128 - 127</span></span><br><span class="line"><span class="type">int</span> <span class="variable">n2</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"><span class="type">byte</span> <span class="variable">b2</span> <span class="operator">=</span> n2;<span class="comment">//错误，如果是变量赋值，判断类型</span></span><br><span class="line"><span class="type">char</span> <span class="variable">c1</span> <span class="operator">=</span> b1;<span class="comment">//错误，原因 byte 不能自动转换成 char</span></span><br></pre></td></tr></table></figure>
+<p>byte，short，char 他们三者可以计算，在计算时首先转换为int类型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"><span class="type">short</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"><span class="type">short</span> <span class="variable">s2</span> <span class="operator">=</span> b2 + s1;<span class="comment">//错，b2 + s1 =&gt; int</span></span><br><span class="line"><span class="type">int</span> <span class="variable">s2</span> <span class="operator">=</span> b2 + s1;</span><br><span class="line"><span class="type">byte</span> <span class="variable">b4</span> <span class="operator">=</span> b2 + b3;<span class="comment">//错， b2 + b3 =&gt; int</span></span><br></pre></td></tr></table></figure>
+<p>boolean 不参与转换</p>
+<p>表达式结果类型自动提升为操作数中最大的类型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span> <span class="variable">b4</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"><span class="type">short</span> <span class="variable">s3</span> <span class="operator">=</span> <span class="number">100</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">num200</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"><span class="type">double</span> <span class="variable">num300</span> <span class="operator">=</span> <span class="number">1.1</span>;</span><br><span class="line"><span class="type">double</span> <span class="variable">num500</span> <span class="operator">=</span> b4 + s3 + num200 + num300;</span><br></pre></td></tr></table></figure>
+
+</article>
+        
+          <a href="/./log/Java-1.html" class="more-title">阅读更多</a> 
+        
+      </div>
+    </div>
   
     <div class="log-item">
       <h2 class="log-title">
