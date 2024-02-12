@@ -331,11 +331,11 @@
       </p>
       <p class="main-left--subtitle">
         <span>最近动态：</span>
-        <span>3天前</span>
+        <span>4天前</span>
       </p>
       <p class="main-left--subtitle">
         <span>上线时间：</span>
-        <span>726天</span>
+        <span>727天</span>
       </p>
       <p class="main-left--subtitle">
         <span>当前版本：</span>
@@ -352,6 +352,29 @@
 
 
 <div class="log">
+  
+    <div class="log-item">
+      <h2 class="log-title">
+        <span>2024-02-12 12:15:00</span>
+        <span>星期一</span>
+      </h2>
+      <h1 class="log-main-title"><a href="/./log/Java-2.html">Java三元运算符</a></h1>
+      <div class="log-wrapper more" style="max-height: 1000px;">
+        <article class="article-content"><p>基本语法：<br>条件表达式 ？ 表达式1 ：表达式2;<br>1.如果条件表达式为true，运算后的结果是表达式1;<br>2.如果条件表达式为false，运算后的结果是表达式2;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">99</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> a&gt;b ? a++ :b--;<span class="comment">//result = 99，但是a = 10, b = 98</span></span><br></pre></td></tr></table></figure>
+
+<p>使用细节<br>表达式1和表达式2要为可以赋给接收变量的类型（或可以自动转换）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">3</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">8</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> a &gt; b ? <span class="number">1.1</span> : <span class="number">3.4</span>;<span class="comment">//错误的</span></span><br><span class="line"><span class="type">double</span> <span class="variable">d</span> <span class="operator">=</span> a &gt; b ? a : b + <span class="number">3</span>;<span class="comment">//可以的</span></span><br></pre></td></tr></table></figure>
+
+<p>三元运算符可以转换成if–else 语句<br>实现三个数的最大值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> (n1 &gt; n2 ? n1 : n2) &gt; n3 ? (n1 &gt; n2 ? n1 : n2) : n3;</span><br></pre></td></tr></table></figure>
+
+</article>
+        
+          <a href="/./log/Java-2.html" class="more-title">阅读更多</a> 
+        
+      </div>
+    </div>
   
     <div class="log-item">
       <h2 class="log-title">

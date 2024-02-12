@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>lirb的博客小站——about | Hexo</title>
+  <title>lirb的博客小站——Java三元运算符 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="shortcut icon" href="/imgs/shortcut-icon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/public.css" />
@@ -16,7 +16,7 @@
 
   <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
   <script>
-    document.title = `lirb的博客小站——about`
+    document.title = `lirb的博客小站——Java三元运算符`
   </script>
 <meta name="generator" content="Hexo 7.1.1"></head>
 
@@ -347,27 +347,97 @@
       <div id="main-container" class="main-container">
 
 
-  <link rel="stylesheet" href="/css/partial/about.css" />
+  <link rel="stylesheet" href="/css/partial/article.css" />
 
-<div class="about">
-  <div class="about-top">
-    <div class="about-title">
-      <h2>关于我</h2>
-    </div>
-    <div class="about-info">
-      <img class="about-avatar" src="/imgs/avatar.jpg" alt="">
-      <div class="about-detail">
-        
-          <p>我的B站空间：https://space.bilibili.com/521785861?spm_id_from=333.1007.0.0</p>
-        
+<div class="article-container">
+  <div class="article">
+    <h1 class="article-title">Java三元运算符</h1>
+    <div class="article-info">
+      <div class="article-info--item">
+        <div class="article-info--info">
+          
+          
+          <p class="article-info--date">日期：2024-02-12 12:15:00</p>
+        </div>
+        <img src="/imgs/default-cover.webp" alt="" class="article-cover">
       </div>
     </div>
-  </div>
-  <div class="about-content">
+    <article class="article-content markdown-body">
+      <p>基本语法：<br>条件表达式 ？ 表达式1 ：表达式2;<br>1.如果条件表达式为true，运算后的结果是表达式1;<br>2.如果条件表达式为false，运算后的结果是表达式2;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">99</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> a&gt;b ? a++ :b--;<span class="comment">//result = 99，但是a = 10, b = 98</span></span><br></pre></td></tr></table></figure>
+
+<p>使用细节<br>表达式1和表达式2要为可以赋给接收变量的类型（或可以自动转换）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">3</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">8</span>;</span><br><span class="line"><span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> a &gt; b ? <span class="number">1.1</span> : <span class="number">3.4</span>;<span class="comment">//错误的</span></span><br><span class="line"><span class="type">double</span> <span class="variable">d</span> <span class="operator">=</span> a &gt; b ? a : b + <span class="number">3</span>;<span class="comment">//可以的</span></span><br></pre></td></tr></table></figure>
+
+<p>三元运算符可以转换成if–else 语句<br>实现三个数的最大值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> (n1 &gt; n2 ? n1 : n2) &gt; n3 ? (n1 &gt; n2 ? n1 : n2) : n3;</span><br></pre></td></tr></table></figure>
+
+
+    </article>
     
+    <div class="read-nums">
+      <!-- id 将作为查询条件 -->
+      <span id="log/Java-2.html" class="leancloud_visitors" data-flag-title="Your Article Title">
+        <em class="post-meta-item-text">浏览量</em>
+        <i class="leancloud-visitors-count"></i>
+      </span>
+    </div>
+    <div class="comments-intro">
+      <h2>评论区</h2>
+      <p>欢迎你留下宝贵的意见，昵称输入QQ号会显示QQ头像哦~</p>
+    </div>
+    <div id="vcomments" class="vcomments"></div>
+    
+  </div>
+  <div class="article-catelogue">
+    <div class="article-catelogue--wrapper">
+      <div class="catelogue catelogue-1">
+        <h3>目录</h3>
+        
+      </div>
+      
+    </div>
   </div>
 </div>
 
+
+<script>
+  // var定义，避免pjax重新进来造成的重复声明错误
+  var config = JSON.parse('{"enable":true,"appId":"Pf8zCXGEH1qsprnWfikVVujL-gzGzoHsz","appKey":"qOqoiUHhH1TGtLRUYURkLRQX","placeholder":"请留下你宝贵的意见吧~","meta":["nick"],"recordIP":true,"visitor":true,"enableQQ":true}')
+  new Valine({
+    el: '#vcomments',
+    appId: config.appId,
+    appKey: config.appKey,
+    placeholder: config.placeholder,
+    meta: config.meta,
+    recordIP: config.recordIP,
+    visitor: config.visitor,
+    enableQQ: config.enableQQ,
+    path: 'log/Java-2.html'
+  })
+</script>
+
+
+<script>
+  $(document).on('pjax:complete', function() {
+    const tocs = document.querySelector('.toc')
+    const links = tocs ? tocs.querySelectorAll('a') : []
+    links.forEach(link => {
+      link.addEventListener('click', e => {
+        const href = decodeURIComponent(e.href)
+        href.search(/#(.*)/)
+        const id = RegExp.$1
+        const target = document.querySelector('#' + id)
+        const top = target.offsetTop
+        document.documentElement.scrollTo({
+          top: top - 100,
+          behavior: 'smooth'
+        })
+        e.preventDefault()
+      })
+    })
+  })
+</script> 
 
 </div>
       <div class="main-right-wrapper"><div class="main-right">
