@@ -331,11 +331,11 @@
       </p>
       <p class="main-left--subtitle">
         <span>最近动态：</span>
-        <span>4天前</span>
+        <span>1周前</span>
       </p>
       <p class="main-left--subtitle">
         <span>上线时间：</span>
-        <span>727天</span>
+        <span>732天</span>
       </p>
       <p class="main-left--subtitle">
         <span>当前版本：</span>
@@ -352,6 +352,26 @@
 
 
 <div class="log">
+  
+    <div class="log-item">
+      <h2 class="log-title">
+        <span>2024-02-17 20:43:08</span>
+        <span>星期六</span>
+      </h2>
+      <h1 class="log-main-title"><a href="/./log/Java-3.html">Java 重载(Overload)</a></h1>
+      <div class="log-wrapper more" style="max-height: 1000px;">
+        <article class="article-content"><p>java中允许同一个类中，多个重名的方法存在，但要求形参列表不一致<br>比如：System.out.println(); out 是 PrintStream类型</p>
+<p>重载的好处<br>1.减轻了起名的麻烦<br>2.减轻了记名的麻烦</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//令方法：calculate</span></span><br><span class="line"><span class="comment">//下面四个calculate构成重载</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">calculate</span><span class="params">(<span class="type">int</span> n1, <span class="type">int</span> n2)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> n1 + n2;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="type">double</span> <span class="title function_">calculate</span><span class="params">(<span class="type">int</span> n1, <span class="type">double</span> n2)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> n1 + n2;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="type">double</span> <span class="title function_">calculate</span><span class="params">(<span class="type">double</span> n1, <span class="type">int</span> n2)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> n1 + n2;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">calculate</span><span class="params">(<span class="type">int</span> n1, <span class="type">int</span> n2, <span class="type">int</span> n3)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> n1 + n2 + n3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>细节：<br>1.方法名：必须相同<br>2.形参列表：必须不同（形参类型或个数或顺序必须至少有一个不一样）<br>3.返回类型：无要求（跟返回类型无关）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">calculate</span><span class="params">(<span class="type">int</span> n1, <span class="type">int</span> n2, <span class="type">int</span> n3)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> n1 + n2 + n3;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//不构成重载，因为和返回类型无关</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">calculate</span><span class="params">(<span class="type">int</span> n1, <span class="type">int</span> n2, <span class="type">int</span> n3)</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> n1+n2+n3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</article>
+        
+          <a href="/./log/Java-3.html" class="more-title">阅读更多</a> 
+        
+      </div>
+    </div>
   
     <div class="log-item">
       <h2 class="log-title">

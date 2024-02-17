@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>lirb的博客小站——link | Hexo</title>
+  <title>lirb的博客小站——Java 重载(Overload) | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="shortcut icon" href="/imgs/shortcut-icon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/public.css" />
@@ -16,7 +16,7 @@
 
   <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
   <script>
-    document.title = `lirb的博客小站——link`
+    document.title = `lirb的博客小站——Java 重载(Overload)`
   </script>
 <meta name="generator" content="Hexo 7.1.1"></head>
 
@@ -347,27 +347,94 @@
       <div id="main-container" class="main-container">
 
 
-  <link rel="stylesheet" href="/css/partial/link.css" />
+  <link rel="stylesheet" href="/css/partial/article.css" />
 
-<ul class="link">
-  
-    <li class="link-item">
-      <img src="https://d33wubrfki0l68.cloudfront.net/6657ba50e702d84afb32fe846bed54fba1a77add/827ae/logo.svg" alt="">
-      <div class="link-info">
-        <p>Hexo.</p>
-        <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/">- TA的小站</a>
+<div class="article-container">
+  <div class="article">
+    <h1 class="article-title">Java 重载(Overload)</h1>
+    <div class="article-info">
+      <div class="article-info--item">
+        <div class="article-info--info">
+          
+          
+          <p class="article-info--date">日期：2024-02-17 20:43:08</p>
+        </div>
+        <img src="/imgs/default-cover.webp" alt="" class="article-cover">
       </div>
-    </li>
-  
-    <li class="link-item">
-      <img src="https://assetstore-cdn-china.unitychina.cn/cdn-origin/assets/as/views/common/components/Logo/src/unity-assetstore-logo-new.50ac708aeae28b8b6bf369ece5875fa5.svg" alt="">
-      <div class="link-info">
-        <p>Unity Asset</p>
-        <a target="_blank" rel="noopener" href="https://assetstore.unity.com/zh">- TA的小站</a>
+    </div>
+    <article class="article-content markdown-body">
+      <p>java中允许同一个类中，多个重名的方法存在，但要求形参列表不一致<br>比如：System.out.println(); out 是 PrintStream类型</p>
+<p>重载的好处<br>1.减轻了起名的麻烦<br>2.减轻了记名的麻烦</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//令方法：calculate</span></span><br><span class="line"><span class="comment">//下面四个calculate构成重载</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">calculate</span><span class="params">(<span class="type">int</span> n1, <span class="type">int</span> n2)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> n1 + n2;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="type">double</span> <span class="title function_">calculate</span><span class="params">(<span class="type">int</span> n1, <span class="type">double</span> n2)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> n1 + n2;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="type">double</span> <span class="title function_">calculate</span><span class="params">(<span class="type">double</span> n1, <span class="type">int</span> n2)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> n1 + n2;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">calculate</span><span class="params">(<span class="type">int</span> n1, <span class="type">int</span> n2, <span class="type">int</span> n3)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> n1 + n2 + n3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>细节：<br>1.方法名：必须相同<br>2.形参列表：必须不同（形参类型或个数或顺序必须至少有一个不一样）<br>3.返回类型：无要求（跟返回类型无关）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">calculate</span><span class="params">(<span class="type">int</span> n1, <span class="type">int</span> n2, <span class="type">int</span> n3)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> n1 + n2 + n3;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//不构成重载，因为和返回类型无关</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">calculate</span><span class="params">(<span class="type">int</span> n1, <span class="type">int</span> n2, <span class="type">int</span> n3)</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> n1+n2+n3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </article>
+    
+    <div class="read-nums">
+      <!-- id 将作为查询条件 -->
+      <span id="log/Java-3.html" class="leancloud_visitors" data-flag-title="Your Article Title">
+        <em class="post-meta-item-text">浏览量</em>
+        <i class="leancloud-visitors-count"></i>
+      </span>
+    </div>
+    <div class="comments-intro">
+      <h2>评论区</h2>
+      <p>欢迎你留下宝贵的意见，昵称输入QQ号会显示QQ头像哦~</p>
+    </div>
+    <div id="vcomments" class="vcomments"></div>
+    
+  </div>
+  <div class="article-catelogue">
+    <div class="article-catelogue--wrapper">
+      <div class="catelogue catelogue-1">
+        <h3>目录</h3>
+        
       </div>
-    </li>
-  
-</ul>
+      
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // var定义，避免pjax重新进来造成的重复声明错误
+  var config = JSON.parse('{"enable":true,"appId":"Pf8zCXGEH1qsprnWfikVVujL-gzGzoHsz","appKey":"qOqoiUHhH1TGtLRUYURkLRQX","placeholder":"请留下你宝贵的意见吧~","meta":["nick"],"recordIP":true,"visitor":true,"enableQQ":true}')
+  new Valine({
+    el: '#vcomments',
+    appId: config.appId,
+    appKey: config.appKey,
+    placeholder: config.placeholder,
+    meta: config.meta,
+    recordIP: config.recordIP,
+    visitor: config.visitor,
+    enableQQ: config.enableQQ,
+    path: 'log/Java-3.html'
+  })
+</script>
+
+
+<script>
+  $(document).on('pjax:complete', function() {
+    const tocs = document.querySelector('.toc')
+    const links = tocs ? tocs.querySelectorAll('a') : []
+    links.forEach(link => {
+      link.addEventListener('click', e => {
+        const href = decodeURIComponent(e.href)
+        href.search(/#(.*)/)
+        const id = RegExp.$1
+        const target = document.querySelector('#' + id)
+        const top = target.offsetTop
+        document.documentElement.scrollTo({
+          top: top - 100,
+          behavior: 'smooth'
+        })
+        e.preventDefault()
+      })
+    })
+  })
+</script> 
 
 </div>
       <div class="main-right-wrapper"><div class="main-right">
