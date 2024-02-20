@@ -335,7 +335,7 @@
       </p>
       <p class="main-left--subtitle">
         <span>上线时间：</span>
-        <span>732天</span>
+        <span>735天</span>
       </p>
       <p class="main-left--subtitle">
         <span>当前版本：</span>
@@ -352,6 +352,28 @@
 
 
 <div class="log">
+  
+    <div class="log-item">
+      <h2 class="log-title">
+        <span>2024-02-20 12:44:10</span>
+        <span>星期二</span>
+      </h2>
+      <h1 class="log-main-title"><a href="/./log/Java-4.html">Java 可变参数使用</a></h1>
+      <div class="log-wrapper more" style="max-height: 1000px;">
+        <article class="article-content"><p>可变参数<br>Java中允许将同一类中的多个同名同功能但参数个数不同的方法，封装成一个方法。<br>基本语法<br>访问修饰符 返回类型 方法名（数据类型… 形参名）{<br>}</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">    sum(<span class="number">1</span>, <span class="number">5</span>, <span class="number">100</span>) <span class="comment">//返回106</span></span><br><span class="line">    sum(<span class="number">1</span>, <span class="number">6</span>) <span class="comment">//返回6</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">sum</span><span class="params">(<span class="type">int</span>... nums)</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">res</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; nums.length; i++)&#123;</span><br><span class="line">        res += nums[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;<span class="comment">// int... 表示接受的是可变参数，类型是int，即可接受多个int(0-多)</span></span><br><span class="line"> <span class="comment">// nums 可以当作数组</span></span><br></pre></td></tr></table></figure>
+<p>使用细节<br>1.可变参数的实参可以为0个或任意多个<br>2.可变参数的实参可以为数组<br>3.可变参数的本质就是数组<br>4.可变参数可以和普通类型的参数一起放在形参列表，但必须保证可变参数在最后</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">f1</span><span class="params">(<span class="type">double</span>... nums, String str)</span><span class="comment">// 错误</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">f2</span><span class="params">(String str, <span class="type">double</span>... nums)</span><span class="comment">// 正确</span></span><br></pre></td></tr></table></figure>
+
+<p>5.一个形参列表中只能出现一个可变参数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">f3</span><span class="params">(<span class="type">int</span>... nums1, <span class="type">double</span>... nums2)</span><span class="comment">// 错误</span></span><br></pre></td></tr></table></figure>
+
+</article>
+        
+          <a href="/./log/Java-4.html" class="more-title">阅读更多</a> 
+        
+      </div>
+    </div>
   
     <div class="log-item">
       <h2 class="log-title">
