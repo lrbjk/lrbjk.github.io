@@ -1,0 +1,36 @@
+.link {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.link-item {
+  padding: 10px 30px;
+  display: flex;
+  align-items: center;
+  margin: 0 15px 15px 15px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #333;
+}
+.link-item img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.link-info {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+}
+.link-info p {
+  color: #333;
+}
+.link-info a {
+  color: #999;
+  margin-top: 5px;
+  font-size: 13px;
+}
+.link-info a:hover {
+  text-decoration: underline;
+}
