@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>lirb的博客小站——Dos指令入门 | Hexo</title>
+  <title>lirb的博客小站——【从零开始的ARPG】角色基本运动 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="shortcut icon" href="/imgs/shortcut-icon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/public.css" />
@@ -16,7 +16,7 @@
 
   <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
   <script>
-    document.title = `lirb的博客小站——Dos指令入门`
+    document.title = `lirb的博客小站——【从零开始的ARPG】角色基本运动`
   </script>
 <meta name="generator" content="Hexo 7.1.1"></head>
 
@@ -351,56 +351,51 @@
 
 <div class="article-container">
   <div class="article">
-    <h1 class="article-title">Dos指令入门</h1>
+    <h1 class="article-title">【从零开始的ARPG】角色基本运动</h1>
     <div class="article-info">
       <div class="article-info--item">
         <div class="article-info--info">
           
+          <div class="article-info--categories">
+            <span>分类：</span>
+            
+          </div>
           
-          <p class="article-info--date">日期：2024-02-08 15:09:44</p>
+          
+          <div class="article-info--tags">
+            <span>标签：</span>
+            <a class="tag-link" href="/tags/Unity3D/" rel="tag">Unity3D</a>
+          </div>
+          
+          <p class="article-info--date">日期：2024-08-29 22:29:33</p>
         </div>
         <img src="/imgs/default-cover.webp" alt="" class="article-cover">
       </div>
     </div>
     <article class="article-content markdown-body">
-      <p>Disk Operating System 磁盘操作系统<br>常用dos指令<br>1.查看当前目录有什么</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dir    dir F:\blog\source</span><br></pre></td></tr></table></figure>
-<p>2.切换到其他盘下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd     cd /D c:</span><br></pre></td></tr></table></figure>
-<p>3.切换到当前盘的其他目录下（相对路径和绝对路径）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd F:\blog\source    cd ..\..\blog\source</span><br></pre></td></tr></table></figure>
-<p>4.切换到上一级</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ..</span><br></pre></td></tr></table></figure>
-<p>5.切换到根目录</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd \</span><br></pre></td></tr></table></figure>
-<p>6.查看指定目录下所有的子级目录</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tree F:\blog\source</span><br></pre></td></tr></table></figure>
+      <iframe src="https://www.bilibili.com/video/BV1NUsTeDETE/?spm_id_from=333.999.0.0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" height="600" width="800">
+</iframe>
 
-<img src="https://lrbjk.github.io/imgs/log/t1.png" alt="t1" style="zoom:75%;">
-7.清屏
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cls</span><br></pre></td></tr></table></figure>
-8.退出dos
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exit</span><br></pre></td></tr></table></figure>
-还有一些使用较少的dos指令
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">md 创建目录</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rd 删除目录</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copy 拷贝文件</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">del 删除文件</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 输入内容到文件  type （跟echo差不多）</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">move 剪切</span><br></pre></td></tr></table></figure>
-
+<h1 id="状态机"><a href="#状态机" class="headerlink" title="状态机"></a>状态机</h1><p>角色状态切换运用的是有限状态机，</p>
+<p>每个状态中进行该状态下的行为，包括动画，位移和其他特殊行为。</p>
+<p><img src="/2024/08/29/Unity-2/StateMachine01.png"></p>
+<p>其中，状态1 与状态 2 中的Enter()， Update()， Exit() 是覆写的状态基类。</p>
+<h1 id="相机"><a href="#相机" class="headerlink" title="相机"></a>相机</h1><h3 id="相机视角："><a href="#相机视角：" class="headerlink" title="相机视角："></a>相机视角：</h3><p>使用第三人称相机；</p>
+<p>相机需要跟随玩家角色移动；</p>
+<p>相机需要根据玩家的移动情况归正；</p>
+<h3 id="相机效果："><a href="#相机效果：" class="headerlink" title="相机效果："></a>相机效果：</h3><h4 id="缩放："><a href="#缩放：" class="headerlink" title="缩放："></a>缩放：</h4><p>玩家调整镜头缩放大小；</p>
+<h4 id="震动："><a href="#震动：" class="headerlink" title="震动："></a>震动：</h4><p>玩家进行攻击时根据攻击强弱进行轻微相机震动；</p>
+<p>防御状态下受击；</p>
+<p>一些特殊攻击需要；</p>
+<h4 id="模糊："><a href="#模糊：" class="headerlink" title="模糊："></a>模糊：</h4><p>在玩家进行冲刺时模糊镜头；</p>
+<h4 id="其他镜头特效："><a href="#其他镜头特效：" class="headerlink" title="其他镜头特效："></a>其他镜头特效：</h4><p>玩家残血的时候镜头血雾；</p>
+<h3 id="镜头失序问题："><a href="#镜头失序问题：" class="headerlink" title="镜头失序问题："></a>镜头失序问题：</h3><p>防止镜头在碰到墙壁或地板等具有碰撞体的物体时穿模</p>
 
     </article>
     
     <div class="read-nums">
       <!-- id 将作为查询条件 -->
-      <span id="log/logName-1.html" class="leancloud_visitors" data-flag-title="Your Article Title">
+      <span id="2024/08/29/Unity-2/" class="leancloud_visitors" data-flag-title="Your Article Title">
         <em class="post-meta-item-text">浏览量</em>
         <i class="leancloud-visitors-count"></i>
       </span>
@@ -416,8 +411,18 @@
     <div class="article-catelogue--wrapper">
       <div class="catelogue catelogue-1">
         <h3>目录</h3>
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="toc-number">1.</span> <span class="toc-text">状态机</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9B%B8%E6%9C%BA"><span class="toc-number">2.</span> <span class="toc-text">相机</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E6%9C%BA%E8%A7%86%E8%A7%92%EF%BC%9A"><span class="toc-number">2.0.1.</span> <span class="toc-text">相机视角：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E6%9C%BA%E6%95%88%E6%9E%9C%EF%BC%9A"><span class="toc-number">2.0.2.</span> <span class="toc-text">相机效果：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%A9%E6%94%BE%EF%BC%9A"><span class="toc-number">2.0.2.1.</span> <span class="toc-text">缩放：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9C%87%E5%8A%A8%EF%BC%9A"><span class="toc-number">2.0.2.2.</span> <span class="toc-text">震动：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E7%B3%8A%EF%BC%9A"><span class="toc-number">2.0.2.3.</span> <span class="toc-text">模糊：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E9%95%9C%E5%A4%B4%E7%89%B9%E6%95%88%EF%BC%9A"><span class="toc-number">2.0.2.4.</span> <span class="toc-text">其他镜头特效：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%95%9C%E5%A4%B4%E5%A4%B1%E5%BA%8F%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="toc-number">2.0.3.</span> <span class="toc-text">镜头失序问题：</span></a></li></ol></li></ol></li></ol>
       </div>
+      
+        <div class="catelogue catelogue-2">
+           
+          
+            <p>
+              <span>下一篇</span>
+              <a href="/2024/07/29/unity-1/">Unity2D俯视角敌人巡逻以及追击玩家</a>
+            </p>
+          
+        </div>
       
     </div>
   </div>
@@ -436,7 +441,7 @@
     recordIP: config.recordIP,
     visitor: config.visitor,
     enableQQ: config.enableQQ,
-    path: 'log/logName-1.html'
+    path: '2024/08/29/Unity-2/'
   })
 </script>
 
