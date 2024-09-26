@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>lirb的博客小站——为什么说卡普空是动作天尊——《鬼泣5》战斗分析 | Hexo</title>
+  <title>lirb的博客小站——为什么说卡普空是动作天尊——《鬼泣5》战斗分析#1 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="shortcut icon" href="/imgs/shortcut-icon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/public.css" />
@@ -16,7 +16,7 @@
 
   <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
   <script>
-    document.title = `lirb的博客小站——为什么说卡普空是动作天尊——《鬼泣5》战斗分析`
+    document.title = `lirb的博客小站——为什么说卡普空是动作天尊——《鬼泣5》战斗分析#1`
   </script>
 <meta name="generator" content="Hexo 7.1.1"></head>
 
@@ -193,7 +193,7 @@
   const ipt = document.querySelector('#search-input')
   const btn = document.querySelector('#search-btn')
   const layer = document.querySelector('#search-layer')
-  const posts = JSON.parse(`[{"title":"【从零开始的ARPG】角色基本运动","path":"2024/08/29/Unity-2/"},{"title":"为什么说卡普空是动作天尊——《鬼泣5》战斗分析","path":"2024/09/17/blog-1/"},{"title":"这两周Unity两作品","path":"2024/02/08/first-blog/"},{"title":"【从零开始的ARPG】角色基本连招","path":"2024/09/11/Unity-3/"},{"title":"Unity2D俯视角敌人巡逻以及追击玩家","path":"2024/07/29/unity-1/"}]`)
+  const posts = JSON.parse(`[{"title":"为什么说卡普空是动作天尊——《鬼泣5》战斗分析#1","path":"2024/09/17/blog-1/"},{"title":"【从零开始的ARPG】角色基本连招","path":"2024/09/11/Unity-3/"},{"title":"【从零开始的ARPG】角色基本运动","path":"2024/08/29/Unity-2/"},{"title":"这两周Unity两作品","path":"2024/02/08/first-blog/"},{"title":"Unity2D俯视角敌人巡逻以及追击玩家","path":"2024/07/29/unity-1/"}]`)
   ipt.addEventListener('keyup', e => {
     if (e.key === 'Enter') {
       handleSearch()
@@ -335,7 +335,7 @@
       </p>
       <p class="main-left--subtitle">
         <span>上线时间：</span>
-        <span>953天</span>
+        <span>954天</span>
       </p>
       <p class="main-left--subtitle">
         <span>当前版本：</span>
@@ -351,7 +351,7 @@
 
 <div class="article-container">
   <div class="article">
-    <h1 class="article-title">为什么说卡普空是动作天尊——《鬼泣5》战斗分析</h1>
+    <h1 class="article-title">为什么说卡普空是动作天尊——《鬼泣5》战斗分析#1</h1>
     <div class="article-info">
       <div class="article-info--item">
         <div class="article-info--info">
@@ -435,7 +435,8 @@
 <h3 id="正反馈的受击机制："><a href="#正反馈的受击机制：" class="headerlink" title="正反馈的受击机制："></a>正反馈的受击机制：</h3><p>在《鬼泣》中，怪物进入到受击状态中，只要玩家一直保持住连招状态，怪物就会一直受击，被玩家硬控；玩家越打越爽。</p>
 <h3 id="玩家受击惩罚："><a href="#玩家受击惩罚：" class="headerlink" title="玩家受击惩罚："></a>玩家受击惩罚：</h3><p>在《鬼泣》中，玩家受击惩罚是血量下降，评分降低，有些特别的比如集中条降低等。</p>
 <h3 id="角色行为动作设计："><a href="#角色行为动作设计：" class="headerlink" title="角色行为动作设计："></a>角色行为动作设计：</h3><p>《鬼泣5》跟以往的系列不太一样，这一部有4个可以操控的角色（尼禄，但丁，v ，维吉尔）</p>
-<p><img src="/2024/09/17/blog-1/p1.png" alt="p1"></p>
+<img src="/2024/09/17/blog-1/p1.png" alt="p1" style="zoom:150%;">
+
 <p>角色是以近战攻击&amp;远程攻击为主的，每个角色的战斗风格都不一样。</p>
 <h4 id="尼禄："><a href="#尼禄：" class="headerlink" title="尼禄："></a>尼禄：</h4><p>地面攻击招式 + 空中攻击招式 + 魔人状态攻击 + 机械臂攻击</p>
 <p><strong>红刃：</strong></p>
@@ -494,6 +495,41 @@
 <p>双刀哥：韧性强，很难打断</p>
 <p>死神剪刀：它的剪刀武器会弹反玩家的攻击并且反击，玩家只能打碎它的剪刀才能造成伤害。</p>
 <p>骑士：主要是有盾能够防御玩家攻击，玩家要破盾后才能连续输出。</p>
+<h1 id="“打击感”如何而来："><a href="#“打击感”如何而来：" class="headerlink" title="“打击感”如何而来："></a>“打击感”如何而来：</h1><p>游戏中所谓的“打击感”，其实就是玩家在攻击后的打击反馈。</p>
+<p>而这样一种感官反馈是由很多方面组成的：</p>
+<p><strong>攻击方动画；</strong></p>
+<p><strong>受击方动画；</strong></p>
+<p><strong>打击特效（固有特效与质感特效）；</strong></p>
+<p><strong>镜头抖动；</strong></p>
+<p><strong>音效；</strong></p>
+<p><strong>手柄震动；</strong></p>
+<p>而卡普空在《鬼泣5》中就把这些效果展现得淋漓尽致，给人的感觉就是：有张有驰，张弛有度：</p>
+<h2 id="攻击动画："><a href="#攻击动画：" class="headerlink" title="攻击动画："></a>攻击动画：</h2><h3 id="原始动画："><a href="#原始动画：" class="headerlink" title="原始动画："></a>原始动画：</h3><p>可以看下面一段GIF：</p>
+<img src="/2024/09/17/blog-1/2024-09-21%2018-48-29.gif" style="zoom:50%;">
+
+<p>可以看到尼禄的攻击动画是非常迅速的，但是，就是在这么迅速的攻击动画中，展现出了很强的张力，让人印象深刻。</p>
+<p>而这是如何做到的呢，秘诀就在于——在高速的动画中，总要留几帧去摆帅气的pose。正所谓有张才有驰，有缓才有急。</p>
+<p>在攻击动画的<strong>衔接方面</strong>，《鬼泣5》中的连招动画衔接也非常的不一样，我们将衔接的部分放缓可以看到</p>
+<img src="/2024/09/17/blog-1/nilu2.gif" style="zoom:50%;">
+
+<p>一般动画，第一刀劈下去下一刀按照惯性应该向上捞，但是鬼泣中却采用衔接反手下劈；这样更能展现出动作的力量感。</p>
+<h3 id="当攻击击中敌人时："><a href="#当攻击击中敌人时：" class="headerlink" title="当攻击击中敌人时："></a><strong>当攻击击中敌人时：</strong></h3><img src="/2024/09/17/blog-1/04.gif" style="zoom:50%;">
+
+<img src="/2024/09/17/blog-1/nilu3.gif" style="zoom:50%;">
+
+<p>（两个GIF都是放慢30%）</p>
+<p><strong>冻结帧：</strong></p>
+<p>可以发现，尼禄在攻击到敌人的时候，攻击动画会有一个明显的顿帧；这就是所谓的帧冻结，也是一个非常简单的提升打击感的方法，若是没有帧冻结，那玩家的攻击就像是在挥砍空气。</p>
+<img src="/2024/09/17/blog-1/freezing.png" style="zoom:50%;">
+
+<p>但是帧冻结的时间也不能随意设计，一般来说，轻武器不需要配置很长的冻结帧或者不配置冻结帧；而越重的武器打击时配置的冻结帧就会相对长一些。</p>
+<h3 id="抽帧："><a href="#抽帧：" class="headerlink" title="抽帧："></a>抽帧：</h3><p>卡普空的动作游戏为了表现打击感，一般会对攻击动作进行抽帧处理，《鬼泣》也不例外；</p>
+<img src="/2024/09/17/blog-1/zhen01.png" style="zoom:50%;">
+
+<img src="/2024/09/17/blog-1/zhen02.png" style="zoom:50%;">
+
+<p>抽帧可以使攻击动画更加高速。</p>
+<h3 id="小结："><a href="#小结：" class="headerlink" title="小结："></a>小结：</h3><p>作为攻击动画，首先没必要中规中矩，适当的夸张一些反而更能增加游玩时候的视觉效果；与打击对象交互时，适当的添加一些帧冻结（“卡肉”）效果也能防止玩家觉得自己在砍空气，从而降低打击效果。</p>
 
     </article>
     
@@ -515,7 +551,7 @@
     <div class="article-catelogue--wrapper">
       <div class="catelogue catelogue-1">
         <h3>目录</h3>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">前言：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%88%98%E6%96%97%E6%A0%B8%E5%BF%83%E4%BD%93%E9%AA%8C%EF%BC%9A"><span class="toc-number">2.</span> <span class="toc-text">战斗核心体验：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E5%8A%A8%E5%8F%8D%E5%BA%94%E9%A2%91%E7%8E%87%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">主动反应频率：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A2%AB%E5%8A%A8%E5%8F%8D%E5%BA%94%E9%A2%91%E7%8E%87%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">被动反应频率：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%98%E6%96%97%E7%9A%84%E5%AE%BD%E5%BA%A6%E4%B8%8E%E6%B7%B1%E5%BA%A6%EF%BC%9A"><span class="toc-number">2.3.</span> <span class="toc-text">战斗的宽度与深度：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%BD%E5%BA%A6%EF%BC%9A"><span class="toc-number">2.3.1.</span> <span class="toc-text">宽度：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%EF%BC%9A"><span class="toc-number">2.3.2.</span> <span class="toc-text">深度：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="toc-number">2.3.3.</span> <span class="toc-text">总结：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%98%E6%96%97%E7%B3%BB%E7%BB%9F%EF%BC%9A"><span class="toc-number">2.4.</span> <span class="toc-text">战斗系统：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%A9%E5%AE%B6%E8%83%BD%E5%8A%9B%EF%BC%9A"><span class="toc-number">3.</span> <span class="toc-text">玩家能力：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96%E6%B6%88%E5%90%8E%E6%91%87%EF%BC%9A"><span class="toc-number">3.0.1.</span> <span class="toc-text">取消后摇：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%8F%8D%E9%A6%88%E7%9A%84%E5%8F%97%E5%87%BB%E6%9C%BA%E5%88%B6%EF%BC%9A"><span class="toc-number">3.0.2.</span> <span class="toc-text">正反馈的受击机制：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%A9%E5%AE%B6%E5%8F%97%E5%87%BB%E6%83%A9%E7%BD%9A%EF%BC%9A"><span class="toc-number">3.0.3.</span> <span class="toc-text">玩家受击惩罚：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%92%E8%89%B2%E8%A1%8C%E4%B8%BA%E5%8A%A8%E4%BD%9C%E8%AE%BE%E8%AE%A1%EF%BC%9A"><span class="toc-number">3.0.4.</span> <span class="toc-text">角色行为动作设计：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%BC%E7%A6%84%EF%BC%9A"><span class="toc-number">3.0.4.1.</span> <span class="toc-text">尼禄：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%86%E4%B8%81%EF%BC%9A"><span class="toc-number">3.0.4.2.</span> <span class="toc-text">但丁：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%B4%E5%90%89%E5%B0%94%EF%BC%9A"><span class="toc-number">3.0.4.3.</span> <span class="toc-text">维吉尔：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%AA%E7%89%A9%E8%AE%BE%E8%AE%A1%EF%BC%9A"><span class="toc-number">4.</span> <span class="toc-text">怪物设计：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%A8%A1%E5%BC%8F%EF%BC%9A"><span class="toc-number">4.1.</span> <span class="toc-text">攻击模式：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%AC%B2%E6%9C%9B%EF%BC%9A"><span class="toc-number">4.2.</span> <span class="toc-text">攻击欲望：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E5%8A%A8%E4%BD%9C%EF%BC%9A"><span class="toc-number">4.3.</span> <span class="toc-text">攻击动作：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E6%AE%8A%E6%9C%BA%E5%88%B6%EF%BC%9A"><span class="toc-number">4.4.</span> <span class="toc-text">特殊机制：</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">前言：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%88%98%E6%96%97%E6%A0%B8%E5%BF%83%E4%BD%93%E9%AA%8C%EF%BC%9A"><span class="toc-number">2.</span> <span class="toc-text">战斗核心体验：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E5%8A%A8%E5%8F%8D%E5%BA%94%E9%A2%91%E7%8E%87%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">主动反应频率：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A2%AB%E5%8A%A8%E5%8F%8D%E5%BA%94%E9%A2%91%E7%8E%87%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">被动反应频率：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%98%E6%96%97%E7%9A%84%E5%AE%BD%E5%BA%A6%E4%B8%8E%E6%B7%B1%E5%BA%A6%EF%BC%9A"><span class="toc-number">2.3.</span> <span class="toc-text">战斗的宽度与深度：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%BD%E5%BA%A6%EF%BC%9A"><span class="toc-number">2.3.1.</span> <span class="toc-text">宽度：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%EF%BC%9A"><span class="toc-number">2.3.2.</span> <span class="toc-text">深度：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="toc-number">2.3.3.</span> <span class="toc-text">总结：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%98%E6%96%97%E7%B3%BB%E7%BB%9F%EF%BC%9A"><span class="toc-number">2.4.</span> <span class="toc-text">战斗系统：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%A9%E5%AE%B6%E8%83%BD%E5%8A%9B%EF%BC%9A"><span class="toc-number">3.</span> <span class="toc-text">玩家能力：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96%E6%B6%88%E5%90%8E%E6%91%87%EF%BC%9A"><span class="toc-number">3.0.1.</span> <span class="toc-text">取消后摇：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%8F%8D%E9%A6%88%E7%9A%84%E5%8F%97%E5%87%BB%E6%9C%BA%E5%88%B6%EF%BC%9A"><span class="toc-number">3.0.2.</span> <span class="toc-text">正反馈的受击机制：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%A9%E5%AE%B6%E5%8F%97%E5%87%BB%E6%83%A9%E7%BD%9A%EF%BC%9A"><span class="toc-number">3.0.3.</span> <span class="toc-text">玩家受击惩罚：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%92%E8%89%B2%E8%A1%8C%E4%B8%BA%E5%8A%A8%E4%BD%9C%E8%AE%BE%E8%AE%A1%EF%BC%9A"><span class="toc-number">3.0.4.</span> <span class="toc-text">角色行为动作设计：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%BC%E7%A6%84%EF%BC%9A"><span class="toc-number">3.0.4.1.</span> <span class="toc-text">尼禄：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%86%E4%B8%81%EF%BC%9A"><span class="toc-number">3.0.4.2.</span> <span class="toc-text">但丁：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%B4%E5%90%89%E5%B0%94%EF%BC%9A"><span class="toc-number">3.0.4.3.</span> <span class="toc-text">维吉尔：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%AA%E7%89%A9%E8%AE%BE%E8%AE%A1%EF%BC%9A"><span class="toc-number">4.</span> <span class="toc-text">怪物设计：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%A8%A1%E5%BC%8F%EF%BC%9A"><span class="toc-number">4.1.</span> <span class="toc-text">攻击模式：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%AC%B2%E6%9C%9B%EF%BC%9A"><span class="toc-number">4.2.</span> <span class="toc-text">攻击欲望：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E5%8A%A8%E4%BD%9C%EF%BC%9A"><span class="toc-number">4.3.</span> <span class="toc-text">攻击动作：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E6%AE%8A%E6%9C%BA%E5%88%B6%EF%BC%9A"><span class="toc-number">4.4.</span> <span class="toc-text">特殊机制：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E2%80%9C%E6%89%93%E5%87%BB%E6%84%9F%E2%80%9D%E5%A6%82%E4%BD%95%E8%80%8C%E6%9D%A5%EF%BC%9A"><span class="toc-number">5.</span> <span class="toc-text">“打击感”如何而来：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E5%8A%A8%E7%94%BB%EF%BC%9A"><span class="toc-number">5.1.</span> <span class="toc-text">攻击动画：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E5%A7%8B%E5%8A%A8%E7%94%BB%EF%BC%9A"><span class="toc-number">5.1.1.</span> <span class="toc-text">原始动画：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%93%E6%94%BB%E5%87%BB%E5%87%BB%E4%B8%AD%E6%95%8C%E4%BA%BA%E6%97%B6%EF%BC%9A"><span class="toc-number">5.1.2.</span> <span class="toc-text">当攻击击中敌人时：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%BD%E5%B8%A7%EF%BC%9A"><span class="toc-number">5.1.3.</span> <span class="toc-text">抽帧：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93%EF%BC%9A"><span class="toc-number">5.1.4.</span> <span class="toc-text">小结：</span></a></li></ol></li></ol></li></ol>
       </div>
       
         <div class="catelogue catelogue-2">
