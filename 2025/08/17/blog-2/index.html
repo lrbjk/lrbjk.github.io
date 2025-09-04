@@ -193,7 +193,7 @@
   const ipt = document.querySelector('#search-input')
   const btn = document.querySelector('#search-btn')
   const layer = document.querySelector('#search-layer')
-  const posts = JSON.parse(`[{"title":"为什么说卡普空是动作天尊——《鬼泣5》战斗分析#1","path":"2024/09/17/blog-1/"},{"title":"独具风格的怪物——雷狼龙解析","path":"2025/08/17/blog-2/"},{"title":"【从零开始的ARPG】角色基本运动","path":"2024/08/29/Unity-2/"},{"title":"【从零开始的ARPG】角色基本连招","path":"2024/09/11/Unity-3/"},{"title":"这两周Unity两作品","path":"2024/02/08/first-blog/"},{"title":"Unity2D俯视角敌人巡逻以及追击玩家","path":"2024/07/29/unity-1/"},{"title":"【更高级的运动系统】关于在Unity中如何处理角色急停","path":"2025/01/27/Unity-4/"}]`)
+  const posts = JSON.parse(`[{"title":"【从零开始的ARPG】角色基本运动","path":"2024/08/29/Unity-2/"},{"title":"【更高级的运动系统】关于在Unity中如何处理角色急停","path":"2025/01/27/Unity-4/"},{"title":"【从零开始的ARPG】角色基本连招","path":"2024/09/11/Unity-3/"},{"title":"为什么说卡普空是动作天尊——《鬼泣5》战斗分析#1","path":"2024/09/17/blog-1/"},{"title":"独具风格的怪物——雷狼龙解析","path":"2025/08/17/blog-2/"},{"title":"这两周Unity两作品","path":"2024/02/08/first-blog/"},{"title":"Unity2D俯视角敌人巡逻以及追击玩家","path":"2024/07/29/unity-1/"}]`)
   ipt.addEventListener('keyup', e => {
     if (e.key === 'Enter') {
       handleSearch()
@@ -374,7 +374,7 @@
     </div>
     <article class="article-content markdown-body">
       <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>作为怪物猎人系列的超人气怪物之一，雷狼龙首次在《怪物猎人P3》中作为封面怪物登场。在之后大部分作品中都有出现。</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\01.png" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/01.png" style="zoom:80%;">
 
 <p>作为招式规律性比较强，与玩家交互性最强的怪物之一，雷狼龙也常常是玩家们练习的对象。并且受到广大猎人喜爱，<strong>在20周年全怪物人气投票夺得榜一。</strong></p>
 <h2 id="设定"><a href="#设定" class="headerlink" title="设定"></a>设定</h2><p>牙龙种，不会飞行但是身手敏捷。</p>
@@ -389,7 +389,7 @@
 <h2 id="设计目的"><a href="#设计目的" class="headerlink" title="设计目的"></a>设计目的</h2><p>作为第一个牙龙种生物，其设计与之前的飞龙种，兽龙种不同；强调地面机动性，无法飞行，与玩家交互时间会更长。</p>
 <p>作为全程在地面作战并且具有两形态切换战斗的怪物，玩家感受到新的战斗体验。</p>
 <p>普通顶级掠食者，数值不是很高，并且招式也具有规律性，玩家可以利用其进行武器练习。（例如MHWI活动任务“再会了 雷狼龙”）</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\02.jpg" style="zoom:50%;">
+<img src="/2025/08/17/blog-2/02.jpg" style="zoom:50%;">
 
 <h2 id="怪物的生态行为"><a href="#怪物的生态行为" class="headerlink" title="怪物的生态行为"></a>怪物的生态行为</h2><h3 id="雷光虫共生："><a href="#雷光虫共生：" class="headerlink" title="雷光虫共生："></a>雷光虫共生：</h3><p>与雷光虫共生关系，吸收附近雷光虫进入超电状态，也会将集群的雷光虫以雷球的方式向猎人丢出。</p>
 <p>这种生态关系<strong>首先是提高了玩家狩猎的真实感，其次也给雷狼龙添加了更多机制上的玩法。</strong></p>
@@ -401,14 +401,14 @@
 <p>相当于进战标准，玩家容易分辨自己是否进战开始讨伐。</p>
 <p>不同生态位的吼叫强度会随生态位上升而提高，进一步体现出所狩猎怪物的地位。</p>
 <h4 id="进怒机制"><a href="#进怒机制" class="headerlink" title="进怒机制"></a>进怒机制</h4><p>每一个怪物几乎都会进入愤怒状态</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\03.png" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/03.png" style="zoom:75%;">
 
 <p>进怒前先会进行吼叫（打断玩家当前非躲避&#x2F;防御动作）</p>
 <p>雷狼龙在进怒后会进入超电状态，攻击频率提高。</p>
 <p>一些攻击开始变招，连段变长；猎人需要更加集中注意力去躲避和处理雷狼龙的进攻。</p>
 <p>攻击伤害变高，并且攻击附带雷属性伤害。</p>
 <p>（玩家携带带有“挑战者”属性的装饰品或者护石也能在怪物进怒时提高自己的攻击）</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\04.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/04.gif" style="zoom:75%;">
 
 <p>​                                                                                                                         雷狼龙进怒</p>
 <p>但是，雷狼龙的进怒逻辑有一点特别，首先<strong>要自身先进入超电状态后才能进怒</strong>，所以玩家一些特殊手段（比如钩爪上身拍头）无法让其快速进怒。</p>
@@ -423,7 +423,7 @@
 <h6 id="效果："><a href="#效果：" class="headerlink" title="效果："></a>效果：</h6><p>雷狼龙的基础技能，伤害不高，<strong>前摇幅度大比较明显</strong>。</p>
 <p>超电状态下附有电属性。</p>
 <p>一般轻拳后会<strong>有概率派生连招，玩家需要做好处理连招的准备</strong>。</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\05.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/05.gif" style="zoom:75%;">
 
 <h5 id="【重拳】"><a href="#【重拳】" class="headerlink" title="【重拳】"></a>【重拳】</h5><h6 id="触发条件：-1"><a href="#触发条件：-1" class="headerlink" title="触发条件："></a>触发条件：</h6><p>与玩家距离&lt;&#x3D;500单位（较近距离）</p>
 <p>玩家位于怪物正面或者侧面。</p>
@@ -432,7 +432,7 @@
 <p>超电状态下附有电属性。</p>
 <p>会将玩家击飞。</p>
 <p>此招结束后，有几率触发连招。</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\06.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/06.gif" style="zoom:75%;">
 
 <h5 id="【头槌攻击】"><a href="#【头槌攻击】" class="headerlink" title="【头槌攻击】"></a>【头槌攻击】</h5><h6 id="触发条件：-2"><a href="#触发条件：-2" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家在怪物正面，近距离。</p>
 <h6 id="描述：-2"><a href="#描述：-2" class="headerlink" title="描述："></a>描述：</h6><p>向前挺胸，用头撞击。</p>
@@ -441,7 +441,7 @@
 <p>如果玩家仍然位于其正面，则会派生出后跳接【飞扑】</p>
 <p>玩家位于其身后，则会派生【扫尾攻击】</p>
 <p>增加了怪物变招，<strong>玩家可以通过改变自身位置来引出想要怪物展开的招式</strong>（比如太刀翻滚躲避头槌后到侧边见切铁山靠开刃）</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\07.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/07.gif" style="zoom:75%;">
 
 <h5 id="【铁山靠】"><a href="#【铁山靠】" class="headerlink" title="【铁山靠】"></a>【铁山靠】</h5><h6 id="触发条件：-3"><a href="#触发条件：-3" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家在其侧面，近距离。</p>
 <p>当【头槌攻击】结束后，玩家在其侧面派生。</p>
@@ -450,7 +450,7 @@
 <p>超电状态下附有电属性。</p>
 <p>攻击侧边玩家，让<strong>动作看起来更流畅更具有巨物的真实感。</strong></p>
 <p>招式结束后<strong>后摇较长，玩家能乘机输出</strong>。</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\08.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/08.gif" style="zoom:75%;">
 
 <h5 id="【飞扑】"><a href="#【飞扑】" class="headerlink" title="【飞扑】"></a>【飞扑】</h5><h6 id="触发条件：-4"><a href="#触发条件：-4" class="headerlink" title="触发条件："></a>触发条件：</h6><p>当玩家在怪物面前并且距离较远。</p>
 <p>当【头槌攻击】结束后，玩家在其正面派生。</p>
@@ -458,7 +458,7 @@
 <h6 id="效果：-4"><a href="#效果：-4" class="headerlink" title="效果："></a>效果：</h6><p>雷狼龙的位移技能，可以使其快速与玩家拉近距离。</p>
 <p>超电状态下附有电属性。</p>
 <p>伤害范围大，玩家需要使用当身技处理或者左右翻滚闪避。</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\09.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/09.gif" style="zoom:75%;">
 
 <h5 id="【扫尾】"><a href="#【扫尾】" class="headerlink" title="【扫尾】"></a>【扫尾】</h5><h6 id="触发条件：-5"><a href="#触发条件：-5" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家在其身后，近距离。</p>
 <p>当【头槌攻击】结束后，玩家在其身后派生。</p>
@@ -466,7 +466,7 @@
 <h6 id="效果：-5"><a href="#效果：-5" class="headerlink" title="效果："></a>效果：</h6><p>范围比较大，玩家受击会被击飞；玩家需要使用当身技处理或者向后飞扑躲避。</p>
 <p>超电状态下附有电属性。</p>
 <p>当玩家绕后使用尾巴攻击，模拟出怪物攻击的真实感。</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\10.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/10.gif" style="zoom:75%;">
 
 <h5 id="【回旋攻击】"><a href="#【回旋攻击】" class="headerlink" title="【回旋攻击】"></a>【回旋攻击】</h5><h6 id="触发条件：-6"><a href="#触发条件：-6" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家在其侧面，中距离则有概率释放。</p>
 <p>有概率在翻筋斗后释放。</p>
@@ -474,7 +474,7 @@
 <h6 id="效果：-6"><a href="#效果：-6" class="headerlink" title="效果："></a>效果：</h6><p>大范围攻击，玩家受击会被击飞；可以使用当身技或者翻滚来处理。</p>
 <p>在超电状态下会带有雷属性攻击。</p>
 <p>招式结束后<strong>后摇硬直较长，玩家成功处理招式后可以乘机输出。</strong></p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\11.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/11.gif" style="zoom:75%;">
 
 <h5 id="【冲刺】"><a href="#【冲刺】" class="headerlink" title="【冲刺】"></a>【冲刺】</h5><h6 id="触发条件：-7"><a href="#触发条件：-7" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家位于其中远距离。</p>
 <h6 id="描述：-7"><a href="#描述：-7" class="headerlink" title="描述："></a>描述：</h6><p>狂奔撞击目标</p>
@@ -482,14 +482,14 @@
 <p>当玩家与其相隔较远时，能起到<strong>拉近距离的作用</strong>。</p>
 <p>当玩家间隔较近时，能<strong>拉开与玩家距离</strong>。</p>
 <p>一般这招结束后会派生雷狼龙的蓄电。</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\12.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/12.gif" style="zoom:75%;">
 
 <h5 id="【尾砸】"><a href="#【尾砸】" class="headerlink" title="【尾砸】"></a>【尾砸】</h5><h6 id="触发条件：-8"><a href="#触发条件：-8" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家在其身后。</p>
 <h6 id="描述：-8"><a href="#描述：-8" class="headerlink" title="描述："></a>描述：</h6><p>雷狼龙跃起后空翻将尾巴狠狠砸向地面</p>
 <h6 id="效果：-8"><a href="#效果：-8" class="headerlink" title="效果："></a>效果：</h6><p>攻击范围判定大，玩家需要左右翻滚或者使用当身技来躲避攻击。</p>
 <p>玩家受击后会被击飞。</p>
 <p>前摇与【扫尾】技能相似，更加加大了玩家<strong>战斗中的不确定性</strong>，考验玩家对武器的熟练度和反应。</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\15.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/15.gif" style="zoom:75%;">
 
 <h4 id="特殊技能"><a href="#特殊技能" class="headerlink" title="特殊技能"></a>特殊技能</h4><h5 id="【蓄电-大蓄电】"><a href="#【蓄电-大蓄电】" class="headerlink" title="【蓄电&amp;大蓄电】"></a>【蓄电&amp;大蓄电】</h5><h6 id="触发条件：-9"><a href="#触发条件：-9" class="headerlink" title="触发条件："></a>触发条件：</h6><p>雷狼龙处于普通状态下会触发。</p>
 <h6 id="描述：-9"><a href="#描述：-9" class="headerlink" title="描述："></a>描述：</h6><p>雷狼龙在原地蓄力，背上冒出蓝光闪电。</p>
@@ -498,10 +498,10 @@
 <p>此时的雷狼龙在原地硬直，<strong>玩家可以乘机输出</strong>（但是大蓄电要小心身边落雷）。</p>
 <p><strong>一种调整战斗节奏的手段</strong>（比如玩家不必选择进攻而是可以进行磨刀之类使用道具的空闲时间）</p>
 <p>蓄电</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\13.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/13.gif" style="zoom:75%;">
 
 <p>大蓄电</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\14.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/14.gif" style="zoom:75%;">
 
 <h4 id="进阶技能（指仅在超电状态下触发）"><a href="#进阶技能（指仅在超电状态下触发）" class="headerlink" title="进阶技能（指仅在超电状态下触发）"></a>进阶技能（指仅在超电状态下触发）</h4><h5 id="【雷球】"><a href="#【雷球】" class="headerlink" title="【雷球】"></a>【雷球】</h5><h6 id="触发条件：-10"><a href="#触发条件：-10" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家与其距离在中远距离。</p>
 <p>雷狼龙处于超电状态。</p>
@@ -513,16 +513,16 @@
 <h6 id="效果：-10"><a href="#效果：-10" class="headerlink" title="效果："></a>效果：</h6><p>雷球带有电属性伤害，玩家受击后会硬直。</p>
 <p>发射雷球强迫玩家进行位移，<strong>此时雷狼龙处于硬直状态，玩家可以乘机靠近雷狼龙进行输出</strong>。</p>
 <p>单发雷球</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\16.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/16.gif" style="zoom:75%;">
 
 <p>二连雷球</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\17.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/17.gif" style="zoom:75%;">
 
 <p>环形雷球</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\19.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/19.gif" style="zoom:75%;">
 
 <p>重砸雷球</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\18.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/18.gif" style="zoom:75%;">
 
 <h5 id="【跳跃背砸】"><a href="#【跳跃背砸】" class="headerlink" title="【跳跃背砸】"></a>【跳跃背砸】</h5><h6 id="触发条件：-11"><a href="#触发条件：-11" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家位于其中距离。</p>
 <p>处于怒后超电状态触发。</p>
@@ -531,7 +531,7 @@
 <p>拉近与玩家的距离。</p>
 <p>招式<strong>结束后后摇硬直比较长，玩家可以乘机输出</strong>。</p>
 <p>被击中后会带雷电buff。</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\20.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/20.gif" style="zoom:75%;">
 
 <h5 id="【二连跳砸】"><a href="#【二连跳砸】" class="headerlink" title="【二连跳砸】"></a>【二连跳砸】</h5><h6 id="触发条件：-12"><a href="#触发条件：-12" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家在其正面。</p>
 <p>雷狼龙处于超电状态。</p>
@@ -540,7 +540,7 @@
 <p>也是拉近与玩家距离的手段。</p>
 <p>招式后摇长，玩家能继续进行输出。</p>
 <p>玩家可以利用这招来给<strong>自己快速增加战斗资源。</strong>（比如太刀开刃）</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\21.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/21.gif" style="zoom:75%;">
 
 <h3 id="连招派生分析"><a href="#连招派生分析" class="headerlink" title="连招派生分析"></a>连招派生分析</h3><h4 id="连段设计："><a href="#连段设计：" class="headerlink" title="连段设计："></a>连段设计：</h4><p>雷狼龙作为大师位怪物（世界），连段丰富还有各种变招。</p>
 <p>许多连段都是与玩家进行足够的交互而设计的，有部分连段是为了与玩家拉开距离，改变战斗节奏。</p>
@@ -552,25 +552,25 @@
 <h4 id="连段解析："><a href="#连段解析：" class="headerlink" title="连段解析："></a>连段解析：</h4><p>接下来列举几个在战斗中使用最频繁的连段。</p>
 <h5 id="【农夫三拳】"><a href="#【农夫三拳】" class="headerlink" title="【农夫三拳】"></a>【农夫三拳】</h5><p>此连段作为雷狼龙的经典连招，从P3一直继承到世界；世界中的农夫三拳也有了变招。</p>
 <h6 id="招式描述："><a href="#招式描述：" class="headerlink" title="招式描述："></a>招式描述：</h6><p>右轻拳+左轻拳+右重拳</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\22.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/22.gif" style="zoom:75%;">
 
 <h6 id="效果：-13"><a href="#效果：-13" class="headerlink" title="效果："></a>效果：</h6><p>雷狼龙经典招式，只有在超电状态下使用，相对来说频率比较低的招式，玩家处理和应对的方式多。</p>
 <p>在世界中，此招还添加了一些变招，比如在放完右轻拳后，可能会接上左重拳；<strong>给玩家处理招式增加了些变数</strong>，有时还是需要靠目押来决定对策。</p>
 <h5 id="【头槌-铁山靠-飞扑-扫尾】"><a href="#【头槌-铁山靠-飞扑-扫尾】" class="headerlink" title="【头槌+铁山靠&#x2F;飞扑&#x2F;扫尾】"></a>【头槌+铁山靠&#x2F;飞扑&#x2F;扫尾】</h5><p>雷狼龙正常状态下基础连招，根据玩家位置不同从而派生后续连招。</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\23.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/23.gif" style="zoom:75%;">
 
 <h6 id="效果：-14"><a href="#效果：-14" class="headerlink" title="效果："></a>效果：</h6><p>头槌后根据玩家位置发动下个招式，玩家可以<strong>利用这一机制进行引招从而决定自己下一步动作</strong>。</p>
 <p>特别的，在怒后超电状态下，此连招除了派生【飞扑】的连段，其余连段都会添加一个【回旋攻击】进行收尾。</p>
 <p>连段的延长变化导致玩家需要处理的攻击变多且变复杂，增大了对策难度。</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\24.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/24.gif" style="zoom:75%;">
 
 <h5 id="【轻拳派生】"><a href="#【轻拳派生】" class="headerlink" title="【轻拳派生】"></a>【轻拳派生】</h5><p>雷狼龙进入怒后超电状态后的轻拳攻击不只是派生【农夫三拳】了，一般轻拳会有四段派生，以【大背砸】结尾或者是重拳结尾。</p>
-<p><img src="/2025/08/17/blog-2/blog\source_posts\blog-2\25.gif"></p>
+<p><img src="/2025/08/17/blog-2/blog-2%5C25.gif"></p>
 <h6 id="效果：-15"><a href="#效果：-15" class="headerlink" title="效果："></a>效果：</h6><p>新的强力变招，此<strong>连段的攻击频率算比较高，对于初见的玩家会比较难处理</strong>，且伤害较高，稍微失误可能就猫车了。</p>
 <p>招式的前置招都是轻拳，变招多具有迷惑性，玩家在战斗时需要集中注意来目押招式，提高了难度。</p>
 <h5 id="特殊连段【反击】"><a href="#特殊连段【反击】" class="headerlink" title="特殊连段【反击】"></a>特殊连段【反击】</h5><p>雷狼龙进入怒后超电状态会解锁一项新技能：反击。</p>
 <p>对于初见玩家这一动作具有一定的迷惑性，此技能的前摇和其受击进入硬直动画非常相像；而【反击】动作是播完前摇后直接使用重拳，给玩家猝不及防。</p>
-<img src="/2025/08/17/blog-2/blog\source\_posts\blog-2\26.gif" style="zoom:75%;">
+<img src="/2025/08/17/blog-2/26.gif" style="zoom:75%;">
 
 <h6 id="效果：-16"><a href="#效果：-16" class="headerlink" title="效果："></a>效果：</h6><p>首先是给玩家一种<strong>很强的交互感</strong>，这种类似于玩家防御反击的招式能够增强交互的亮点，使怪物AI没有那么一招一式的呆板。</p>
 <p><strong>调整战斗节奏与攻防转换</strong>，【反击】招式能立马改变玩家的战斗节奏，把玩家从进攻立马转变为防守（反击）状态。</p>
