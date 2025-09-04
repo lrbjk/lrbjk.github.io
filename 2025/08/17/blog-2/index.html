@@ -193,7 +193,7 @@
   const ipt = document.querySelector('#search-input')
   const btn = document.querySelector('#search-btn')
   const layer = document.querySelector('#search-layer')
-  const posts = JSON.parse(`[{"title":"【从零开始的ARPG】角色基本运动","path":"2024/08/29/Unity-2/"},{"title":"【更高级的运动系统】关于在Unity中如何处理角色急停","path":"2025/01/27/Unity-4/"},{"title":"【从零开始的ARPG】角色基本连招","path":"2024/09/11/Unity-3/"},{"title":"为什么说卡普空是动作天尊——《鬼泣5》战斗分析#1","path":"2024/09/17/blog-1/"},{"title":"独具风格的怪物——雷狼龙解析","path":"2025/08/17/blog-2/"},{"title":"这两周Unity两作品","path":"2024/02/08/first-blog/"},{"title":"Unity2D俯视角敌人巡逻以及追击玩家","path":"2024/07/29/unity-1/"}]`)
+  const posts = JSON.parse(`[{"title":"【从零开始的ARPG】角色基本运动","path":"2024/08/29/Unity-2/"},{"title":"【从零开始的ARPG】角色基本连招","path":"2024/09/11/Unity-3/"},{"title":"【更高级的运动系统】关于在Unity中如何处理角色急停","path":"2025/01/27/Unity-4/"},{"title":"独具风格的怪物——雷狼龙解析","path":"2025/08/17/blog-2/"},{"title":"为什么说卡普空是动作天尊——《鬼泣5》战斗分析#1","path":"2024/09/17/blog-1/"},{"title":"这两周Unity两作品","path":"2024/02/08/first-blog/"},{"title":"Unity2D俯视角敌人巡逻以及追击玩家","path":"2024/07/29/unity-1/"}]`)
   ipt.addEventListener('keyup', e => {
     if (e.key === 'Enter') {
       handleSearch()
@@ -414,87 +414,117 @@
 <p>但是，雷狼龙的进怒逻辑有一点特别，首先<strong>要自身先进入超电状态后才能进怒</strong>，所以玩家一些特殊手段（比如钩爪上身拍头）无法让其快速进怒。</p>
 <h3 id="招式拆解"><a href="#招式拆解" class="headerlink" title="招式拆解"></a>招式拆解</h3><p>雷狼龙一般有三种形态</p>
 <p><strong>普通状态→怒前超电状态→怒后超电状态</strong></p>
-<h4 id="常规技能"><a href="#常规技能" class="headerlink" title="常规技能"></a>常规技能</h4><h5 id="【轻拳】"><a href="#【轻拳】" class="headerlink" title="【轻拳】"></a>【轻拳】</h5><h6 id="触发条件："><a href="#触发条件：" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家距离&lt;&#x3D;350单位 （近距离）</p>
+<h4 id="常规技能"><a href="#常规技能" class="headerlink" title="常规技能"></a>常规技能</h4><h4 id="【轻拳】"><a href="#【轻拳】" class="headerlink" title="【轻拳】"></a>【轻拳】</h4><p><strong>触发条件：</strong></p>
+<p>玩家距离&lt;&#x3D;350单位 （近距离）</p>
 <p>玩家位于正面或者侧面。</p>
 <p>对同一目标10s内最多触发3次。</p>
 <p>玩家倒地后不触发。</p>
 <p>硬直状态无法触发。</p>
-<h6 id="描述："><a href="#描述：" class="headerlink" title="描述："></a>描述：</h6><p>雷狼龙举起前爪向玩家位置拍下。（此技能并不会把玩家击飞）</p>
-<h6 id="效果："><a href="#效果：" class="headerlink" title="效果："></a>效果：</h6><p>雷狼龙的基础技能，伤害不高，<strong>前摇幅度大比较明显</strong>。</p>
+<p><strong>描述：</strong></p>
+<p>雷狼龙举起前爪向玩家位置拍下。（此技能并不会把玩家击飞）</p>
+<p><strong>效果：</strong></p>
+<p>雷狼龙的基础技能，伤害不高，<strong>前摇幅度大比较明显</strong>。</p>
 <p>超电状态下附有电属性。</p>
 <p>一般轻拳后会<strong>有概率派生连招，玩家需要做好处理连招的准备</strong>。</p>
 <img src="/2025/08/17/blog-2/05.gif" style="zoom:75%;">
 
-<h5 id="【重拳】"><a href="#【重拳】" class="headerlink" title="【重拳】"></a>【重拳】</h5><h6 id="触发条件：-1"><a href="#触发条件：-1" class="headerlink" title="触发条件："></a>触发条件：</h6><p>与玩家距离&lt;&#x3D;500单位（较近距离）</p>
+<h5 id="【重拳】"><a href="#【重拳】" class="headerlink" title="【重拳】"></a>【重拳】</h5><p><strong>触发条件：</strong></p>
+<p>与玩家距离&lt;&#x3D;500单位（较近距离）</p>
 <p>玩家位于怪物正面或者侧面。</p>
-<h6 id="描述：-1"><a href="#描述：-1" class="headerlink" title="描述："></a>描述：</h6><p>雷狼龙高举自己前爪蓄力向猎人挥出，扬起大量尘土。</p>
-<h6 id="效果：-1"><a href="#效果：-1" class="headerlink" title="效果："></a>效果：</h6><p>伤害<strong>范围扩大</strong>，<strong>判定时间长</strong>，伤害较高。</p>
+<p><strong>描述：</strong></p>
+<p>雷狼龙高举自己前爪蓄力向猎人挥出，扬起大量尘土。</p>
+<p><strong>效果：</strong></p>
+<p>伤害<strong>范围扩大</strong>，<strong>判定时间长</strong>，伤害较高。</p>
 <p>超电状态下附有电属性。</p>
 <p>会将玩家击飞。</p>
 <p>此招结束后，有几率触发连招。</p>
 <img src="/2025/08/17/blog-2/06.gif" style="zoom:75%;">
 
-<h5 id="【头槌攻击】"><a href="#【头槌攻击】" class="headerlink" title="【头槌攻击】"></a>【头槌攻击】</h5><h6 id="触发条件：-2"><a href="#触发条件：-2" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家在怪物正面，近距离。</p>
-<h6 id="描述：-2"><a href="#描述：-2" class="headerlink" title="描述："></a>描述：</h6><p>向前挺胸，用头撞击。</p>
-<h6 id="效果：-2"><a href="#效果：-2" class="headerlink" title="效果："></a>效果：</h6><p>头槌攻击后，一般会根据玩家位置派生对应连招；</p>
+<h5 id="【头槌攻击】"><a href="#【头槌攻击】" class="headerlink" title="【头槌攻击】"></a>【头槌攻击】</h5><p><strong>触发条件：</strong></p>
+<p>玩家在怪物正面，近距离。</p>
+<p><strong>描述：</strong></p>
+<p>向前挺胸，用头撞击。</p>
+<p><strong>效果：</strong></p>
+<p>头槌攻击后，一般会根据玩家位置派生对应连招；</p>
 <p>当玩家在怪物头槌攻击后位于其侧面，则会派生出【铁山靠】攻击</p>
 <p>如果玩家仍然位于其正面，则会派生出后跳接【飞扑】</p>
 <p>玩家位于其身后，则会派生【扫尾攻击】</p>
 <p>增加了怪物变招，<strong>玩家可以通过改变自身位置来引出想要怪物展开的招式</strong>（比如太刀翻滚躲避头槌后到侧边见切铁山靠开刃）</p>
 <img src="/2025/08/17/blog-2/07.gif" style="zoom:75%;">
 
-<h5 id="【铁山靠】"><a href="#【铁山靠】" class="headerlink" title="【铁山靠】"></a>【铁山靠】</h5><h6 id="触发条件：-3"><a href="#触发条件：-3" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家在其侧面，近距离。</p>
+<h5 id="【铁山靠】"><a href="#【铁山靠】" class="headerlink" title="【铁山靠】"></a>【铁山靠】</h5><p><strong>触发条件：</strong></p>
+<p>玩家在其侧面，近距离。</p>
 <p>当【头槌攻击】结束后，玩家在其侧面派生。</p>
-<h6 id="描述：-3"><a href="#描述：-3" class="headerlink" title="描述："></a>描述：</h6><p>猛地耸肩向右侧撞击，超带电状态下带雷属性。</p>
-<h6 id="效果：-3"><a href="#效果：-3" class="headerlink" title="效果："></a>效果：</h6><p>普通的技能，玩家受击后会被击飞。</p>
+<p><strong>描述：</strong></p>
+<p>猛地耸肩向右侧撞击，超带电状态下带雷属性。</p>
+<p><strong>效果：</strong></p>
+<p>普通的技能，玩家受击后会被击飞。</p>
 <p>超电状态下附有电属性。</p>
 <p>攻击侧边玩家，让<strong>动作看起来更流畅更具有巨物的真实感。</strong></p>
 <p>招式结束后<strong>后摇较长，玩家能乘机输出</strong>。</p>
 <img src="/2025/08/17/blog-2/08.gif" style="zoom:75%;">
 
-<h5 id="【飞扑】"><a href="#【飞扑】" class="headerlink" title="【飞扑】"></a>【飞扑】</h5><h6 id="触发条件：-4"><a href="#触发条件：-4" class="headerlink" title="触发条件："></a>触发条件：</h6><p>当玩家在怪物面前并且距离较远。</p>
+<h5 id="【飞扑】"><a href="#【飞扑】" class="headerlink" title="【飞扑】"></a>【飞扑】</h5><p><strong>触发条件：</strong></p>
+<p>当玩家在怪物面前并且距离较远。</p>
 <p>当【头槌攻击】结束后，玩家在其正面派生。</p>
-<h6 id="描述：-4"><a href="#描述：-4" class="headerlink" title="描述："></a>描述：</h6><p>雷狼龙跃起向玩家飞扑。</p>
-<h6 id="效果：-4"><a href="#效果：-4" class="headerlink" title="效果："></a>效果：</h6><p>雷狼龙的位移技能，可以使其快速与玩家拉近距离。</p>
+<p><strong>描述：</strong></p>
+<p>雷狼龙跃起向玩家飞扑。</p>
+<p><strong>效果：</strong></p>
+<p>雷狼龙的位移技能，可以使其快速与玩家拉近距离。</p>
 <p>超电状态下附有电属性。</p>
 <p>伤害范围大，玩家需要使用当身技处理或者左右翻滚闪避。</p>
 <img src="/2025/08/17/blog-2/09.gif" style="zoom:75%;">
 
-<h5 id="【扫尾】"><a href="#【扫尾】" class="headerlink" title="【扫尾】"></a>【扫尾】</h5><h6 id="触发条件：-5"><a href="#触发条件：-5" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家在其身后，近距离。</p>
+<h5 id="【扫尾】"><a href="#【扫尾】" class="headerlink" title="【扫尾】"></a>【扫尾】</h5><p><strong>触发条件：</strong></p>
+<p>玩家在其身后，近距离。</p>
 <p>当【头槌攻击】结束后，玩家在其身后派生。</p>
-<h6 id="描述：-5"><a href="#描述：-5" class="headerlink" title="描述："></a>描述：</h6><p>雷狼龙抬起尾巴向玩家方向扫去。</p>
-<h6 id="效果：-5"><a href="#效果：-5" class="headerlink" title="效果："></a>效果：</h6><p>范围比较大，玩家受击会被击飞；玩家需要使用当身技处理或者向后飞扑躲避。</p>
+<p><strong>描述：</strong></p>
+<p>雷狼龙抬起尾巴向玩家方向扫去。</p>
+<p><strong>效果：</strong></p>
+<p>范围比较大，玩家受击会被击飞；玩家需要使用当身技处理或者向后飞扑躲避。</p>
 <p>超电状态下附有电属性。</p>
 <p>当玩家绕后使用尾巴攻击，模拟出怪物攻击的真实感。</p>
 <img src="/2025/08/17/blog-2/10.gif" style="zoom:75%;">
 
-<h5 id="【回旋攻击】"><a href="#【回旋攻击】" class="headerlink" title="【回旋攻击】"></a>【回旋攻击】</h5><h6 id="触发条件：-6"><a href="#触发条件：-6" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家在其侧面，中距离则有概率释放。</p>
+<h5 id="【回旋攻击】"><a href="#【回旋攻击】" class="headerlink" title="【回旋攻击】"></a>【回旋攻击】</h5><p><strong>触发条件：</strong></p>
+<p>玩家在其侧面，中距离则有概率释放。</p>
 <p>有概率在翻筋斗后释放。</p>
-<h6 id="描述：-6"><a href="#描述：-6" class="headerlink" title="描述："></a>描述：</h6><p>雷狼龙单手撑地，以左爪为轴甩尾旋转。</p>
-<h6 id="效果：-6"><a href="#效果：-6" class="headerlink" title="效果："></a>效果：</h6><p>大范围攻击，玩家受击会被击飞；可以使用当身技或者翻滚来处理。</p>
+<p><strong>描述：</strong></p>
+<p>雷狼龙单手撑地，以左爪为轴甩尾旋转。</p>
+<p><strong>效果：</strong></p>
+<p>大范围攻击，玩家受击会被击飞；可以使用当身技或者翻滚来处理。</p>
 <p>在超电状态下会带有雷属性攻击。</p>
 <p>招式结束后<strong>后摇硬直较长，玩家成功处理招式后可以乘机输出。</strong></p>
 <img src="/2025/08/17/blog-2/11.gif" style="zoom:75%;">
 
-<h5 id="【冲刺】"><a href="#【冲刺】" class="headerlink" title="【冲刺】"></a>【冲刺】</h5><h6 id="触发条件：-7"><a href="#触发条件：-7" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家位于其中远距离。</p>
-<h6 id="描述：-7"><a href="#描述：-7" class="headerlink" title="描述："></a>描述：</h6><p>狂奔撞击目标</p>
-<h6 id="效果：-7"><a href="#效果：-7" class="headerlink" title="效果："></a>效果：</h6><p>被撞击到的玩家会被龙车撞飞。</p>
+<h5 id="【冲刺】"><a href="#【冲刺】" class="headerlink" title="【冲刺】"></a>【冲刺】</h5><p><strong>触发条件：</strong></p>
+<p>玩家位于其中远距离。</p>
+<p><strong>描述：</strong></p>
+<p>狂奔撞击目标</p>
+<p><strong>效果：</strong></p>
+<p>被撞击到的玩家会被龙车撞飞。</p>
 <p>当玩家与其相隔较远时，能起到<strong>拉近距离的作用</strong>。</p>
 <p>当玩家间隔较近时，能<strong>拉开与玩家距离</strong>。</p>
 <p>一般这招结束后会派生雷狼龙的蓄电。</p>
 <img src="/2025/08/17/blog-2/12.gif" style="zoom:75%;">
 
-<h5 id="【尾砸】"><a href="#【尾砸】" class="headerlink" title="【尾砸】"></a>【尾砸】</h5><h6 id="触发条件：-8"><a href="#触发条件：-8" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家在其身后。</p>
-<h6 id="描述：-8"><a href="#描述：-8" class="headerlink" title="描述："></a>描述：</h6><p>雷狼龙跃起后空翻将尾巴狠狠砸向地面</p>
-<h6 id="效果：-8"><a href="#效果：-8" class="headerlink" title="效果："></a>效果：</h6><p>攻击范围判定大，玩家需要左右翻滚或者使用当身技来躲避攻击。</p>
+<h5 id="【尾砸】"><a href="#【尾砸】" class="headerlink" title="【尾砸】"></a>【尾砸】</h5><p><strong>触发条件：</strong></p>
+<p>玩家在其身后。</p>
+<p><strong>描述：</strong></p>
+<p>雷狼龙跃起后空翻将尾巴狠狠砸向地面</p>
+<p><strong>效果：</strong></p>
+<p>攻击范围判定大，玩家需要左右翻滚或者使用当身技来躲避攻击。</p>
 <p>玩家受击后会被击飞。</p>
 <p>前摇与【扫尾】技能相似，更加加大了玩家<strong>战斗中的不确定性</strong>，考验玩家对武器的熟练度和反应。</p>
 <img src="/2025/08/17/blog-2/15.gif" style="zoom:75%;">
 
-<h4 id="特殊技能"><a href="#特殊技能" class="headerlink" title="特殊技能"></a>特殊技能</h4><h5 id="【蓄电-大蓄电】"><a href="#【蓄电-大蓄电】" class="headerlink" title="【蓄电&amp;大蓄电】"></a>【蓄电&amp;大蓄电】</h5><h6 id="触发条件：-9"><a href="#触发条件：-9" class="headerlink" title="触发条件："></a>触发条件：</h6><p>雷狼龙处于普通状态下会触发。</p>
-<h6 id="描述：-9"><a href="#描述：-9" class="headerlink" title="描述："></a>描述：</h6><p>雷狼龙在原地蓄力，背上冒出蓝光闪电。</p>
+<h4 id="特殊技能"><a href="#特殊技能" class="headerlink" title="特殊技能"></a>特殊技能</h4><h5 id="【蓄电-大蓄电】"><a href="#【蓄电-大蓄电】" class="headerlink" title="【蓄电&amp;大蓄电】"></a>【蓄电&amp;大蓄电】</h5><p><strong>触发条件：</strong></p>
+<p>雷狼龙处于普通状态下会触发。</p>
+<p><strong>描述：</strong></p>
+<p>雷狼龙在原地蓄力，背上冒出蓝光闪电。</p>
 <p>大蓄电还会在身边落雷。</p>
-<h6 id="效果：-9"><a href="#效果：-9" class="headerlink" title="效果："></a>效果：</h6><p>雷狼龙通过蓄电和大蓄电来使自己进入超电状态（蓄电算累计一层电，大蓄电算两层；一般雷狼龙蓄满四层电就会进入超电状态）。</p>
+<p><strong>效果：</strong></p>
+<p>雷狼龙通过蓄电和大蓄电来使自己进入超电状态（蓄电算累计一层电，大蓄电算两层；一般雷狼龙蓄满四层电就会进入超电状态）。</p>
 <p>此时的雷狼龙在原地硬直，<strong>玩家可以乘机输出</strong>（但是大蓄电要小心身边落雷）。</p>
 <p><strong>一种调整战斗节奏的手段</strong>（比如玩家不必选择进攻而是可以进行磨刀之类使用道具的空闲时间）</p>
 <p>蓄电</p>
@@ -503,14 +533,17 @@
 <p>大蓄电</p>
 <img src="/2025/08/17/blog-2/14.gif" style="zoom:75%;">
 
-<h4 id="进阶技能（指仅在超电状态下触发）"><a href="#进阶技能（指仅在超电状态下触发）" class="headerlink" title="进阶技能（指仅在超电状态下触发）"></a>进阶技能（指仅在超电状态下触发）</h4><h5 id="【雷球】"><a href="#【雷球】" class="headerlink" title="【雷球】"></a>【雷球】</h5><h6 id="触发条件：-10"><a href="#触发条件：-10" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家与其距离在中远距离。</p>
+<h4 id="进阶技能（指仅在超电状态下触发）"><a href="#进阶技能（指仅在超电状态下触发）" class="headerlink" title="进阶技能（指仅在超电状态下触发）"></a>进阶技能（指仅在超电状态下触发）</h4><h5 id="【雷球】"><a href="#【雷球】" class="headerlink" title="【雷球】"></a>【雷球】</h5><p><strong>触发条件：</strong></p>
+<p>玩家与其距离在中远距离。</p>
 <p>雷狼龙处于超电状态。</p>
-<h6 id="描述：-10"><a href="#描述：-10" class="headerlink" title="描述："></a>描述：</h6><p>雷狼龙有三种形态雷球：</p>
+<p><strong>描述：</strong></p>
+<p>雷狼龙有三种形态雷球：</p>
 <p>基础雷球：雷狼龙通过甩尾释放单次雷球；</p>
 <p>二连雷球：雷狼龙甩尾两次释放雷球；</p>
 <p>环形雷球：雷狼龙大甩尾后身边形成大量雷球环绕并且向外扩散。</p>
 <p>PS：在愤怒状态下有几率在重拳砸下后释放雷球。</p>
-<h6 id="效果：-10"><a href="#效果：-10" class="headerlink" title="效果："></a>效果：</h6><p>雷球带有电属性伤害，玩家受击后会硬直。</p>
+<p><strong>效果：</strong></p>
+<p>雷球带有电属性伤害，玩家受击后会硬直。</p>
 <p>发射雷球强迫玩家进行位移，<strong>此时雷狼龙处于硬直状态，玩家可以乘机靠近雷狼龙进行输出</strong>。</p>
 <p>单发雷球</p>
 <img src="/2025/08/17/blog-2/16.gif" style="zoom:75%;">
@@ -524,19 +557,25 @@
 <p>重砸雷球</p>
 <img src="/2025/08/17/blog-2/18.gif" style="zoom:75%;">
 
-<h5 id="【跳跃背砸】"><a href="#【跳跃背砸】" class="headerlink" title="【跳跃背砸】"></a>【跳跃背砸】</h5><h6 id="触发条件：-11"><a href="#触发条件：-11" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家位于其中距离。</p>
+<h5 id="【跳跃背砸】"><a href="#【跳跃背砸】" class="headerlink" title="【跳跃背砸】"></a>【跳跃背砸】</h5><p><strong>触发条件：</strong></p>
+<p>玩家位于其中距离。</p>
 <p>处于怒后超电状态触发。</p>
-<h6 id="描述：-11"><a href="#描述：-11" class="headerlink" title="描述："></a>描述：</h6><p>雷狼龙快速跃起，迅速用背砸下。</p>
-<h6 id="效果：-11"><a href="#效果：-11" class="headerlink" title="效果："></a>效果：</h6><p>高伤害，大范围招式，玩家需要提前进行躲避处理或者使用当身技来处理招式。</p>
+<p><strong>描述：</strong></p>
+<p>雷狼龙快速跃起，迅速用背砸下。</p>
+<p><strong>效果：</strong></p>
+<p>高伤害，大范围招式，玩家需要提前进行躲避处理或者使用当身技来处理招式。</p>
 <p>拉近与玩家的距离。</p>
 <p>招式<strong>结束后后摇硬直比较长，玩家可以乘机输出</strong>。</p>
 <p>被击中后会带雷电buff。</p>
 <img src="/2025/08/17/blog-2/20.gif" style="zoom:75%;">
 
-<h5 id="【二连跳砸】"><a href="#【二连跳砸】" class="headerlink" title="【二连跳砸】"></a>【二连跳砸】</h5><h6 id="触发条件：-12"><a href="#触发条件：-12" class="headerlink" title="触发条件："></a>触发条件：</h6><p>玩家在其正面。</p>
+<h5 id="【二连跳砸】"><a href="#【二连跳砸】" class="headerlink" title="【二连跳砸】"></a>【二连跳砸】</h5><p><strong>触发条件：</strong></p>
+<p>玩家在其正面。</p>
 <p>雷狼龙处于超电状态。</p>
-<h6 id="描述：-12"><a href="#描述：-12" class="headerlink" title="描述："></a>描述：</h6><p>雷狼龙先在地面划一道闪电再跃起跳砸，落地后紧接着进行第二次跳砸。</p>
-<h6 id="效果：-12"><a href="#效果：-12" class="headerlink" title="效果："></a>效果：</h6><p>非常快速的招式，也是超电状态下雷狼龙经典招式，玩家最好需要使用当身技处理招式，也可以提前进行翻滚躲避。</p>
+<p><strong>描述：</strong></p>
+<p>雷狼龙先在地面划一道闪电再跃起跳砸，落地后紧接着进行第二次跳砸。</p>
+<p><strong>效果：</strong></p>
+<p>非常快速的招式，也是超电状态下雷狼龙经典招式，玩家最好需要使用当身技处理招式，也可以提前进行翻滚躲避。</p>
 <p>也是拉近与玩家距离的手段。</p>
 <p>招式后摇长，玩家能继续进行输出。</p>
 <p>玩家可以利用这招来给<strong>自己快速增加战斗资源。</strong>（比如太刀开刃）</p>
@@ -551,40 +590,50 @@
 <p>华丽的外观加上刺激的战斗体验，作为20周年超人气角色实至名归！</p>
 <h4 id="连段解析："><a href="#连段解析：" class="headerlink" title="连段解析："></a>连段解析：</h4><p>接下来列举几个在战斗中使用最频繁的连段。</p>
 <h5 id="【农夫三拳】"><a href="#【农夫三拳】" class="headerlink" title="【农夫三拳】"></a>【农夫三拳】</h5><p>此连段作为雷狼龙的经典连招，从P3一直继承到世界；世界中的农夫三拳也有了变招。</p>
-<h6 id="招式描述："><a href="#招式描述：" class="headerlink" title="招式描述："></a>招式描述：</h6><p>右轻拳+左轻拳+右重拳</p>
+<p><strong>招式描述：</strong></p>
+<p>右轻拳+左轻拳+右重拳</p>
 <img src="/2025/08/17/blog-2/22.gif" style="zoom:75%;">
 
-<h6 id="效果：-13"><a href="#效果：-13" class="headerlink" title="效果："></a>效果：</h6><p>雷狼龙经典招式，只有在超电状态下使用，相对来说频率比较低的招式，玩家处理和应对的方式多。</p>
+<p><strong>效果：</strong></p>
+<p>雷狼龙经典招式，只有在超电状态下使用，相对来说频率比较低的招式，玩家处理和应对的方式多。</p>
 <p>在世界中，此招还添加了一些变招，比如在放完右轻拳后，可能会接上左重拳；<strong>给玩家处理招式增加了些变数</strong>，有时还是需要靠目押来决定对策。</p>
 <h5 id="【头槌-铁山靠-飞扑-扫尾】"><a href="#【头槌-铁山靠-飞扑-扫尾】" class="headerlink" title="【头槌+铁山靠&#x2F;飞扑&#x2F;扫尾】"></a>【头槌+铁山靠&#x2F;飞扑&#x2F;扫尾】</h5><p>雷狼龙正常状态下基础连招，根据玩家位置不同从而派生后续连招。</p>
 <img src="/2025/08/17/blog-2/23.gif" style="zoom:75%;">
 
-<h6 id="效果：-14"><a href="#效果：-14" class="headerlink" title="效果："></a>效果：</h6><p>头槌后根据玩家位置发动下个招式，玩家可以<strong>利用这一机制进行引招从而决定自己下一步动作</strong>。</p>
+<p><strong>效果：</strong></p>
+<p>头槌后根据玩家位置发动下个招式，玩家可以<strong>利用这一机制进行引招从而决定自己下一步动作</strong>。</p>
 <p>特别的，在怒后超电状态下，此连招除了派生【飞扑】的连段，其余连段都会添加一个【回旋攻击】进行收尾。</p>
 <p>连段的延长变化导致玩家需要处理的攻击变多且变复杂，增大了对策难度。</p>
 <img src="/2025/08/17/blog-2/24.gif" style="zoom:75%;">
 
 <h5 id="【轻拳派生】"><a href="#【轻拳派生】" class="headerlink" title="【轻拳派生】"></a>【轻拳派生】</h5><p>雷狼龙进入怒后超电状态后的轻拳攻击不只是派生【农夫三拳】了，一般轻拳会有四段派生，以【大背砸】结尾或者是重拳结尾。</p>
-<p><img src="/2025/08/17/blog-2/blog-2%5C25.gif"></p>
-<h6 id="效果：-15"><a href="#效果：-15" class="headerlink" title="效果："></a>效果：</h6><p>新的强力变招，此<strong>连段的攻击频率算比较高，对于初见的玩家会比较难处理</strong>，且伤害较高，稍微失误可能就猫车了。</p>
+<img src="/2025/08/17/blog-2/25.gif">
+
+
+
+<p><strong>效果：</strong></p>
+<p>新的强力变招，此<strong>连段的攻击频率算比较高，对于初见的玩家会比较难处理</strong>，且伤害较高，稍微失误可能就猫车了。</p>
 <p>招式的前置招都是轻拳，变招多具有迷惑性，玩家在战斗时需要集中注意来目押招式，提高了难度。</p>
 <h5 id="特殊连段【反击】"><a href="#特殊连段【反击】" class="headerlink" title="特殊连段【反击】"></a>特殊连段【反击】</h5><p>雷狼龙进入怒后超电状态会解锁一项新技能：反击。</p>
 <p>对于初见玩家这一动作具有一定的迷惑性，此技能的前摇和其受击进入硬直动画非常相像；而【反击】动作是播完前摇后直接使用重拳，给玩家猝不及防。</p>
 <img src="/2025/08/17/blog-2/26.gif" style="zoom:75%;">
 
-<h6 id="效果：-16"><a href="#效果：-16" class="headerlink" title="效果："></a>效果：</h6><p>首先是给玩家一种<strong>很强的交互感</strong>，这种类似于玩家防御反击的招式能够增强交互的亮点，使怪物AI没有那么一招一式的呆板。</p>
+<p><strong>效果：</strong></p>
+<p>首先是给玩家一种<strong>很强的交互感</strong>，这种类似于玩家防御反击的招式能够增强交互的亮点，使怪物AI没有那么一招一式的呆板。</p>
 <p><strong>调整战斗节奏与攻防转换</strong>，【反击】招式能立马改变玩家的战斗节奏，把玩家从进攻立马转变为防守（反击）状态。</p>
 <p><strong>加快了进怒状态下攻击节奏</strong>，提高了进怒状态下的游戏难度，考验玩家武器和游戏机制熟练度。</p>
 <h3 id="基本机制"><a href="#基本机制" class="headerlink" title="基本机制"></a>基本机制</h3><h4 id="部位破环："><a href="#部位破环：" class="headerlink" title="部位破环："></a>部位破环：</h4><p>部位破环是怪猎中玩家战斗利用的最重要的机制之一，所有的怪物都有可破环的部位。</p>
 <p>怪物受到伤害同时<strong>会积累破坏值</strong>；</p>
 <p>每个可破坏部位破坏值是<strong>单独计算</strong>；</p>
 <p>当破坏值达到阈值则会<strong>触发部位破坏</strong>。</p>
-<h5 id="效果：-17"><a href="#效果：-17" class="headerlink" title="效果："></a>效果：</h5><p>部位破坏触发后，怪物会陷入<strong>比较长的硬直时间，此时玩家可以进行持续输出</strong>；</p>
+<p><strong>效果：</strong></p>
+<p>部位破坏触发后，怪物会陷入<strong>比较长的硬直时间，此时玩家可以进行持续输出</strong>；</p>
 <p>一些部位破坏（比如尾巴）会<strong>影响怪物的后续招式</strong>（世界雷狼龙好像没有什么大影响），一般怪物尾巴掉落后玩家可以进行<strong>额外一次素材收集（部位破坏奖励）</strong>。</p>
 <p>对于大体型怪物加入部位破坏的机制也能<strong>增加一定狩猎真实感</strong>。</p>
 <h4 id="口水硬直："><a href="#口水硬直：" class="headerlink" title="口水硬直："></a>口水硬直：</h4><p>怪物受到一定伤害后，会出现一段时间的发呆，流口水状态，此状态一般维持4秒（此时钩爪上身能重制硬直时间）</p>
 <p>一般<strong>阈值伤害为总血量的10%<strong>，积累伤害后还需要</strong>触发一次怪物的部位硬直才能让其进入口水硬直</strong>。（条件有一点苛刻，防止其重复进入口水硬直而导致玩家可以无限输出）</p>
-<h5 id="效果：-18"><a href="#效果：-18" class="headerlink" title="效果："></a>效果：</h5><p>对于玩家造成伤害的一次奖励，<strong>硬直状态下玩家可以持续输出</strong>。</p>
+<p><strong>效果：</strong></p>
+<p>对于玩家造成伤害的一次奖励，<strong>硬直状态下玩家可以持续输出</strong>。</p>
 <p>一定程度上<strong>提高了玩家狩猎的真实感。</strong></p>
 <h3 id="特殊机制"><a href="#特殊机制" class="headerlink" title="特殊机制"></a>特殊机制</h3><h4 id="属性攻击："><a href="#属性攻击：" class="headerlink" title="属性攻击："></a>属性攻击：</h4><p>雷狼龙进入超电状态的攻击都附带有雷属性，玩家附有雷属性异常后会更加容易积累眩晕值；<strong>积累满眩晕值后，玩家会直接在原地大硬直</strong>。此时更加容易被怪物攻击。</p>
 <p>眩晕的大硬直也增加了玩家在战斗的<strong>复杂性以及挑战性</strong>。</p>
@@ -615,7 +664,7 @@
     <div class="article-catelogue--wrapper">
       <div class="catelogue catelogue-1">
         <h3>目录</h3>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E5%AE%9A"><span class="toc-number">2.</span> <span class="toc-text">设定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%80%81%E4%BD%8D%EF%BC%88%E4%BB%A5MHWI%E4%B8%BA%E4%BE%8B%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">生态位（以MHWI为例）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E7%9B%AE%E7%9A%84"><span class="toc-number">4.</span> <span class="toc-text">设计目的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%AA%E7%89%A9%E7%9A%84%E7%94%9F%E6%80%81%E8%A1%8C%E4%B8%BA"><span class="toc-number">5.</span> <span class="toc-text">怪物的生态行为</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%B7%E5%85%89%E8%99%AB%E5%85%B1%E7%94%9F%EF%BC%9A"><span class="toc-number">5.1.</span> <span class="toc-text">雷光虫共生：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%86%E5%9C%B0%E4%BA%89%E5%A4%BA%EF%BC%9A"><span class="toc-number">5.2.</span> <span class="toc-text">领地争夺：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%98%E6%96%97%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90"><span class="toc-number">6.</span> <span class="toc-text">战斗行为分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%9C%BA%E5%90%BC%EF%BC%8C%E8%BF%9B%E6%80%92%E4%B8%8E%E9%9D%9E%E8%BF%9B%E6%80%92%E7%8A%B6%E6%80%81"><span class="toc-number">6.1.</span> <span class="toc-text">开场吼，进怒与非进怒状态</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%80%E5%9C%BA%E5%90%BC"><span class="toc-number">6.1.1.</span> <span class="toc-text">开场吼</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E6%80%92%E6%9C%BA%E5%88%B6"><span class="toc-number">6.1.2.</span> <span class="toc-text">进怒机制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%9B%E5%BC%8F%E6%8B%86%E8%A7%A3"><span class="toc-number">6.2.</span> <span class="toc-text">招式拆解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%84%E6%8A%80%E8%83%BD"><span class="toc-number">6.2.1.</span> <span class="toc-text">常规技能</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E8%BD%BB%E6%8B%B3%E3%80%91"><span class="toc-number">6.2.1.1.</span> <span class="toc-text">【轻拳】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6%EF%BC%9A"><span class="toc-number">6.2.1.1.1.</span> <span class="toc-text">触发条件：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8F%8F%E8%BF%B0%EF%BC%9A"><span class="toc-number">6.2.1.1.2.</span> <span class="toc-text">描述：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A"><span class="toc-number">6.2.1.1.3.</span> <span class="toc-text">效果：</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E9%87%8D%E6%8B%B3%E3%80%91"><span class="toc-number">6.2.1.2.</span> <span class="toc-text">【重拳】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6%EF%BC%9A-1"><span class="toc-number">6.2.1.2.1.</span> <span class="toc-text">触发条件：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8F%8F%E8%BF%B0%EF%BC%9A-1"><span class="toc-number">6.2.1.2.2.</span> <span class="toc-text">描述：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-1"><span class="toc-number">6.2.1.2.3.</span> <span class="toc-text">效果：</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E5%A4%B4%E6%A7%8C%E6%94%BB%E5%87%BB%E3%80%91"><span class="toc-number">6.2.1.3.</span> <span class="toc-text">【头槌攻击】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6%EF%BC%9A-2"><span class="toc-number">6.2.1.3.1.</span> <span class="toc-text">触发条件：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8F%8F%E8%BF%B0%EF%BC%9A-2"><span class="toc-number">6.2.1.3.2.</span> <span class="toc-text">描述：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-2"><span class="toc-number">6.2.1.3.3.</span> <span class="toc-text">效果：</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E9%93%81%E5%B1%B1%E9%9D%A0%E3%80%91"><span class="toc-number">6.2.1.4.</span> <span class="toc-text">【铁山靠】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6%EF%BC%9A-3"><span class="toc-number">6.2.1.4.1.</span> <span class="toc-text">触发条件：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8F%8F%E8%BF%B0%EF%BC%9A-3"><span class="toc-number">6.2.1.4.2.</span> <span class="toc-text">描述：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-3"><span class="toc-number">6.2.1.4.3.</span> <span class="toc-text">效果：</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E9%A3%9E%E6%89%91%E3%80%91"><span class="toc-number">6.2.1.5.</span> <span class="toc-text">【飞扑】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6%EF%BC%9A-4"><span class="toc-number">6.2.1.5.1.</span> <span class="toc-text">触发条件：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8F%8F%E8%BF%B0%EF%BC%9A-4"><span class="toc-number">6.2.1.5.2.</span> <span class="toc-text">描述：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-4"><span class="toc-number">6.2.1.5.3.</span> <span class="toc-text">效果：</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E6%89%AB%E5%B0%BE%E3%80%91"><span class="toc-number">6.2.1.6.</span> <span class="toc-text">【扫尾】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6%EF%BC%9A-5"><span class="toc-number">6.2.1.6.1.</span> <span class="toc-text">触发条件：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8F%8F%E8%BF%B0%EF%BC%9A-5"><span class="toc-number">6.2.1.6.2.</span> <span class="toc-text">描述：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-5"><span class="toc-number">6.2.1.6.3.</span> <span class="toc-text">效果：</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E5%9B%9E%E6%97%8B%E6%94%BB%E5%87%BB%E3%80%91"><span class="toc-number">6.2.1.7.</span> <span class="toc-text">【回旋攻击】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6%EF%BC%9A-6"><span class="toc-number">6.2.1.7.1.</span> <span class="toc-text">触发条件：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8F%8F%E8%BF%B0%EF%BC%9A-6"><span class="toc-number">6.2.1.7.2.</span> <span class="toc-text">描述：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-6"><span class="toc-number">6.2.1.7.3.</span> <span class="toc-text">效果：</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E5%86%B2%E5%88%BA%E3%80%91"><span class="toc-number">6.2.1.8.</span> <span class="toc-text">【冲刺】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6%EF%BC%9A-7"><span class="toc-number">6.2.1.8.1.</span> <span class="toc-text">触发条件：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8F%8F%E8%BF%B0%EF%BC%9A-7"><span class="toc-number">6.2.1.8.2.</span> <span class="toc-text">描述：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-7"><span class="toc-number">6.2.1.8.3.</span> <span class="toc-text">效果：</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E5%B0%BE%E7%A0%B8%E3%80%91"><span class="toc-number">6.2.1.9.</span> <span class="toc-text">【尾砸】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6%EF%BC%9A-8"><span class="toc-number">6.2.1.9.1.</span> <span class="toc-text">触发条件：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8F%8F%E8%BF%B0%EF%BC%9A-8"><span class="toc-number">6.2.1.9.2.</span> <span class="toc-text">描述：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-8"><span class="toc-number">6.2.1.9.3.</span> <span class="toc-text">效果：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E6%AE%8A%E6%8A%80%E8%83%BD"><span class="toc-number">6.2.2.</span> <span class="toc-text">特殊技能</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E8%93%84%E7%94%B5-%E5%A4%A7%E8%93%84%E7%94%B5%E3%80%91"><span class="toc-number">6.2.2.1.</span> <span class="toc-text">【蓄电&amp;大蓄电】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6%EF%BC%9A-9"><span class="toc-number">6.2.2.1.1.</span> <span class="toc-text">触发条件：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8F%8F%E8%BF%B0%EF%BC%9A-9"><span class="toc-number">6.2.2.1.2.</span> <span class="toc-text">描述：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-9"><span class="toc-number">6.2.2.1.3.</span> <span class="toc-text">效果：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD%EF%BC%88%E6%8C%87%E4%BB%85%E5%9C%A8%E8%B6%85%E7%94%B5%E7%8A%B6%E6%80%81%E4%B8%8B%E8%A7%A6%E5%8F%91%EF%BC%89"><span class="toc-number">6.2.3.</span> <span class="toc-text">进阶技能（指仅在超电状态下触发）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E9%9B%B7%E7%90%83%E3%80%91"><span class="toc-number">6.2.3.1.</span> <span class="toc-text">【雷球】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6%EF%BC%9A-10"><span class="toc-number">6.2.3.1.1.</span> <span class="toc-text">触发条件：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8F%8F%E8%BF%B0%EF%BC%9A-10"><span class="toc-number">6.2.3.1.2.</span> <span class="toc-text">描述：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-10"><span class="toc-number">6.2.3.1.3.</span> <span class="toc-text">效果：</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E8%B7%B3%E8%B7%83%E8%83%8C%E7%A0%B8%E3%80%91"><span class="toc-number">6.2.3.2.</span> <span class="toc-text">【跳跃背砸】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6%EF%BC%9A-11"><span class="toc-number">6.2.3.2.1.</span> <span class="toc-text">触发条件：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8F%8F%E8%BF%B0%EF%BC%9A-11"><span class="toc-number">6.2.3.2.2.</span> <span class="toc-text">描述：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-11"><span class="toc-number">6.2.3.2.3.</span> <span class="toc-text">效果：</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E4%BA%8C%E8%BF%9E%E8%B7%B3%E7%A0%B8%E3%80%91"><span class="toc-number">6.2.3.3.</span> <span class="toc-text">【二连跳砸】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6%EF%BC%9A-12"><span class="toc-number">6.2.3.3.1.</span> <span class="toc-text">触发条件：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8F%8F%E8%BF%B0%EF%BC%9A-12"><span class="toc-number">6.2.3.3.2.</span> <span class="toc-text">描述：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-12"><span class="toc-number">6.2.3.3.3.</span> <span class="toc-text">效果：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8B%9B%E6%B4%BE%E7%94%9F%E5%88%86%E6%9E%90"><span class="toc-number">6.3.</span> <span class="toc-text">连招派生分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9E%E6%AE%B5%E8%AE%BE%E8%AE%A1%EF%BC%9A"><span class="toc-number">6.3.1.</span> <span class="toc-text">连段设计：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E7%9B%AE%E7%9A%84%EF%BC%9A"><span class="toc-number">6.3.2.</span> <span class="toc-text">设计目的：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9E%E6%AE%B5%E8%A7%A3%E6%9E%90%EF%BC%9A"><span class="toc-number">6.3.3.</span> <span class="toc-text">连段解析：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E5%86%9C%E5%A4%AB%E4%B8%89%E6%8B%B3%E3%80%91"><span class="toc-number">6.3.3.1.</span> <span class="toc-text">【农夫三拳】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8B%9B%E5%BC%8F%E6%8F%8F%E8%BF%B0%EF%BC%9A"><span class="toc-number">6.3.3.1.1.</span> <span class="toc-text">招式描述：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-13"><span class="toc-number">6.3.3.1.2.</span> <span class="toc-text">效果：</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E5%A4%B4%E6%A7%8C-%E9%93%81%E5%B1%B1%E9%9D%A0-%E9%A3%9E%E6%89%91-%E6%89%AB%E5%B0%BE%E3%80%91"><span class="toc-number">6.3.3.2.</span> <span class="toc-text">【头槌+铁山靠&#x2F;飞扑&#x2F;扫尾】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-14"><span class="toc-number">6.3.3.2.1.</span> <span class="toc-text">效果：</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E8%BD%BB%E6%8B%B3%E6%B4%BE%E7%94%9F%E3%80%91"><span class="toc-number">6.3.3.3.</span> <span class="toc-text">【轻拳派生】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-15"><span class="toc-number">6.3.3.3.1.</span> <span class="toc-text">效果：</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%89%B9%E6%AE%8A%E8%BF%9E%E6%AE%B5%E3%80%90%E5%8F%8D%E5%87%BB%E3%80%91"><span class="toc-number">6.3.3.4.</span> <span class="toc-text">特殊连段【反击】</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-16"><span class="toc-number">6.3.3.4.1.</span> <span class="toc-text">效果：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%9C%BA%E5%88%B6"><span class="toc-number">6.4.</span> <span class="toc-text">基本机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E4%BD%8D%E7%A0%B4%E7%8E%AF%EF%BC%9A"><span class="toc-number">6.4.1.</span> <span class="toc-text">部位破环：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-17"><span class="toc-number">6.4.1.1.</span> <span class="toc-text">效果：</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%A3%E6%B0%B4%E7%A1%AC%E7%9B%B4%EF%BC%9A"><span class="toc-number">6.4.2.</span> <span class="toc-text">口水硬直：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%EF%BC%9A-18"><span class="toc-number">6.4.2.1.</span> <span class="toc-text">效果：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E6%AE%8A%E6%9C%BA%E5%88%B6"><span class="toc-number">6.5.</span> <span class="toc-text">特殊机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7%E6%94%BB%E5%87%BB%EF%BC%9A"><span class="toc-number">6.5.1.</span> <span class="toc-text">属性攻击：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E5%AE%9A"><span class="toc-number">2.</span> <span class="toc-text">设定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%80%81%E4%BD%8D%EF%BC%88%E4%BB%A5MHWI%E4%B8%BA%E4%BE%8B%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">生态位（以MHWI为例）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E7%9B%AE%E7%9A%84"><span class="toc-number">4.</span> <span class="toc-text">设计目的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%AA%E7%89%A9%E7%9A%84%E7%94%9F%E6%80%81%E8%A1%8C%E4%B8%BA"><span class="toc-number">5.</span> <span class="toc-text">怪物的生态行为</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%B7%E5%85%89%E8%99%AB%E5%85%B1%E7%94%9F%EF%BC%9A"><span class="toc-number">5.1.</span> <span class="toc-text">雷光虫共生：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%86%E5%9C%B0%E4%BA%89%E5%A4%BA%EF%BC%9A"><span class="toc-number">5.2.</span> <span class="toc-text">领地争夺：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%98%E6%96%97%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90"><span class="toc-number">6.</span> <span class="toc-text">战斗行为分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%9C%BA%E5%90%BC%EF%BC%8C%E8%BF%9B%E6%80%92%E4%B8%8E%E9%9D%9E%E8%BF%9B%E6%80%92%E7%8A%B6%E6%80%81"><span class="toc-number">6.1.</span> <span class="toc-text">开场吼，进怒与非进怒状态</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%80%E5%9C%BA%E5%90%BC"><span class="toc-number">6.1.1.</span> <span class="toc-text">开场吼</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E6%80%92%E6%9C%BA%E5%88%B6"><span class="toc-number">6.1.2.</span> <span class="toc-text">进怒机制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%9B%E5%BC%8F%E6%8B%86%E8%A7%A3"><span class="toc-number">6.2.</span> <span class="toc-text">招式拆解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%84%E6%8A%80%E8%83%BD"><span class="toc-number">6.2.1.</span> <span class="toc-text">常规技能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E3%80%90%E8%BD%BB%E6%8B%B3%E3%80%91"><span class="toc-number">6.2.2.</span> <span class="toc-text">【轻拳】</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E9%87%8D%E6%8B%B3%E3%80%91"><span class="toc-number">6.2.2.1.</span> <span class="toc-text">【重拳】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E5%A4%B4%E6%A7%8C%E6%94%BB%E5%87%BB%E3%80%91"><span class="toc-number">6.2.2.2.</span> <span class="toc-text">【头槌攻击】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E9%93%81%E5%B1%B1%E9%9D%A0%E3%80%91"><span class="toc-number">6.2.2.3.</span> <span class="toc-text">【铁山靠】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E9%A3%9E%E6%89%91%E3%80%91"><span class="toc-number">6.2.2.4.</span> <span class="toc-text">【飞扑】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E6%89%AB%E5%B0%BE%E3%80%91"><span class="toc-number">6.2.2.5.</span> <span class="toc-text">【扫尾】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E5%9B%9E%E6%97%8B%E6%94%BB%E5%87%BB%E3%80%91"><span class="toc-number">6.2.2.6.</span> <span class="toc-text">【回旋攻击】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E5%86%B2%E5%88%BA%E3%80%91"><span class="toc-number">6.2.2.7.</span> <span class="toc-text">【冲刺】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E5%B0%BE%E7%A0%B8%E3%80%91"><span class="toc-number">6.2.2.8.</span> <span class="toc-text">【尾砸】</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E6%AE%8A%E6%8A%80%E8%83%BD"><span class="toc-number">6.2.3.</span> <span class="toc-text">特殊技能</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E8%93%84%E7%94%B5-%E5%A4%A7%E8%93%84%E7%94%B5%E3%80%91"><span class="toc-number">6.2.3.1.</span> <span class="toc-text">【蓄电&amp;大蓄电】</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E9%98%B6%E6%8A%80%E8%83%BD%EF%BC%88%E6%8C%87%E4%BB%85%E5%9C%A8%E8%B6%85%E7%94%B5%E7%8A%B6%E6%80%81%E4%B8%8B%E8%A7%A6%E5%8F%91%EF%BC%89"><span class="toc-number">6.2.4.</span> <span class="toc-text">进阶技能（指仅在超电状态下触发）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E9%9B%B7%E7%90%83%E3%80%91"><span class="toc-number">6.2.4.1.</span> <span class="toc-text">【雷球】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E8%B7%B3%E8%B7%83%E8%83%8C%E7%A0%B8%E3%80%91"><span class="toc-number">6.2.4.2.</span> <span class="toc-text">【跳跃背砸】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E4%BA%8C%E8%BF%9E%E8%B7%B3%E7%A0%B8%E3%80%91"><span class="toc-number">6.2.4.3.</span> <span class="toc-text">【二连跳砸】</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8B%9B%E6%B4%BE%E7%94%9F%E5%88%86%E6%9E%90"><span class="toc-number">6.3.</span> <span class="toc-text">连招派生分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9E%E6%AE%B5%E8%AE%BE%E8%AE%A1%EF%BC%9A"><span class="toc-number">6.3.1.</span> <span class="toc-text">连段设计：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E7%9B%AE%E7%9A%84%EF%BC%9A"><span class="toc-number">6.3.2.</span> <span class="toc-text">设计目的：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9E%E6%AE%B5%E8%A7%A3%E6%9E%90%EF%BC%9A"><span class="toc-number">6.3.3.</span> <span class="toc-text">连段解析：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E5%86%9C%E5%A4%AB%E4%B8%89%E6%8B%B3%E3%80%91"><span class="toc-number">6.3.3.1.</span> <span class="toc-text">【农夫三拳】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E5%A4%B4%E6%A7%8C-%E9%93%81%E5%B1%B1%E9%9D%A0-%E9%A3%9E%E6%89%91-%E6%89%AB%E5%B0%BE%E3%80%91"><span class="toc-number">6.3.3.2.</span> <span class="toc-text">【头槌+铁山靠&#x2F;飞扑&#x2F;扫尾】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E8%BD%BB%E6%8B%B3%E6%B4%BE%E7%94%9F%E3%80%91"><span class="toc-number">6.3.3.3.</span> <span class="toc-text">【轻拳派生】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%89%B9%E6%AE%8A%E8%BF%9E%E6%AE%B5%E3%80%90%E5%8F%8D%E5%87%BB%E3%80%91"><span class="toc-number">6.3.3.4.</span> <span class="toc-text">特殊连段【反击】</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%9C%BA%E5%88%B6"><span class="toc-number">6.4.</span> <span class="toc-text">基本机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E4%BD%8D%E7%A0%B4%E7%8E%AF%EF%BC%9A"><span class="toc-number">6.4.1.</span> <span class="toc-text">部位破环：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%A3%E6%B0%B4%E7%A1%AC%E7%9B%B4%EF%BC%9A"><span class="toc-number">6.4.2.</span> <span class="toc-text">口水硬直：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E6%AE%8A%E6%9C%BA%E5%88%B6"><span class="toc-number">6.5.</span> <span class="toc-text">特殊机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7%E6%94%BB%E5%87%BB%EF%BC%9A"><span class="toc-number">6.5.1.</span> <span class="toc-text">属性攻击：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol>
       </div>
       
         <div class="catelogue catelogue-2">
