@@ -1,0 +1,57 @@
+.archive {
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #333;
+}
+.archive-title {
+  color: #87ceeb;
+  text-align: center;
+  padding: 15px 0;
+  margin-bottom: 15px;
+  border-bottom: 1px dashed #ccc;
+}
+.archive-list {
+  width: 100%;
+  display: flex;
+}
+.archive-list > li {
+  width: 100%;
+}
+.archive-list__year {
+  width: 100%;
+}
+.archive-list__year h2 {
+  color: #333;
+  font-size: 24px;
+  text-shadow: 5px 28px #ddd;
+}
+.archive-list__month {
+  color: #666;
+  font-size: 16px;
+  margin: 5px 0 0 15px;
+}
+.archive-list__post {
+  margin-left: 30px;
+  list-style: circle;
+  margin-top: 5px;
+}
+.archive-list__post:first-child {
+  margin-top: 10px;
+}
+.archive-list__post > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.archive-list__post > div > a {
+  color: #333;
+  font-size: 14px;
+}
+.archive-list__post > div > a:hover {
+  text-decoration: underline;
+}
+.archive-list__post > div > span {
+  color: #808080;
+  font-size: 14px;
+}

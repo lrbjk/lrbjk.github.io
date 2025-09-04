@@ -1,0 +1,142 @@
+.tools {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #333;
+}
+.tools-title {
+  color: #007fff;
+  font-size: 18px;
+  position: relative;
+}
+.tools-title::before,
+.tools-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  transform: translateY(-50%) scale(0.999);
+  display: inline-block;
+  width: 22%;
+  height: 1px;
+  background-color: #007fff;
+  animation: aWidth 1.2s infinite linear;
+}
+.tools-title::after {
+  bottom: -15px;
+  animation-delay: 0.25s;
+}
+@-moz-keyframes aWidth {
+  0% {
+    width: 22%;
+  }
+  25% {
+    width: 36%;
+  }
+  50% {
+    width: 20%;
+  }
+  75% {
+    width: 30%;
+  }
+  100% {
+    width: 22%;
+  }
+}
+@-webkit-keyframes aWidth {
+  0% {
+    width: 22%;
+  }
+  25% {
+    width: 36%;
+  }
+  50% {
+    width: 20%;
+  }
+  75% {
+    width: 30%;
+  }
+  100% {
+    width: 22%;
+  }
+}
+@-o-keyframes aWidth {
+  0% {
+    width: 22%;
+  }
+  25% {
+    width: 36%;
+  }
+  50% {
+    width: 20%;
+  }
+  75% {
+    width: 30%;
+  }
+  100% {
+    width: 22%;
+  }
+}
+@keyframes aWidth {
+  0% {
+    width: 22%;
+  }
+  25% {
+    width: 36%;
+  }
+  50% {
+    width: 20%;
+  }
+  75% {
+    width: 30%;
+  }
+  100% {
+    width: 22%;
+  }
+}
+.tools-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+.tools-list li {
+  width: calc(50% - 8px);
+  display: flex;
+  padding: 10px;
+  margin-top: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px #ccc;
+}
+.tools-list li:hover {
+  box-shadow: 1px 1px 5px inset #ccc;
+}
+.tools-list li .tool-cover {
+  width: 120px;
+  height: 120px;
+  border: 1px solid #ccc;
+  object-fit: cover;
+  -o-object-fit: cover;
+}
+.tools-list li .tool-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 10px;
+}
+.tools-list li .tool-info .tool-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+.tools-list li .tool-info .tool-intro {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #666;
+}
+.tools-list li .tool-info .tool-link {
+  font-size: 14px;
+  color: #007fff;
+  text-align: right;
+  text-decoration: underline;
+}

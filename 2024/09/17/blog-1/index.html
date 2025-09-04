@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>lirb的博客小站——为什么说卡普空是动作天尊——《鬼泣5》战斗分析#1 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" href="/imgs/shortcut-icon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/css/public.css" />
+  <link rel="stylesheet" href="/css/layout.css" />
+  <link rel="stylesheet" href="/css/iconfont.css" />
+  <link rel="stylesheet" href="/css/APlayer.min.css" />
+  <script src="/js/APlayer.min.js"></script>
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/jquery.pjax.min.js"></script>
+
+  <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+  <script>
+    document.title = `lirb的博客小站——为什么说卡普空是动作天尊——《鬼泣5》战斗分析#1`
+  </script>
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<style>
+  .load {
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(37, 35, 40);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 9999;
+  }
+  .load-circle {
+    width: 80px;
+    height: 80px;
+    border: 8px solid orange;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: rotate 1s linear infinite;
+    filter: drop-shadow(0 0 3px orange);
+  }
+  .load-circle-inner {
+    width: 40px;
+    height: 40px;
+    border: 8px solid orange;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: rotate-reverse .5s linear infinite;
+  }
+  .load-text {
+    margin-top: 20px;
+    font-size: 24px;
+    color: orange;
+    display: flex;
+  }
+  .load-text span {
+    margin: 0 5px;
+    text-shadow: 5px 5px 5px orange;
+    animation: move 1s linear infinite;
+  }
+  .load-text span:nth-child(1) {
+    animation-delay: -0.6s;
+  }
+  .load-text span:nth-child(2) {
+    animation-delay: -0.5s;
+  }
+  .load-text span:nth-child(3) {
+    animation-delay: -0.4s;
+  }
+  .load-text span:nth-child(4) {
+    animation-delay: -0.3s;
+  }
+  .load-text span:nth-child(5) {
+    animation-delay: -0.2s;
+  }
+  .load-text span:nth-child(6) {
+    animation-delay: -0.1s;
+  }
+  @keyframes rotate {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+  }
+  @keyframes rotate-reverse {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(-360deg); }
+  }
+  @keyframes move {
+    0% { transform: translateY(0%) rotate(0) scale(1); }
+    20% { transform: translateY(20%) rotate(10deg) scale(1.2); }
+    80% { transform: translateY(-10%) rotate(-20deg) scale(.8);}
+    100% { transform: translateY(0) rotate(0) scale(1); }
+  }
+
+  .progress {
+    position: fixed;
+    left: 0; top: 0;
+    width: 0;
+    height: 3px;
+    background-color: green;
+    transition: all cubic-bezier(0.215, 0.610, 0.355, 1) .1s;
+    z-index: 9999;
+  }
+
+  .to-up {
+    animation: toUp .5s 1;
+  }
+  .gray {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 9999;
+    display: none;
+    pointer-events: none;
+    background-color: #000;
+    mix-blend-mode: color;
+  }
+  @keyframes toUp {
+    from { transform: translateY(15px); opacity: 0; }
+    to { transform: translateY(0) ; opacity: 1; }
+  }
+</style>
+<body>
+  <div id="load" class="load">
+    <div class="load-circle">
+      <div class="load-circle-inner"></div>
+    </div>
+    <p class="load-text">
+      <span>L</span>
+      <span>O</span>
+      <span>A</span>
+      <span>D</span>
+      <span>I</span>
+      <span>N</span>
+      <span>G</span>
+    </p>
+  </div>
+  <div id="container" class="container w-100 vh-100" style="display: none;">
+    <header class="header">
+  <div class="header-wrapper">
+    <div class="header-left">
+      <div class="header-search">
+        <input id="search-input" type="text" class="header-search--input" placeholder="请输入要检索的文章标题" />
+        <span id="search-btn" class="header-search--icon"><i class="iconfont icon-sousuo"></i></span>
+      </div>
+      <div id="search-layer" class="header-search--layer hidden">
+        <p class="title">
+          <span>以下是搜索内容：</span>
+          <span id="close-layer-btn">关闭</span>
+        </p>
+        <ul>
+        </ul>
+      </div>
+    </div>
+    <div class="header-right">
+      <ul class="header-menu">
+        <li>
+          <a href="http://example.com/">
+            <i class="header-menu--icon iconfont icon-shouye"></i>
+            <span class="header-menu--span">首页</span>
+          </a>
+        </li>
+        <li>
+          <a href="http://example.com/log">
+            <i class="header-menu--icon iconfont icon-rizhi"></i>
+            <span class="header-menu--span">日志</span>
+          </a>
+        </li>
+        <li>
+          <a href="http://example.com/link">
+            <i class="header-menu--icon iconfont icon-youqinglianjie"></i>
+            <span class="header-menu--span">友情链接</span>
+          </a>
+        </li>
+        <li>
+          <a href="http://example.com/about">
+            <i class="header-menu--icon iconfont icon-guanyuwomen"></i>
+            <span class="header-menu--span">关于我</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<script>
+  const ipt = document.querySelector('#search-input')
+  const btn = document.querySelector('#search-btn')
+  const layer = document.querySelector('#search-layer')
+  const posts = JSON.parse(`[{"title":"为什么说卡普空是动作天尊——《鬼泣5》战斗分析#1","path":"2024/09/17/blog-1/"},{"title":"独具风格的怪物——雷狼龙解析","path":"2025/08/17/blog-2/"},{"title":"【从零开始的ARPG】角色基本运动","path":"2024/08/29/Unity-2/"},{"title":"【从零开始的ARPG】角色基本连招","path":"2024/09/11/Unity-3/"},{"title":"这两周Unity两作品","path":"2024/02/08/first-blog/"},{"title":"Unity2D俯视角敌人巡逻以及追击玩家","path":"2024/07/29/unity-1/"},{"title":"【更高级的运动系统】关于在Unity中如何处理角色急停","path":"2025/01/27/Unity-4/"}]`)
+  ipt.addEventListener('keyup', e => {
+    if (e.key === 'Enter') {
+      handleSearch()
+    }
+  })
+  btn.addEventListener('click', () => {
+    handleSearch()
+  })
+
+  document.querySelector('#close-layer-btn').addEventListener('click', () => {
+    layer.classList.toggle('hidden')
+  })
+
+  function handleSearch() {
+    if (ipt.value.trim() === '') {
+      return
+    }
+    let html = ''
+    const targetPosts = posts.filter(post => post.title.includes(ipt.value))
+    targetPosts.forEach(post => {
+      html += `
+        <li>
+          <div>
+            <a href="/${post.path}">${post.title.replace(new RegExp(ipt.value), `<span>${ipt.value}</span>`)}</a>
+          </div>
+          <img src="${post.cover || '/imgs/default-cover.webp' }" />
+        </li>
+      `
+    })
+    if (html.trim () === '') {
+      html += '<p class="empty">没有搜索到内容</p>'
+    }
+    layer.querySelector('ul').innerHTML = html
+    layer.classList.remove('hidden')
+  }
+</script> 
+    <section id="main" class="main">
+      <div class="main-left-wrapper">
+<div class="main-left">
+  <div class="main-left--block">
+    <div class="main-left--info">
+      <img src="/imgs/avatar.jpg"" class="main-left--avatar" />
+      <div class="main-left--intro">
+        <p class="main-left--name">Lirb.</p>
+        <div class="main-left--tags">
+          <span class="main-left--tag">Unity</span>
+          <span class="main-left--tag">Gameplaying</span>
+        </div>
+      </div>
+    </div>
+  
+    <div>
+      <div class="main-left--motto">
+        <p>“我们的旅程是星辰大海”</p>
+        <p>“一个简单普通的男孩”</p>
+      </div>
+      <div class="main-left--github">
+        <span class="line"></span>
+        <a target="_blank" rel="noopener" href="https://github.com/lrbjk"><i class="logo iconfont icon-github-fill"></i></a>
+        <span class="line"></span>
+      </div>
+      <div class="main-left--statics">
+        <a href="/categories">
+          <div>
+            <span>0</span>
+            <span>分类</span>
+          </div>
+        </a>
+        <a href="/tags">
+          <div>
+            <span>3</span>
+            <span>标签</span>
+          </div>
+        </a>
+        <a href="/archives">
+          <div>
+            <span>6 </span>
+            <span>归档</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-left--block">
+    <ul class="main-left--menu">
+      
+        <li>
+          <a href="/">
+            <span class="header-menu--span">小站首页</span>
+            <i class="header-menu--icon iconfont icon-shouye"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a href="/log">
+            <span class="header-menu--span">个人日志</span>
+            <i class="header-menu--icon iconfont icon-rizhi"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a href="/link">
+            <span class="header-menu--span">友情链接</span>
+            <i class="header-menu--icon iconfont icon-youqinglianjie"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a href="/about">
+            <span class="header-menu--span">关于自己</span>
+            <i class="header-menu--icon iconfont icon-guanyuwomen"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a href="/tools">
+            <span class="header-menu--span">我的工具</span>
+            <i class="header-menu--icon iconfont icon-gongju"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="main-left--block">
+    <div class="main-left--site">
+      <h5 class="main-left--title">
+        <span>站点信息</span>
+        <i class="iconfont icon-zhandian"></i>
+      </h5>
+      <p class="main-left--subtitle">
+        <span>文章数目：</span>
+        <span>7 篇</span>
+      </p>
+      <p class="main-left--subtitle">
+        <span>最近动态：</span>
+        <span>今天</span>
+      </p>
+      <p class="main-left--subtitle">
+        <span>上线时间：</span>
+        <span>1297天</span>
+      </p>
+      <p class="main-left--subtitle">
+        <span>当前版本：</span>
+        <span>v1.0.2</span>
+      </p>
+    </div>
+  </div>
+</div></div>
+      <div id="main-container" class="main-container">
+
+
+  <link rel="stylesheet" href="/css/partial/article.css" />
+
+<div class="article-container">
+  <div class="article">
+    <h1 class="article-title">为什么说卡普空是动作天尊——《鬼泣5》战斗分析#1</h1>
+    <div class="article-info">
+      <div class="article-info--item">
+        <div class="article-info--info">
+          
+          <div class="article-info--categories">
+            <span>分类：</span>
+            
+          </div>
+          
+          
+          <div class="article-info--tags">
+            <span>标签：</span>
+            <a class="tag-link" href="/tags/%E6%B8%B8%E6%88%8F%E6%9D%82%E8%B0%88/" rel="tag">游戏杂谈</a>
+          </div>
+          
+          <p class="article-info--date">日期：2024-09-17 22:47:25</p>
+        </div>
+        <img src="/imgs/default-cover.webp" alt="" class="article-cover">
+      </div>
+    </div>
+    <article class="article-content markdown-body">
+      <h1 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h1><p>说到动作游戏，脑海中第一反应便是卡普空的《怪猎》和《鬼泣》系列，这两经典IP可以说是我心目中最好玩，表现力最强的动作游戏。写这篇文章也是因为在玩过《鬼泣5》后还是被这5年前的游戏所震撼，有感而发；希望能以一种比较专业的视角去分析并且记录，学习。</p>
+<p>我将以下几个角度去分析：</p>
+<p>战斗核心体验解析：</p>
+<p>玩家能力：</p>
+<p>怪物设计：</p>
+<p>“动作天尊”打击感如何而来：</p>
+<p>动效表现杂谈：</p>
+<h1 id="战斗核心体验："><a href="#战斗核心体验：" class="headerlink" title="战斗核心体验："></a>战斗核心体验：</h1><p>简单概括DMC5的战斗核心体验就是： ”快！，炫酷连招去虐杀怪物“。</p>
+<p>”快“ 指的是游戏节奏快，说到快节奏的ACT游戏就想到”四大名著“：《鬼泣》《忍龙》《猎天使魔女》《战神》。</p>
+<p>而什么样才是快节奏呢？</p>
+<p>动作节奏快和操作节奏快，</p>
+<p>比如说最经典的鬼泣5科目一：</p>
+<video width="320" height="240" controls>
+    <source src="/2024/09/17/blog-1/vedio01.mp4" type="video/mp4">
+</video>
+
+
+
+
+<p>可以看到维吉尔的连招节奏非常快，而且玩家的输入也需要非常的迅速才能达成这样的连段效果。</p>
+<p>动作节奏快指的是每一个动作的时间短，后摇可以打断，快进快出。</p>
+<p>操作节奏快，指的是反应频率，这是动作游戏最关键的一点，正如稻叶敦志先生在2016年的GDC中所说的那样 “游戏不会呆呆地在那里等你开始，而是自顾自地不断向你展示出种种状态，并且提示你应该做些什么来应对”</p>
+<img src="/2024/09/17/blog-1/GDC-1.png" style="zoom:75%;">
+
+<p>所以说动作游戏本质上其实就是反应力的游戏。</p>
+<p>反应频率又可以分为两部分：</p>
+<h2 id="主动反应频率："><a href="#主动反应频率：" class="headerlink" title="主动反应频率："></a>主动反应频率：</h2><p>游戏提供给玩家的攻击方式，系统等，主要还是针对玩家的攻击动作行为的设计，比如连招。</p>
+<p>主动反应频率还受到动作时长、动作接续规则影响。</p>
+<p>动作时长：一般一个动作分为 ：前摇  攻击判定  后摇；动作时长也可以分为 动画时长+判定时长</p>
+<p>动作接续：连招，后摇取消；越自由的动作接续规则，主动反应频率越高，玩家自由度也就越高。</p>
+<h2 id="被动反应频率："><a href="#被动反应频率：" class="headerlink" title="被动反应频率："></a>被动反应频率：</h2><p>一般指的是玩家对于敌人，环境的反应；比如说玩家招架，闪避等行为。</p>
+<p>被动反应频率主要是由敌人的攻击频率所影响，攻击频率主要由攻击动画速度，同屏的敌人个数所决定。</p>
+<p>对于《鬼泣5》来说，主动反应频率大于被动反应频率的：</p>
+<p>主动反应频率高：动作帧数快，前摇短，后摇能取消；连招丰富且复杂，武器模式多。</p>
+<p>被动反应频率低：敌人攻击欲望低，敌人攻击前摇长并且会被打断，同屏的怪物数量少。</p>
+<p>（与之相反的《只狼》则是主动反应频率低而被动反应频率高，敌人攻击欲望很强，玩家需要一直弹反敌人的攻击）</p>
+<h2 id="战斗的宽度与深度："><a href="#战斗的宽度与深度：" class="headerlink" title="战斗的宽度与深度："></a>战斗的宽度与深度：</h2><p>我在此归纳一下网上所流行的说法：</p>
+<h3 id="宽度："><a href="#宽度：" class="headerlink" title="宽度："></a>宽度：</h3><p>简单来说就是战斗中所有情况的总和，包括玩家基本攻击，招式，敌人，地图场景等因素；有些地方将其等价为可能性空间。</p>
+<p>还有一个简易公式：</p>
+<p>宽度&#x3D;发生的情况总量×蕴含的影响总量×操作总量</p>
+<h3 id="深度："><a href="#深度：" class="headerlink" title="深度："></a>深度：</h3><p>简单来说就是在一个时间内玩家需要去处理信息的复杂度，也是精通一个动作游戏的难度所在。</p>
+<p>同样</p>
+<p>深度&#x3D;宽度 &#x2F; 反应时间</p>
+<p>（而外两个公式：操作总量&#x3D;操控精度×指令维度×决策数</p>
+<p>​                            操控精度 &#x3D; 操控时间精度 × 操控空间精度）</p>
+<p>归纳一下，深度 &#x3D; （被动反应频率 + 主动反应频率）×外部规则空间×操控时间精度×操控空间精度×执行指令操作×决策数</p>
+<p>其中，外部规则空间：指的是游戏战斗系统中所限定的玩家与敌人交互之间的规则，在《鬼泣5》中表现为将怪物打到失衡后可以将其击飞进行空中连击，怪物在被完美弹反后陷入硬直等。这些规则极大程度的影响着玩家的决策。</p>
+<p>操控时间精度：通俗的话来说就是判断无敌帧，怪物攻击时目押躲闪；还有《鬼泣5》尼禄搓红剑续到第三段要抓紧时间打出（好像第三段的判定只有两帧）。</p>
+<p>操控空间精度：操作对于空间位置的要求，方向与距离；像是左右前后闪避，玩家需要判断敌人的攻击方向进行闪躲</p>
+<p>执行指令操作：执行某种指令的复杂度，比如说《鬼泣5》中的维吉尔的虚无刀界：R1 + 左摇杆后推 + Y（特别是摇杆后退的Timing）还有科目一中将敌人挑飞后 Y+Y+Y(长按)然后松开Y打出完美次元斩。</p>
+<p>决策数：指的是在一个操作之后可以选择的操作数，好比《鬼泣》中各种连招，攻击之后可以选择继续连招还是换武器重新连招。</p>
+<h3 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h3><p><strong>一个游戏的深度决定了他的难度上限和下限</strong>，而难度可以划分为操作难度（上限）和游戏通关难度（下限）；就比如说《鬼泣5》中要实现像科目一这样华丽的操作需要对连招的熟悉度高且经过长时间练习，而只是通关游戏的话不需要那么多连招，有时候复读一个招式就ok了（咿呀剑法）</p>
+<h2 id="战斗系统："><a href="#战斗系统：" class="headerlink" title="战斗系统："></a>战斗系统：</h2><p>战斗系统主要是由 系统规则 + 玩家行为 + 怪物行为 + 数值 组成</p>
+<p>系统规则主要指的是敌人与玩家之间的交互方面，比如玩家这一刀下去，敌人是受击，击退还是格挡。数值则是这一攻击下给敌人造成了多少伤害，亦或是击飞距离等。</p>
+<p>在《鬼泣》中，还有一个重要的<strong>评分规则</strong>:</p>
+<p>评分分为D C B A S SS SSS这7档，评分标准则是玩家在战斗中使用的招式越多，难度越大，得到的评分越高；如果一直用同一招式则评分涨得就非常慢，受到敌人攻击则会降低评分。所以玩家要尽可能地打出各种不一样，难度高的连招，并且防止受到敌人攻击。</p>
+<h1 id="玩家能力："><a href="#玩家能力：" class="headerlink" title="玩家能力："></a>玩家能力：</h1><p>像是《鬼泣》这样快节奏的ACT游戏，为了提高主动反应频率，会采取一些必要操作去提高玩家的自由度。</p>
+<h3 id="取消后摇："><a href="#取消后摇：" class="headerlink" title="取消后摇："></a>取消后摇：</h3><p>一般在一个动作中，存在 前摇 攻击判定 后摇 。而后摇取消则是在一个动作的后摇阶段，会被下次输入的新动作所取代。比如说连续按攻击键，新的攻击会取代上一次攻击的后摇；又或是一次攻击后闪避或跳跃，会立马切换出攻击状态。</p>
+<p>后摇取消极大的提高了玩家操作的自由度，让玩家操作人物更加灵活，更快的反应。</p>
+<h3 id="正反馈的受击机制："><a href="#正反馈的受击机制：" class="headerlink" title="正反馈的受击机制："></a>正反馈的受击机制：</h3><p>在《鬼泣》中，怪物进入到受击状态中，只要玩家一直保持住连招状态，怪物就会一直受击，被玩家硬控；玩家越打越爽。</p>
+<h3 id="玩家受击惩罚："><a href="#玩家受击惩罚：" class="headerlink" title="玩家受击惩罚："></a>玩家受击惩罚：</h3><p>在《鬼泣》中，玩家受击惩罚是血量下降，评分降低，有些特别的比如集中条降低等。</p>
+<h3 id="角色行为动作设计："><a href="#角色行为动作设计：" class="headerlink" title="角色行为动作设计："></a>角色行为动作设计：</h3><p>《鬼泣5》跟以往的系列不太一样，这一部有4个可以操控的角色（尼禄，但丁，v ，维吉尔）</p>
+<img src="/2024/09/17/blog-1/p1.png" alt="p1" style="zoom:150%;">
+
+<p>角色是以近战攻击&amp;远程攻击为主的，每个角色的战斗风格都不一样。</p>
+<h4 id="尼禄："><a href="#尼禄：" class="headerlink" title="尼禄："></a>尼禄：</h4><p>地面攻击招式 + 空中攻击招式 + 魔人状态攻击 + 机械臂攻击</p>
+<p><strong>红刃：</strong></p>
+<p>红刃是尼禄独有的特殊属性，是在攻击的特定动作下按左扳机将刀点燃，加强后续攻击攻击力。《鬼泣5》中，红刃充能划为了三档；第一档的判定相对比较宽松，最后一档的判定基本上就1-2帧，比较难把握。</p>
+<p>一段红刃</p>
+<img src="/2024/09/17/blog-1/g2.gif" style="zoom:25%;">
+
+<p>三段红刃</p>
+<img src="/2024/09/17/blog-1/g1.gif" style="zoom: 25%;">
+
+<p>当然，也可以一直按左扳机键蓄力。</p>
+<p><strong>红刃之后加成：</strong></p>
+<p>提高伤害数值；</p>
+<p>提升攻击命中效果，附加击飞击退；</p>
+<p>提高动作速度，提升攻击效率（其实几帧的变化可以忽略不计），但是爽感会大大提高。</p>
+<h4 id="但丁："><a href="#但丁：" class="headerlink" title="但丁："></a>但丁：</h4><p>但丁的招式是所有角色中最多的，也是最复杂的一个角色。</p>
+<p>地面攻击招式 + 空中攻击招式 + 真魔人攻击招式。</p>
+<p>首先是四种战斗风格：</p>
+<p>S-剑圣风格：输出，强化武器技能。</p>
+<img src="/2024/09/17/blog-1/s.gif" style="zoom:50%;">
+
+<p>G-枪神风格：强化远程武器。</p>
+<img src="/2024/09/17/blog-1/c.gif" style="zoom:50%;">
+
+<p>T-骗术师风格：可以进行冲刺，也能瞬移。</p>
+<img src="/2024/09/17/blog-1/T.gif" style="zoom: 50%;">
+
+<p>R-皇家护卫风格：加强防御。</p>
+<img src="/2024/09/17/blog-1/R.gif" style="zoom:50%;">
+
+<p>根据战斗情况的不同随时切换风格。</p>
+<p>武器方面：但丁是全游戏拥有武器最多的角色，有魔剑，巴洛克，三节棍，摩托车（近战）；手枪，双枪，霰弹枪，火箭筒，帽子（远程）；每一个武器都有它单独的连招系统，所以说但丁的操作上限高。</p>
+<h4 id="维吉尔："><a href="#维吉尔：" class="headerlink" title="维吉尔："></a>维吉尔：</h4><p>我认为是《鬼泣5》中招式最帅的角色：</p>
+<p>地面攻击招式 + 空中攻击招式 + 真魔人攻击招式</p>
+<p>攻击方式以近距离为主，有一些空间型的技能，比如次元斩。</p>
+<img src="/2024/09/17/blog-1/cyz.gif" style="zoom:50%;">
+
+<p>维吉尔有一条专属的集中条，一共有三段，在连招时会一直增长；如果受击则会被打断。当集中条大于等于二段时，并且魔人条是满的，则可释放每种武器的大招，比如次元斩 绝 或者 v 的世界。</p>
+<img src="/2024/09/17/blog-1/bs.gif" style="zoom:50%;">
+
+<p>维吉尔自带瞬移机制，玩家可以在击飞敌人后瞬移到敌人面前继续连招。</p>
+<img src="/2024/09/17/blog-1/shunyi.gif" style="zoom:50%;">
+
+<p>幻影剑是维吉尔重要的武器，根据出招不同，幻影剑的攻击方式也不一样；幻影剑某些招式能够控制敌人，方便玩家继续输出。</p>
+<img src="/2024/09/17/blog-1/huanyingjian.gif" style="zoom:50%;">
+
+<h1 id="怪物设计："><a href="#怪物设计：" class="headerlink" title="怪物设计："></a>怪物设计：</h1><h2 id="攻击模式："><a href="#攻击模式：" class="headerlink" title="攻击模式："></a>攻击模式：</h2><p>《鬼泣5》怪物的攻击模式采用<strong>“ 2 + ？” 攻击模式</strong>；</p>
+<p>当场景镜头中怪物的数量大于两个，只会有两个敌人向前攻击玩家，其他怪物会在外围与玩家对峙。这样子的模式会使玩家专心与其中一个敌人 1v1 战斗的时候还需要关注另一个怪物的攻击，及时进行闪避；但又不致于被怪物群殴导致玩家游戏体验降低。</p>
+<img src="/2024/09/17/blog-1/enemies.gif" style="zoom:50%;">
+
+<h2 id="攻击欲望："><a href="#攻击欲望：" class="headerlink" title="攻击欲望："></a>攻击欲望：</h2><p>鬼泣中敌人的攻击欲望普遍偏低（主要是为了降低玩家难度，毕竟有些连招还真不好搓）；但也有一些攻击欲望比较高的（像是维吉尔vs但丁&#x2F;尼禄的boss战）。攻击欲望低也正好应证了《鬼泣》被动反应频率低的特点，玩家能以更多方式去击杀怪物而不是一味的闪避。</p>
+<h2 id="攻击动作："><a href="#攻击动作：" class="headerlink" title="攻击动作："></a>攻击动作：</h2><p>《鬼泣5》中的敌人攻击动作都是比较长的，主要分布在动作的前摇位置，目的是为了让玩家看清怪物的出招动作以便于及时闪避。一些敌人威力比较大的攻击，也会通过一些像外表改变等方式来提醒玩家做好躲避的准备。总之，《鬼泣5》本身就是要玩家“以炫酷的招式去虐杀怪物”所以大部分怪物的攻击也就比较容易闪避或看破。</p>
+<img src="/2024/09/17/blog-1/tanfan.gif" style="zoom:50%;">
+
+<h2 id="特殊机制："><a href="#特殊机制：" class="headerlink" title="特殊机制："></a>特殊机制：</h2><p>在《鬼泣5》中，也存在一些有特殊机制的怪物：</p>
+<p>双刀哥：韧性强，很难打断</p>
+<p>死神剪刀：它的剪刀武器会弹反玩家的攻击并且反击，玩家只能打碎它的剪刀才能造成伤害。</p>
+<p>骑士：主要是有盾能够防御玩家攻击，玩家要破盾后才能连续输出。</p>
+<h1 id="“打击感”如何而来："><a href="#“打击感”如何而来：" class="headerlink" title="“打击感”如何而来："></a>“打击感”如何而来：</h1><p>游戏中所谓的“打击感”，其实就是玩家在攻击后的打击反馈。</p>
+<p>而这样一种感官反馈是由很多方面组成的：</p>
+<p><strong>攻击方动画；</strong></p>
+<p><strong>受击方动画；</strong></p>
+<p><strong>打击特效（固有特效与质感特效）；</strong></p>
+<p><strong>镜头抖动；</strong></p>
+<p><strong>音效；</strong></p>
+<p><strong>手柄震动；</strong></p>
+<p>而卡普空在《鬼泣5》中就把这些效果展现得淋漓尽致，给人的感觉就是：有张有驰，张弛有度：</p>
+<h2 id="攻击动画："><a href="#攻击动画：" class="headerlink" title="攻击动画："></a>攻击动画：</h2><h3 id="原始动画："><a href="#原始动画：" class="headerlink" title="原始动画："></a>原始动画：</h3><p>可以看下面一段GIF：</p>
+<img src="/2024/09/17/blog-1/2024-09-21%2018-48-29.gif" style="zoom:50%;">
+
+<p>可以看到尼禄的攻击动画是非常迅速的，但是，就是在这么迅速的攻击动画中，展现出了很强的张力，让人印象深刻。</p>
+<p>而这是如何做到的呢，秘诀就在于——在高速的动画中，总要留几帧去摆帅气的pose。正所谓有张才有驰，有缓才有急。</p>
+<p>在攻击动画的<strong>衔接方面</strong>，《鬼泣5》中的连招动画衔接也非常的不一样，我们将衔接的部分放缓可以看到</p>
+<img src="/2024/09/17/blog-1/nilu2.gif" style="zoom:50%;">
+
+<p>一般动画，第一刀劈下去下一刀按照惯性应该向上捞，但是鬼泣中却采用衔接反手下劈；这样更能展现出动作的力量感。</p>
+<h3 id="当攻击击中敌人时："><a href="#当攻击击中敌人时：" class="headerlink" title="当攻击击中敌人时："></a><strong>当攻击击中敌人时：</strong></h3><img src="/2024/09/17/blog-1/04.gif" style="zoom:50%;">
+
+<img src="/2024/09/17/blog-1/nilu3.gif" style="zoom:50%;">
+
+<p>（两个GIF都是放慢30%）</p>
+<p><strong>冻结帧：</strong></p>
+<p>可以发现，尼禄在攻击到敌人的时候，攻击动画会有一个明显的顿帧；这就是所谓的帧冻结，也是一个非常简单的提升打击感的方法，若是没有帧冻结，那玩家的攻击就像是在挥砍空气。</p>
+<img src="/2024/09/17/blog-1/freezing.png" style="zoom:50%;">
+
+<p>但是帧冻结的时间也不能随意设计，一般来说，轻武器不需要配置很长的冻结帧或者不配置冻结帧；而越重的武器打击时配置的冻结帧就会相对长一些。</p>
+<h3 id="抽帧："><a href="#抽帧：" class="headerlink" title="抽帧："></a>抽帧：</h3><p>卡普空的动作游戏为了表现打击感，一般会对攻击动作进行抽帧处理，《鬼泣》也不例外；</p>
+<img src="/2024/09/17/blog-1/zhen01.png" style="zoom:50%;">
+
+<img src="/2024/09/17/blog-1/zhen02.png" style="zoom:50%;">
+
+<p>抽帧可以使攻击动画更加高速。</p>
+<h3 id="小结："><a href="#小结：" class="headerlink" title="小结："></a>小结：</h3><p>作为攻击动画，首先没必要中规中矩，适当的夸张一些反而更能增加游玩时候的视觉效果；与打击对象交互时，适当的添加一些帧冻结（“卡肉”）效果也能防止玩家觉得自己在砍空气，从而降低打击效果。</p>
+<h2 id="受击动画："><a href="#受击动画：" class="headerlink" title="受击动画："></a>受击动画：</h2><p>敌人的受击动画当然也是打击效果中不可或缺的一环。</p>
+<p>而敌人受击动画要与敌人位移相，玩家攻击状态（轻击，重击，攻击方向等）相对应。</p>
+<img src="/2024/09/17/blog-1/hit.gif" style="zoom:50%;">
+
+<p>在鬼泣中，敌人受击动画是根据玩家的攻击方向来决定播放哪一个受击动画；</p>
+<p>根据玩家攻击状态（轻击或重击）来决定敌人受击后的位移距离。</p>
+<p>像鬼泣这样的快节奏ACT游戏，敌人的受击动画一般比较长，目的是为了玩家在连招的时候敌人无法打断玩家，提高玩家的游玩体验。</p>
+<h2 id="打击特效："><a href="#打击特效：" class="headerlink" title="打击特效："></a>打击特效：</h2><p>固有特效：一般也是指技能特效，这个特效是最基本、最固定的特效，只要是出技能或者是攻击动作，都会有这个特效。这一类特效一般是对于武器或者角色动作轨迹的夸张模拟；目的就是为了让动作更大更有张力。</p>
+<p>在《鬼泣5》中不同的攻击，不同属性所拥有的技能特效也不相同。</p>
+<img src="/2024/09/17/blog-1/tx01.gif" style="zoom: 25%;">
+
+<img src="/2024/09/17/blog-1/tx02.gif" style="zoom:25%;">
+
+<p>​                                        （像是“咿呀剑法”就有根据人物轨迹的特效，还有音爆特效；刀刃上还附有强化的特效）</p>
+<img src="/2024/09/17/blog-1/tx03.gif" style="zoom:50%;">
+
+<p>​                            （当武器带有特殊属性时，其特效也会直观展现出其属性；比如说雷属性的三节棍就会带有雷电特效）</p>
+<p>质感特效：一般指的是命中特效，这个特效一般是攻击命中对手后才会触发。而这种特效的外观一般由武器类型决定；一般会是一个爆点或者一段闪光。</p>
+<p>在《鬼泣5》中，命中特效其实是一段很短暂的闪光：</p>
+<img src="/2024/09/17/blog-1/tx04.gif" style="zoom:50%;">
+
+<p>​                                                                                        （这段闪光大概只有9帧）</p>
+<p>质感特效中还有一个命中质感，而这命中质感也是由对手的类型决定的，像是血肉之躯的敌人，受击后就会有溅血的特效；若是钢铁之躯，则会有溅射火花的特效。</p>
+<img src="/2024/09/17/blog-1/blood.png" style="zoom: 67%;">
+
+<p>​                                                           （《鬼泣5》中既有血液溅射特效，也有一些火花溅射的效果）</p>
+<p>当然在《鬼泣5》中，还有一层质感特效，就是敌人身上的一段“划痕”。</p>
+<img src="/2024/09/17/blog-1/beHit.png" style="zoom: 67%;">
+
+<p>很多游戏中也会添加一些像这种划痕的特效，比如《星球大战绝地：幸存者》。但是在《鬼泣5》中则使用的是实现制作好的划痕特效而不是实时生成的特效，这样能很好的保证特效不会有奇怪的形状导致玩家出戏。</p>
+<h2 id="镜头抖动："><a href="#镜头抖动：" class="headerlink" title="镜头抖动："></a>镜头抖动：</h2><p>虽然很多人说镜头抖动是最容易也是最low的去增加打击感的方法，但是，不得不说，适当的镜头抖动确实能让玩家的视觉体验以及打击感有很大的提升。</p>
+<p>在《鬼泣5》中，也有用到镜头抖动，但不是在任何时候都使用镜头抖动。像是普通攻击就没有使用到镜头抖动，而一些比较重、比较大型的攻击则用到了镜头抖动。</p>
+<img src="/2024/09/17/blog-1/shake01.gif" style="zoom: 25%;">
+
+<p>重型攻击下利用镜头抖动能很强的增加力量感。</p>
+<h2 id="音效："><a href="#音效：" class="headerlink" title="音效："></a>音效：</h2><p>一般动作游戏音效包括刀挥舞时破风的声音，刀切割到物体的声音，金属撞击的声音……</p>
+<p>合适的音效能增强玩家的打击反馈，让玩家知道自己用何种武器攻击，打击到的是什么，打击的力度怎么样。</p>
+<p>一些ARPG游戏在玩家进行攻击时还会有人物的嘶吼声或者符合人物形象的台词；例如在《鬼泣5》中，角色挥动武器便会伴有吼叫声（但丁“咿呀”剑法）。不同角色还会有不同台词，比如维吉尔出刀时会喊一句“weak”，符合其高冷反派形象。</p>
+<h2 id="手柄震动："><a href="#手柄震动：" class="headerlink" title="手柄震动："></a>手柄震动：</h2><p>对于一些支持手柄操作的ACT游戏，这个反馈是必不可少的。但是同样，不能被滥用。手柄震动应该和镜头震动一样，在重攻击或者是大型攻击才需要用上。（当然，有些手柄震动也是为了提醒玩家有事件发生）</p>
+<h1 id="动效表现杂谈："><a href="#动效表现杂谈：" class="headerlink" title="动效表现杂谈："></a>动效表现杂谈：</h1><p>以上所分析的“打击感”，其实是每一款优秀动作游戏都需要拥有的基本操作。但是，要体现出一个游戏的特色，还是需要有自己独特的动效表现。</p>
+<h2 id="镜头："><a href="#镜头：" class="headerlink" title="镜头："></a>镜头：</h2><p>《鬼泣5》作为一款动作类游戏，主要还是需要展现游戏角色精彩的打斗动作。所以，一般在战斗的时候，镜头不会只朝向玩家背后，而是会让玩家看到角色和敌人两边的动作。</p>
+<img src="/2024/09/17/blog-1/camera01.png" style="zoom: 67%;">
+
+<p>​                                                                                                （玩家移动时）</p>
+<img src="/2024/09/17/blog-1/camera02.png" style="zoom:67%;">
+
+<p>​                     （当玩家在进行攻击等行为时，镜头会自动转向能同时看清玩家和敌人动作的视角，类似于格斗游戏视角）</p>
+<p>这样的镜头设计，更能让玩家体验到动作游戏中“动作”元素的体现，也是提高玩家游玩游戏时的“爽感”的方法。</p>
+
+    </article>
+    
+    <div class="read-nums">
+      <!-- id 将作为查询条件 -->
+      <span id="2024/09/17/blog-1/" class="leancloud_visitors" data-flag-title="Your Article Title">
+        <em class="post-meta-item-text">浏览量</em>
+        <i class="leancloud-visitors-count"></i>
+      </span>
+    </div>
+    <div class="comments-intro">
+      <h2>评论区</h2>
+      <p>欢迎你留下宝贵的意见，昵称输入QQ号会显示QQ头像哦~</p>
+    </div>
+    <div id="vcomments" class="vcomments"></div>
+    
+  </div>
+  <div class="article-catelogue">
+    <div class="article-catelogue--wrapper">
+      <div class="catelogue catelogue-1">
+        <h3>目录</h3>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">前言：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%88%98%E6%96%97%E6%A0%B8%E5%BF%83%E4%BD%93%E9%AA%8C%EF%BC%9A"><span class="toc-number">2.</span> <span class="toc-text">战斗核心体验：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E5%8A%A8%E5%8F%8D%E5%BA%94%E9%A2%91%E7%8E%87%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">主动反应频率：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A2%AB%E5%8A%A8%E5%8F%8D%E5%BA%94%E9%A2%91%E7%8E%87%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">被动反应频率：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%98%E6%96%97%E7%9A%84%E5%AE%BD%E5%BA%A6%E4%B8%8E%E6%B7%B1%E5%BA%A6%EF%BC%9A"><span class="toc-number">2.3.</span> <span class="toc-text">战斗的宽度与深度：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%BD%E5%BA%A6%EF%BC%9A"><span class="toc-number">2.3.1.</span> <span class="toc-text">宽度：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%EF%BC%9A"><span class="toc-number">2.3.2.</span> <span class="toc-text">深度：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="toc-number">2.3.3.</span> <span class="toc-text">总结：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%98%E6%96%97%E7%B3%BB%E7%BB%9F%EF%BC%9A"><span class="toc-number">2.4.</span> <span class="toc-text">战斗系统：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%A9%E5%AE%B6%E8%83%BD%E5%8A%9B%EF%BC%9A"><span class="toc-number">3.</span> <span class="toc-text">玩家能力：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96%E6%B6%88%E5%90%8E%E6%91%87%EF%BC%9A"><span class="toc-number">3.0.1.</span> <span class="toc-text">取消后摇：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%8F%8D%E9%A6%88%E7%9A%84%E5%8F%97%E5%87%BB%E6%9C%BA%E5%88%B6%EF%BC%9A"><span class="toc-number">3.0.2.</span> <span class="toc-text">正反馈的受击机制：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%A9%E5%AE%B6%E5%8F%97%E5%87%BB%E6%83%A9%E7%BD%9A%EF%BC%9A"><span class="toc-number">3.0.3.</span> <span class="toc-text">玩家受击惩罚：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%92%E8%89%B2%E8%A1%8C%E4%B8%BA%E5%8A%A8%E4%BD%9C%E8%AE%BE%E8%AE%A1%EF%BC%9A"><span class="toc-number">3.0.4.</span> <span class="toc-text">角色行为动作设计：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%BC%E7%A6%84%EF%BC%9A"><span class="toc-number">3.0.4.1.</span> <span class="toc-text">尼禄：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%86%E4%B8%81%EF%BC%9A"><span class="toc-number">3.0.4.2.</span> <span class="toc-text">但丁：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%B4%E5%90%89%E5%B0%94%EF%BC%9A"><span class="toc-number">3.0.4.3.</span> <span class="toc-text">维吉尔：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%AA%E7%89%A9%E8%AE%BE%E8%AE%A1%EF%BC%9A"><span class="toc-number">4.</span> <span class="toc-text">怪物设计：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%A8%A1%E5%BC%8F%EF%BC%9A"><span class="toc-number">4.1.</span> <span class="toc-text">攻击模式：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%AC%B2%E6%9C%9B%EF%BC%9A"><span class="toc-number">4.2.</span> <span class="toc-text">攻击欲望：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E5%8A%A8%E4%BD%9C%EF%BC%9A"><span class="toc-number">4.3.</span> <span class="toc-text">攻击动作：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E6%AE%8A%E6%9C%BA%E5%88%B6%EF%BC%9A"><span class="toc-number">4.4.</span> <span class="toc-text">特殊机制：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E2%80%9C%E6%89%93%E5%87%BB%E6%84%9F%E2%80%9D%E5%A6%82%E4%BD%95%E8%80%8C%E6%9D%A5%EF%BC%9A"><span class="toc-number">5.</span> <span class="toc-text">“打击感”如何而来：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E5%8A%A8%E7%94%BB%EF%BC%9A"><span class="toc-number">5.1.</span> <span class="toc-text">攻击动画：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E5%A7%8B%E5%8A%A8%E7%94%BB%EF%BC%9A"><span class="toc-number">5.1.1.</span> <span class="toc-text">原始动画：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%93%E6%94%BB%E5%87%BB%E5%87%BB%E4%B8%AD%E6%95%8C%E4%BA%BA%E6%97%B6%EF%BC%9A"><span class="toc-number">5.1.2.</span> <span class="toc-text">当攻击击中敌人时：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%BD%E5%B8%A7%EF%BC%9A"><span class="toc-number">5.1.3.</span> <span class="toc-text">抽帧：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93%EF%BC%9A"><span class="toc-number">5.1.4.</span> <span class="toc-text">小结：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%97%E5%87%BB%E5%8A%A8%E7%94%BB%EF%BC%9A"><span class="toc-number">5.2.</span> <span class="toc-text">受击动画：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%93%E5%87%BB%E7%89%B9%E6%95%88%EF%BC%9A"><span class="toc-number">5.3.</span> <span class="toc-text">打击特效：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%95%9C%E5%A4%B4%E6%8A%96%E5%8A%A8%EF%BC%9A"><span class="toc-number">5.4.</span> <span class="toc-text">镜头抖动：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9F%B3%E6%95%88%EF%BC%9A"><span class="toc-number">5.5.</span> <span class="toc-text">音效：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%8B%E6%9F%84%E9%9C%87%E5%8A%A8%EF%BC%9A"><span class="toc-number">5.6.</span> <span class="toc-text">手柄震动：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8A%A8%E6%95%88%E8%A1%A8%E7%8E%B0%E6%9D%82%E8%B0%88%EF%BC%9A"><span class="toc-number">6.</span> <span class="toc-text">动效表现杂谈：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%95%9C%E5%A4%B4%EF%BC%9A"><span class="toc-number">6.1.</span> <span class="toc-text">镜头：</span></a></li></ol></li></ol>
+      </div>
+      
+        <div class="catelogue catelogue-2">
+          
+            <p>
+              <span>上一篇：</span>
+              <a href="/2025/01/27/Unity-4/">【更高级的运动系统】关于在Unity中如何处理角色急停</a>
+            </p>
+           
+          
+            <p>
+              <span>下一篇</span>
+              <a href="/2024/09/11/Unity-3/">【从零开始的ARPG】角色基本连招</a>
+            </p>
+          
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // var定义，避免pjax重新进来造成的重复声明错误
+  var config = JSON.parse('{"enable":true,"appId":"Pf8zCXGEH1qsprnWfikVVujL-gzGzoHsz","appKey":"qOqoiUHhH1TGtLRUYURkLRQX","placeholder":"请留下你宝贵的意见吧~","meta":["nick"],"recordIP":true,"visitor":true,"enableQQ":true}')
+  new Valine({
+    el: '#vcomments',
+    appId: config.appId,
+    appKey: config.appKey,
+    placeholder: config.placeholder,
+    meta: config.meta,
+    recordIP: config.recordIP,
+    visitor: config.visitor,
+    enableQQ: config.enableQQ,
+    path: '2024/09/17/blog-1/'
+  })
+</script>
+
+
+<script>
+  $(document).on('pjax:complete', function() {
+    const tocs = document.querySelector('.toc')
+    const links = tocs ? tocs.querySelectorAll('a') : []
+    links.forEach(link => {
+      link.addEventListener('click', e => {
+        const href = decodeURIComponent(e.href)
+        href.search(/#(.*)/)
+        const id = RegExp.$1
+        const target = document.querySelector('#' + id)
+        const top = target.offsetTop
+        document.documentElement.scrollTo({
+          top: top - 100,
+          behavior: 'smooth'
+        })
+        e.preventDefault()
+      })
+    })
+  })
+</script> 
+
+</div>
+      <div class="main-right-wrapper"><div class="main-right">
+  <div class="main-right--board">
+    <div class="main-right--title">
+      <h5>公告栏</h5>
+      <i class="iconfont icon-gonggao"></i>
+    </div>
+    <div class="main-right--content">
+      这里是lirb的博客网站，会分享一些奇奇怪怪的计算机知识。 
+    </div>
+  </div>
+
+  <div id="aplayer" class="main-right--music"></div>
+
+  <div class="operate-items">
+    <div class="operate-item backtop">
+      <i class="iconfont icon-huidaodingbu"></i>
+      <span>回到顶部</span>
+    </div>
+    
+    <div class="operate-item turn-comment hidden">
+      <i class="iconfont icon-pinglun"></i>
+      <span>查看评论</span>
+    </div>
+    
+  </div>
+
+  <div class="main-right--site">
+    <div class="main-right--power">
+      <p>Power By <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo</a>.</p>
+      <p>Theme：<a target="_blank" rel="noopener" href="https://github.com/Aizener/hexo-theme-cola">Cola.</a></p>
+    </div>
+    <p class="main-right--refer"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/#/Integrated/index"></a> </p>
+  </div>
+</div>
+
+<script>
+  function setOperateItem () {
+    const reg = /\d{4}\/\d{2}\/\d{2}\/.+/
+    const path = location.pathname
+    const operateDom = document.querySelector('.main-right .operate-items')
+    const commentDom = document.querySelector('.turn-comment')
+    const cateloguDom = document.querySelector('.article-catelogue > .article-catelogue--wrapper');
+
+    if (commentDom) {
+      if (reg.test(path) || path.match(/\/log\/.+/)) {
+        commentDom.classList.remove('hidden')
+        const newDom = operateDom.cloneNode(true);
+        const _backtopDom = newDom.querySelector('.backtop');
+        const _commentDom = newDom.querySelector('.turn-comment');
+        _backtopDom.addEventListener('click', () => backTopEvent());
+        _commentDom.addEventListener('click', () => commentDomEvent());
+        cateloguDom.appendChild(newDom);
+      } else {
+        commentDom.classList.add('hidden')
+      }
+    }
+  }
+
+  setOperateItem()
+  const musics = JSON.parse(`[{"name":"卡布达","artist":"暂无","url":"music/kabuda.mp3","cover":"https://img2.baidu.com/it/u=705831265,2862720033&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500"}]`)
+  const ap = new APlayer({
+    container: document.querySelector('#aplayer'),
+    audio: musics,
+  })
+
+  $(document).on('pjax:complete', function() {
+    setOperateItem()
+  })
+
+  document.querySelector('.backtop').addEventListener('click', () => {
+    backTopEvent();
+  })
+  const dom = document.querySelector('.turn-comment')
+  dom && dom.addEventListener('click', () => {
+    commentDomEvent();
+  })
+
+  function backTopEvent() {
+    document.documentElement.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
+
+  function commentDomEvent() {
+    const commentDom = document.querySelector('.comments-intro')
+    if (!commentDom) return
+    const top = commentDom.offsetTop, height = commentDom.offsetHeight
+    document.documentElement.scrollTo({
+      top: top - 2 * height,
+      behavior: 'smooth'
+    })
+  }
+</script></div>
+    </section>
+  </div>
+  <div id="progress" class="progress"></div>
+  <div id="gray" class="gray"></div>
+
+  <script>
+    function initScroll () {
+      document.addEventListener('scroll', () => {
+        const doc = document.documentElement
+        const scrollTop = doc.scrollTop
+        const pageHeight = doc.offsetHeight
+        const clientHeight = doc.clientHeight
+        const ratio = scrollTop / (pageHeight - clientHeight)
+        const progress = document.querySelector('#progress')
+        const avatarImg = document.querySelector('.main-left--avatar')
+        progress.style.width = (100 * ratio) + '%'
+        avatarImg.style.transform = `rotate(${360 * ratio}deg)`
+      })
+    }
+
+    const rootPath = "/"
+
+    const checkAndSetArticlePageLayout = () => {
+      const path = location.pathname.replace(rootPath, '');
+      if (
+        /^\/?\d{4}\/\d{2}\/\d{2}\/.*/.test(path) ||
+        /^log\/.+/.test(path)
+      ) {
+        $('.main-container, .main-right, .main-right-wrapper').addClass('is-article')
+      } else {
+        $('.main-container, .main-right, .main-right-wrapper').removeClass('is-article')
+      }
+    }
+
+    const gray = "none"
+    const setGrayStyle = () => {
+      if (gray === 'none') {
+        return
+      } else if (gray === 'index') {
+        location.pathname === '/' ? $('#gray').show() : $('#gray').hide()
+      } else if (gray === 'all') {
+        $('#gray').show()
+      }
+    }
+    setGrayStyle()
+
+
+    window.onload = function () {
+      checkAndSetArticlePageLayout()
+      setTimeout(() => {
+        $('#load').slideUp()
+        $('#container').slideToggle()
+        setTimeout(() => {
+          initScroll();
+        }, 500)
+      }, 500)
+    }
+    
+    let status = 0
+    // 对所有链接跳转事件绑定pjax容器container
+    $(document).pjax('a[target!=_blank]', '#main-container', {
+      container: '#main-container',
+      fragment: '#main-container',
+      timeout: 8000
+    })
+
+    $(document).on('pjax:start', function() {
+    })
+    $(document).on('pjax:complete', function() {
+      status = 0
+      $('.main-container').addClass('to-up').on('animationend', function() {
+        $(this).removeClass('to-up')
+      })
+      setGrayStyle()
+      checkAndSetArticlePageLayout()
+    })
+    $(document).on('pjax:popstate', function() {
+      status = -1
+      checkAndSetArticlePageLayout()
+    });
+  </script>
+</body>
+</html>

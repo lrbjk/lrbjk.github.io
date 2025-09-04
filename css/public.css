@@ -1,0 +1,145 @@
+li {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  color: #333;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+html {
+  font-family: -apple-system, system-ui, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial;
+}
+body {
+  min-height: 100vh;
+}
+::-webkit-scrollbar {
+  width: 0;
+}
+input {
+  color: #666;
+  padding: 7px 10px;
+  outline: none;
+  border: 1px solid #eee;
+  font-size: 13px;
+}
+@media screen and (max-width: 768px) {
+  .header {
+    padding-top: 30px !important;
+  }
+  .header .header-wrapper {
+    width: 100%;
+  }
+  .header .header-left {
+    width: 100%;
+  }
+  .header .header-left .header-search {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .header .header-left .header-search--layer {
+    width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .header .header-right {
+    display: none;
+  }
+  .main {
+    width: 100% !important;
+    padding: 0 15px;
+    flex-direction: column;
+  }
+  .main-left {
+    order: 1;
+    width: 100% !important;
+    position: relative !important;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .main-left--block:nth-child(1) {
+    width: 62%;
+  }
+  .main-left--block:nth-child(2) {
+    margin-top: 0;
+  }
+  .main-left--block:nth-child(3) {
+    width: 100%;
+  }
+  .main-left-wrapper {
+    width: 100% !important;
+  }
+  .main-right {
+    order: 2;
+    width: 100% !important;
+    position: relative !important;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  .main-right .backtop {
+    display: none !important;
+  }
+  .main-right-wrapper {
+    width: 100% !important;
+  }
+  .main-container {
+    order: 3;
+    width: 100% !important;
+    padding: 0 !important;
+    margin-top: 15px;
+  }
+  .main-container .index {
+    flex-direction: column;
+  }
+  .main-container .index-right {
+    display: none;
+  }
+  .main-container .index-center {
+    margin: 15px 0;
+  }
+  .main-container .index-article {
+    height: 260px !important;
+  }
+  .main .article {
+    order: 2;
+    margin-top: 15px;
+    width: 100% !important;
+  }
+  .main .article-container {
+    flex-direction: column;
+  }
+  .main .article-catelogue {
+    order: 1;
+    width: 100%;
+  }
+  .main .article-catelogue--wrapper {
+    width: 100%;
+    padding-left: 0 !important;
+    position: relative !important;
+  }
+  .main .article-catelogue .catelogue-2 {
+    width: 100%;
+    display: flex;
+  }
+  .main .link {
+    display: flex;
+  }
+  .main .about-info {
+    flex-direction: column;
+  }
+  .main .about-detail {
+    margin-top: 15px;
+  }
+  .main .tools {
+    margin-bottom: 15px;
+  }
+  .main .tools li {
+    width: 100% !important;
+  }
+}
