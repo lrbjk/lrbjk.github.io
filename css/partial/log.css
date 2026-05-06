@@ -389,12 +389,12 @@
   padding: 12px;
   text-align: center;
   margin: 12px 0;
-  border: 1px solid #eee;
-  background-color: rgba(240,240,240,0.5);
+  border: 1px solid rgba(255,255,255,0.1);
+  background-color: rgba(255,255,255,0.04);
 }
 .log .log-main-title a {
   font-size: 18px;
-  color: #1e90ff;
+  color: #f5f5f5;
 }
 .log .log-main-title a:hover {
   text-decoration: underline;
@@ -412,7 +412,7 @@
   width: 100%;
   height: 70px;
   opacity: 0.8;
-  background: linear-gradient(to top, #333, transparent 80%, #ccc);
+  background: linear-gradient(to top, #050505, transparent 80%, #151515);
   filter: blur(10px);
 }
 .log-wrapper.more .more-title {
@@ -429,24 +429,26 @@
 .log-wrapper.more .more-title:hover {
   transform: translateX(-50%) translateY(-2px);
   text-decoration: underline;
-  text-shadow: 0 1px 1px #eee, 0 2px 1px #ddd, 0 3px 1px #ccc, 0 4px 1px #808080, 0 5px 1px #666;
+  text-shadow: none;
 }
 .log-item {
   margin-top: 15px;
   padding: 15px;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 5px #333;
+  background-color: rgba(18,18,18,0.88);
+  border-radius: 14px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(18px);
 }
 .log-item:first-child {
   margin-top: 0;
 }
 .log-item h2.log-title {
-  color: #1e90ff;
+  color: #f5f5f5;
   font-size: 16px;
   font-weight: 400;
   padding-bottom: 10px;
-  border-bottom: 1px solid #1e90ff;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;

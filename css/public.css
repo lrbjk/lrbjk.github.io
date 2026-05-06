@@ -3,7 +3,8 @@ li {
 }
 a {
   text-decoration: none;
-  color: #333;
+  color: #f5f5f5;
+  transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 }
 * {
   box-sizing: border-box;
@@ -12,120 +13,149 @@ a {
   user-select: none;
 }
 html {
-  font-family: -apple-system, system-ui, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+  color: #f5f5f5;
+  background: #080808;
+  letter-spacing: 0;
+  scroll-behavior: smooth;
 }
 body {
   min-height: 100vh;
+  color: #f5f5f5;
+  background: radial-gradient(circle at 8% 0%, rgba(255,255,255,0.08), transparent 28%), linear-gradient(135deg, #050505 0%, #0b0b0b 48%, #151515 100%);
+}
+body::selection,
+*::selection {
+  color: #050505;
+  background: #fff;
 }
 ::-webkit-scrollbar {
-  width: 0;
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.24);
+  border-radius: 999px;
 }
 input {
-  color: #666;
-  padding: 7px 10px;
+  width: 100%;
+  color: #f5f5f5;
+  padding: 10px 14px;
   outline: none;
-  border: 1px solid #eee;
-  font-size: 13px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px;
+  font-size: 14px;
+  background: rgba(18,18,18,0.86);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
-@media screen and (max-width: 768px) {
+input::placeholder {
+  color: rgba(255,255,255,0.42);
+}
+input:focus {
+  border-color: rgba(255,255,255,0.38);
+  background: #141414;
+  box-shadow: 0 0 0 4px rgba(255,255,255,0.08);
+}
+@media screen and (max-width: 980px) {
   .header {
-    padding-top: 30px !important;
+    height: auto !important;
+    min-height: 76px;
   }
   .header .header-wrapper {
     width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px 16px;
   }
   .header .header-left {
     width: 100%;
   }
-  .header .header-left .header-search {
-    width: 90%;
-    margin: 0 auto;
-  }
-  .header .header-left .header-search--layer {
-    width: 90%;
-    left: 50%;
-    transform: translateX(-50%);
-  }
   .header .header-right {
-    display: none;
+    overflow-x: auto;
+  }
+  .header .header-menu {
+    justify-content: flex-start;
+    min-width: max-content;
+  }
+  .container {
+    padding-top: 132px !important;
   }
   .main {
     width: 100% !important;
-    padding: 0 15px;
+    padding: 18px 16px 32px !important;
     flex-direction: column;
   }
   .main-left {
     order: 1;
     width: 100% !important;
     position: relative !important;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-  .main-left--block:nth-child(1) {
-    width: 62%;
-  }
-  .main-left--block:nth-child(2) {
-    margin-top: 0;
-  }
-  .main-left--block:nth-child(3) {
-    width: 100%;
+    top: auto !important;
   }
   .main-left-wrapper {
     width: 100% !important;
   }
+  .main-left--block:nth-child(1),
+  .main-left--block:nth-child(2),
+  .main-left--block:nth-child(3) {
+    width: 100%;
+  }
   .main-right {
-    order: 2;
+    order: 3;
     width: 100% !important;
     position: relative !important;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    top: auto !important;
+    margin-top: 0;
   }
-  .main-right .backtop {
-    display: none !important;
+  .main-right.is-article {
+    display: none;
   }
   .main-right-wrapper {
     width: 100% !important;
   }
   .main-container {
-    order: 3;
+    order: 2;
     width: 100% !important;
-    padding: 0 !important;
-    margin-top: 15px;
+    margin-top: 0;
   }
   .main-container .index {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
   .main-container .index-right {
     display: none;
   }
-  .main-container .index-center {
-    margin: 15px 0;
-  }
   .main-container .index-article {
-    height: 260px !important;
+    min-height: 250px !important;
   }
   .main .article {
-    order: 2;
-    margin-top: 15px;
     width: 100% !important;
+    padding: 20px;
+  }
+  .main .article h1 {
+    font-size: 25px;
   }
   .main .article-container {
     flex-direction: column;
   }
+  .main .article-cover {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16/9;
+  }
   .main .article-catelogue {
-    order: 1;
+    order: -1;
     width: 100%;
   }
   .main .article-catelogue--wrapper {
     width: 100%;
-    padding-left: 0 !important;
     position: relative !important;
+    top: auto !important;
   }
   .main .article-catelogue .catelogue-2 {
     width: 100%;
-    display: flex;
   }
   .main .link {
     display: flex;
@@ -141,5 +171,30 @@ input {
   }
   .main .tools li {
     width: 100% !important;
+  }
+}
+@media screen and (max-width: 560px) {
+  .container {
+    padding-top: 126px !important;
+  }
+  .header .header-menu > li > a {
+    min-height: 34px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+  .main {
+    padding: 14px 12px 28px !important;
+  }
+  .main-left--info {
+    padding: 16px;
+  }
+  .main-left--statics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .main .index-article--content {
+    padding: 18px;
+  }
+  .main .index-article--content > a {
+    font-size: 17px;
   }
 }
