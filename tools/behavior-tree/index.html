@@ -1,0 +1,1934 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>行为树可视化工具 | lirb</title>
+  <style>
+    :root {
+      --bg: #111318;
+      --panel: #1a1d24;
+      --panel-soft: #222630;
+      --line: #343a46;
+      --text: #eef2f7;
+      --muted: #9aa4b2;
+      --accent: #35c2a1;
+      --accent-2: #f0b84f;
+      --danger: #ec6a6a;
+      --blue: #72a7ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 330px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: #151820;
+      padding: 22px;
+      overflow-y: auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(53, 194, 161, .55);
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      background: rgba(53, 194, 161, .08);
+      border-radius: 8px;
+      font-weight: 800;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: 0;
+      line-height: 1.25;
+    }
+
+    .brand p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .dropzone {
+      display: block;
+      border: 1px dashed #596273;
+      border-radius: 8px;
+      padding: 18px;
+      background: #191d25;
+      cursor: pointer;
+      transition: border-color .15s ease, background .15s ease;
+    }
+
+    .dropzone:hover,
+    .dropzone.is-dragging {
+      border-color: var(--accent);
+      background: rgba(53, 194, 161, .08);
+    }
+
+    .dropzone strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 7px;
+    }
+
+    .dropzone span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .dropzone input {
+      display: none;
+    }
+
+    .controls {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      padding: 10px 11px;
+      outline: none;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--accent);
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: var(--panel-soft);
+      border-radius: 6px;
+      padding: 9px 10px;
+      cursor: pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      min-height: 38px;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: #596273;
+    }
+
+    .btn.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #071512;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 12px;
+    }
+
+    .stat b {
+      display: block;
+      font-size: 23px;
+      line-height: 1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .legend {
+      display: grid;
+      gap: 8px;
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      background: var(--accent);
+    }
+
+    .swatch.action {
+      background: var(--accent-2);
+    }
+
+    .swatch.external {
+      background: var(--blue);
+    }
+
+    .main {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .toolbar {
+      border-bottom: 1px solid var(--line);
+      background: #171a22;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .toolbar-title {
+      min-width: 0;
+    }
+
+    .toolbar-title h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .toolbar-title p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .workspace {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+    }
+
+    .canvas-wrap {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px),
+        #111318;
+      background-size: 28px 28px;
+    }
+
+    .empty-state {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .empty-state div {
+      max-width: 430px;
+      border: 1px solid var(--line);
+      background: rgba(26, 29, 36, .82);
+      border-radius: 8px;
+      padding: 24px;
+    }
+
+    .empty-state strong {
+      color: var(--text);
+      display: block;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+      user-select: none;
+    }
+
+    svg:active {
+      cursor: grabbing;
+    }
+
+    .edge {
+      fill: none;
+      stroke: #596273;
+      stroke-width: 1.35;
+    }
+
+    .edge.external {
+      stroke: var(--blue);
+      stroke-dasharray: 5 5;
+    }
+
+    .edge.action {
+      stroke: var(--accent-2);
+      stroke-dasharray: 4 5;
+    }
+
+    .edge-label rect {
+      fill: rgba(17, 19, 24, .9);
+      stroke: #3a414f;
+      stroke-width: 1;
+      rx: 4;
+    }
+
+    .edge-label text {
+      fill: #cbd5e1;
+      font-size: 8px;
+      pointer-events: none;
+    }
+
+    .edge-label.node text {
+      fill: #dbeafe;
+    }
+
+    .edge-label.action text {
+      fill: #ffe1a8;
+    }
+
+    .bt-leaf rect,
+    .node-card rect {
+      rx: 8;
+      fill: #20242d;
+      stroke: #3a414f;
+      stroke-width: 1;
+    }
+
+    .node-card .node-strip {
+      rx: 7;
+      fill: #2a3240;
+      stroke: none;
+    }
+
+    .node-card.selector .node-strip {
+      fill: rgba(52, 211, 153, .2);
+    }
+
+    .node-card.sequence .node-strip {
+      fill: rgba(96, 165, 250, .2);
+    }
+
+    .node-card.task .node-strip {
+      fill: rgba(251, 191, 36, .2);
+    }
+
+    .node-card.is-root rect {
+      fill: #172820;
+      stroke: var(--accent);
+    }
+
+    .node-card.is-highlight rect {
+      stroke: var(--accent-2);
+      stroke-width: 3;
+    }
+
+    .node-card text {
+      fill: var(--text);
+      font-size: 12px;
+      pointer-events: none;
+    }
+
+    .node-card .meta {
+      fill: var(--muted);
+      font-size: 10px;
+    }
+
+    .node-card .badge {
+      fill: var(--accent);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .node-card .behavior {
+      fill: #cbd5e1;
+      font-size: 10px;
+    }
+
+    .node-card .condition {
+      fill: #a7f3d0;
+      font-size: 10px;
+    }
+
+    .node-card .node-kind {
+      fill: #d1d5db;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .bt-leaf rect {
+      fill: #241f15;
+      stroke: var(--accent-2);
+      stroke-dasharray: 0;
+    }
+
+    .bt-leaf text {
+      fill: #ffe1a8;
+      font-size: 10px;
+      pointer-events: none;
+    }
+
+    .bt-leaf .leaf-kind {
+      fill: var(--accent-2);
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .details {
+      min-width: 0;
+      border-left: 1px solid var(--line);
+      background: #151820;
+      overflow-y: auto;
+      padding: 18px;
+    }
+
+    .details h3 {
+      margin: 0 0 12px;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+
+    .details-section {
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+      margin-top: 14px;
+    }
+
+    .details-section h4 {
+      margin: 0 0 9px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .list {
+      display: grid;
+      gap: 7px;
+      max-height: 260px;
+      overflow: auto;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 6px;
+      padding: 8px 9px;
+      color: #dce3ee;
+      font-size: 12px;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .pill button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      text-align: left;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .pill.action {
+      border-color: rgba(240, 184, 79, .45);
+    }
+
+    .pill.external {
+      border-color: rgba(114, 167, 255, .45);
+    }
+
+    .code {
+      white-space: pre-wrap;
+      color: #d7dde7;
+      background: #101219;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      font-family: Consolas, "SFMono-Regular", Menlo, monospace;
+      font-size: 12px;
+      line-height: 1.55;
+      max-height: 360px;
+      overflow: auto;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      background: #e9eef7;
+      color: #141820;
+      border-radius: 8px;
+      padding: 10px 14px;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, .35);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .16s ease, transform .16s ease;
+      z-index: 20;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, -4px);
+    }
+
+    @media (max-width: 980px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .workspace {
+        grid-template-columns: 1fr;
+        grid-template-rows: 62vh auto;
+      }
+
+      .details {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .toolbar {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .toolbar-actions {
+        justify-content: stretch;
+      }
+
+      .toolbar-actions .btn {
+        flex: 1 1 110px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">BT</div>
+        <div>
+          <h1>行为树可视化</h1>
+          <p>NACK/FAND 代码文件解析器</p>
+        </div>
+      </div>
+
+      <label class="dropzone" id="dropzone">
+        <input id="fileInput" type="file" multiple accept=".nack,.fand,.txt,.lua,.cs">
+        <strong>导入脚本文件</strong>
+        <span>可一次选择多个 `.nack` 和 `.fand` 文件。所有解析都在当前浏览器内完成。</span>
+      </label>
+
+      <div class="controls">
+        <div class="field">
+          <label for="rootSelect">入口节点</label>
+          <select id="rootSelect"></select>
+        </div>
+        <div class="field">
+          <label for="searchInput">搜索节点、动作或条件</label>
+          <input id="searchInput" type="search" placeholder="例如 node_010 / dash / enraged">
+        </div>
+        <div class="button-row">
+          <button class="btn primary" id="renderBtn">生成图谱</button>
+          <button class="btn" id="fitBtn">适配视图</button>
+          <button class="btn" id="exportSvgBtn">导出 SVG</button>
+          <button class="btn" id="exportJsonBtn">导出 JSON</button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><b id="nodeCount">0</b><span>节点</span></div>
+        <div class="stat"><b id="edgeCount">0</b><span>连接</span></div>
+        <div class="stat"><b id="actionCount">0</b><span>动作</span></div>
+        <div class="stat"><b id="externalCount">0</b><span>外部引用</span></div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><i class="swatch"></i><span>行为树分支</span></div>
+        <div class="legend-item"><i class="swatch external"></i><span>跨库或未导入节点</span></div>
+        <div class="legend-item"><i class="swatch action"></i><span>动作叶子任务</span></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="toolbar">
+        <div class="toolbar-title">
+          <h2 id="title">等待导入文件</h2>
+          <p id="subtitle">推荐先导入 `em057_00.nack` 和 `em057_55.nack`，跨文件引用会自动归类。</p>
+        </div>
+        <div class="toolbar-actions">
+          <button class="btn" id="zoomOutBtn">缩小</button>
+          <button class="btn" id="zoomInBtn">放大</button>
+          <button class="btn" id="resetBtn">重置</button>
+        </div>
+      </header>
+
+      <section class="workspace">
+        <div class="canvas-wrap" id="canvasWrap">
+          <div class="empty-state" id="emptyState">
+            <div>
+              <strong>导入文件后生成行为树</strong>
+              <p>工具会识别 `def node_xxx`、`if/elif/else`、`random/elser`、`>> node` 和 `-> action()`，并把节点跳转绘成可缩放拖拽的图。</p>
+            </div>
+          </div>
+          <svg id="treeSvg" aria-label="行为树图谱"/>
+        </div>
+
+        <aside class="details" id="details">
+          <h3>节点详情</h3>
+          <p class="pill">选择图中的节点后，这里会显示条件、随机权重、动作调用、跳转目标和原始代码片段。</p>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const state = {
+      files: [],
+      nodes: new Map(),
+      edges: [],
+      actions: [],
+      externals: new Set(),
+      selected: null,
+      root: '',
+      transform: { x: 60, y: 60, scale: 1 },
+      layout: new Map(),
+      treeEdges: new Set()
+    };
+
+    const el = {
+      fileInput: document.querySelector('#fileInput'),
+      dropzone: document.querySelector('#dropzone'),
+      rootSelect: document.querySelector('#rootSelect'),
+      searchInput: document.querySelector('#searchInput'),
+      renderBtn: document.querySelector('#renderBtn'),
+      fitBtn: document.querySelector('#fitBtn'),
+      exportSvgBtn: document.querySelector('#exportSvgBtn'),
+      exportJsonBtn: document.querySelector('#exportJsonBtn'),
+      nodeCount: document.querySelector('#nodeCount'),
+      edgeCount: document.querySelector('#edgeCount'),
+      actionCount: document.querySelector('#actionCount'),
+      externalCount: document.querySelector('#externalCount'),
+      title: document.querySelector('#title'),
+      subtitle: document.querySelector('#subtitle'),
+      svg: document.querySelector('#treeSvg'),
+      canvasWrap: document.querySelector('#canvasWrap'),
+      emptyState: document.querySelector('#emptyState'),
+      details: document.querySelector('#details'),
+      toast: document.querySelector('#toast'),
+      zoomInBtn: document.querySelector('#zoomInBtn'),
+      zoomOutBtn: document.querySelector('#zoomOutBtn'),
+      resetBtn: document.querySelector('#resetBtn')
+    };
+
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const cardW = 210;
+    const cardH = 74;
+    const gapX = 48;
+    const gapY = 86;
+    const actionW = 178;
+    const actionH = 34;
+
+    el.fileInput.addEventListener('change', event => loadFiles([...event.target.files]));
+    el.renderBtn.addEventListener('click', () => renderAll());
+    el.rootSelect.addEventListener('change', () => {
+      state.root = el.rootSelect.value;
+      renderAll();
+    });
+    el.searchInput.addEventListener('input', () => drawGraph());
+    el.fitBtn.addEventListener('click', fitView);
+    el.zoomInBtn.addEventListener('click', () => zoomAt(1.18));
+    el.zoomOutBtn.addEventListener('click', () => zoomAt(.84));
+    el.resetBtn.addEventListener('click', () => {
+      state.transform = { x: 60, y: 60, scale: 1 };
+      drawGraph();
+    });
+    el.exportSvgBtn.addEventListener('click', exportSvg);
+    el.exportJsonBtn.addEventListener('click', exportJson);
+
+    ['dragenter', 'dragover'].forEach(name => {
+      el.dropzone.addEventListener(name, event => {
+        event.preventDefault();
+        el.dropzone.classList.add('is-dragging');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(name => {
+      el.dropzone.addEventListener(name, event => {
+        event.preventDefault();
+        el.dropzone.classList.remove('is-dragging');
+      });
+    });
+
+    el.dropzone.addEventListener('drop', event => {
+      const files = [...event.dataTransfer.files];
+      if (files.length) loadFiles(files);
+    });
+
+    setupPanZoom();
+
+    async function loadFiles(files) {
+      const valid = files.filter(file => /\.(nack|fand|txt|lua|cs)$/i.test(file.name));
+      if (!valid.length) {
+        showToast('没有可解析的脚本文件');
+        return;
+      }
+
+      const loaded = await Promise.all(valid.map(async file => ({
+        name: file.name,
+        text: await file.text()
+      })));
+
+      state.files = loaded;
+      parseFiles(loaded);
+      fillRootSelect();
+      renderAll();
+      showToast(`已导入 ${loaded.length} 个文件`);
+    }
+
+    function parseFiles(files) {
+      state.nodes = new Map();
+      state.edges = [];
+      state.actions = [];
+      state.externals = new Set();
+
+      for (const file of files) {
+        if (/\.fand$/i.test(file.name)) parseFand(file);
+        parseNack(file);
+      }
+
+      for (const node of state.nodes.values()) {
+        for (const ref of node.refs) {
+          const target = normalizeNodeRef(ref.target, node.aliases);
+          const isAction = ref.kind === 'action';
+          const exists = state.nodes.has(target);
+          if (!isAction && !exists) state.externals.add(target);
+          state.edges.push({
+            from: node.id,
+            to: target,
+            raw: ref.target,
+            label: ref.label,
+            kind: isAction ? 'action' : exists ? 'node' : 'external'
+          });
+        }
+      }
+    }
+
+    function parseFand(file) {
+      const lines = file.text.split(/\r?\n/);
+      for (const rawLine of lines) {
+        const line = rawLine.trim();
+        const match = line.match(/^([\w.]+)\s*=\s*([\w.-]+\.nack)\s*@\s*([0-9A-Fa-f]+)/);
+        if (match) {
+          const id = `entry:${match[1]}`;
+          state.nodes.set(id, {
+            id,
+            name: match[1],
+            file: file.name,
+            line: 0,
+            aliases: {},
+            type: 'entry',
+            body: [rawLine],
+            conditions: [],
+            randoms: [],
+            switches: [],
+            refs: [{ target: match[2], label: `hash ${match[3]}`, kind: 'external' }],
+            actions: []
+          });
+        }
+      }
+    }
+
+    function parseNack(file) {
+      const aliases = collectAliases(file.text);
+      const lines = file.text.split(/\r?\n/);
+      let current = null;
+
+      lines.forEach((rawLine, index) => {
+        const line = rawLine.trim();
+        const def = line.match(/^def\s+([A-Za-z_][\w.]*)/);
+        if (def) {
+          current = {
+            id: qualify(file.name, def[1]),
+            name: def[1],
+            file: file.name,
+            line: index + 1,
+            aliases,
+            type: 'node',
+            body: [rawLine],
+            conditions: [],
+            randoms: [],
+            switches: [],
+            refs: [],
+            actions: [],
+            flowStack: []
+          };
+          state.nodes.set(current.id, current);
+          return;
+        }
+
+        if (!current) return;
+        current.body.push(rawLine);
+        if (/^endf\b/.test(line)) {
+          delete current.flowStack;
+          current = null;
+          return;
+        }
+
+        parseLine(rawLine, current);
+      });
+    }
+
+    function collectAliases(text) {
+      const aliases = {};
+      text.split(/\r?\n/).forEach(rawLine => {
+        const line = rawLine.trim();
+        const match = line.match(/^import(?:actions|library)\s+([A-Za-z_][\w.]*)\s+as\s+([A-Za-z_][\w.]*)/);
+        if (match) aliases[match[2]] = match[1];
+      });
+      return aliases;
+    }
+
+    function parseLine(rawLine, node) {
+      const line = rawLine.trim();
+      if (!line) return;
+      const indent = getIndent(rawLine);
+      let parsedBranchLine = false;
+
+      if (/^(endif|endr)\b/.test(line)) {
+        popFlow(node, indent, true);
+        return;
+      }
+
+      if (/^(elif|else|elser)\b/.test(line)) {
+        popFlow(node, indent, true);
+      } else {
+        popFlow(node, indent, false);
+      }
+
+      const condition = line.match(/^(if|elif)\s+(.+?)(?:\s*>>\s*([A-Za-z_][\w.]*))?\s*$/);
+      if (condition) {
+        const label = `${condition[1]} ${condition[2]}`.trim();
+        node.conditions.push(label);
+        if (condition[3]) {
+          parseRefs(line, node, combineSwitchLabel(node, label));
+          parsedBranchLine = true;
+        }
+        node.flowStack.push({ indent, label });
+      }
+
+      const elseMatch = line.match(/^else\b/);
+      if (elseMatch) {
+        node.flowStack.push({ indent, label: 'else' });
+      }
+
+      const branch = line.match(/^(random|elser)\s*\(([-\d]+)\)(.*)$/);
+      if (branch) {
+        const label = `${branch[1]} ${branch[2]}%`;
+        node.randoms.push(label);
+        parseRefs(branch[3], node, combineSwitchLabel(node, label));
+        node.flowStack.push({ indent, label });
+        parsedBranchLine = true;
+      }
+
+      if (!parsedBranchLine) parseRefs(line, node, combineSwitchLabel(node, ''));
+    }
+
+    function parseRefs(text, node, label) {
+      const jumpRegex = />>\s*([A-Za-z_][\w.]*)/g;
+      let jump;
+      while ((jump = jumpRegex.exec(text))) {
+        node.refs.push({ target: jump[1], label, kind: 'jump' });
+        if (label) node.switches.push({ target: jump[1], condition: label });
+      }
+
+      const actionRegex = /->\s*([A-Za-z_][\w.]*\([^)]*\))/g;
+      let action;
+      while ((action = actionRegex.exec(text))) {
+        const actionId = `action:${action[1]}`;
+        node.actions.push(action[1]);
+        state.actions.push(action[1]);
+        node.refs.push({ target: actionId, label, kind: 'action' });
+        if (label) node.switches.push({ target: action[1], condition: label });
+      }
+    }
+
+    function getIndent(line) {
+      const match = line.match(/^\s*/);
+      return match ? match[0].replace(/\t/g, '  ').length : 0;
+    }
+
+    function popFlow(node, indent, includeSameIndent) {
+      while (node.flowStack.length) {
+        const last = node.flowStack[node.flowStack.length - 1];
+        if (last.indent > indent || (includeSameIndent && last.indent === indent)) {
+          node.flowStack.pop();
+        } else {
+          break;
+        }
+      }
+    }
+
+    function combineSwitchLabel(node, current) {
+      const labels = node.flowStack.map(item => item.label);
+      if (current) labels.push(current);
+      return labels.filter(Boolean).join(' && ');
+    }
+
+    function qualify(fileName, nodeName) {
+      return `${fileName}::${nodeName}`;
+    }
+
+    function normalizeNodeRef(target, aliases) {
+      if (target.startsWith('action:') || target.startsWith('entry:')) return target;
+      if (/\.nack$/i.test(target)) return `file:${target}`;
+      if (target.includes('.')) {
+        const parts = target.split('.');
+        const namespace = aliases[parts[0]] || parts[0];
+        const name = parts.slice(1).join('.');
+        const direct = findNodeByName(name, namespace);
+        return direct || `${namespace}.${name}`;
+      }
+      return findNodeByName(target) || target;
+    }
+
+    function findNodeByName(name, preferredFilePart = '') {
+      const candidates = [...state.nodes.values()].filter(node => {
+        const nameMatches = node.name === name;
+        const fileMatches = !preferredFilePart || node.file.toLowerCase().includes(preferredFilePart.toLowerCase());
+        return nameMatches && fileMatches;
+      });
+      if (candidates.length) return candidates[0].id;
+      const any = [...state.nodes.values()].find(node => node.name === name);
+      return any ? any.id : '';
+    }
+
+    function fillRootSelect() {
+      const nodes = [...state.nodes.values()].filter(node => node.type === 'node');
+      const firstCombat = nodes.find(node => /_00\.nack::node_000$/i.test(node.id));
+      const firstNode = nodes.find(node => /node_000$/i.test(node.name)) || nodes[0];
+      state.root = firstCombat ? firstCombat.id : firstNode ? firstNode.id : '';
+      el.rootSelect.innerHTML = nodes.map(node => (
+        `<option value="${escapeAttr(node.id)}">${escapeHtml(node.name)} - ${escapeHtml(node.file)}</option>`
+      )).join('');
+      el.rootSelect.value = state.root;
+    }
+
+    function renderAll() {
+      if (!state.nodes.size) return;
+      buildLayout();
+      updateStats();
+      drawGraph();
+      updateDetails(state.selected && state.nodes.has(state.selected) ? state.nodes.get(state.selected) : state.nodes.get(state.root));
+      el.emptyState.style.display = 'none';
+      el.title.textContent = state.files.map(file => file.name).join(', ');
+      el.subtitle.textContent = `入口 ${shortName(state.root)}，默认只显示主干树。点击节点后显示该节点的额外跳转与动作。`;
+    }
+
+    function buildLayout() {
+      const visible = collectReachable(state.root, 180);
+      const levels = new Map();
+      const queue = [{ id: state.root, depth: 0 }];
+      const seen = new Set();
+      const queued = new Set([state.root]);
+      state.treeEdges = new Set();
+
+      while (queue.length) {
+        const item = queue.shift();
+        if (seen.has(item.id) || !visible.has(item.id)) continue;
+        seen.add(item.id);
+        if (!levels.has(item.depth)) levels.set(item.depth, []);
+        levels.get(item.depth).push(item.id);
+
+        const outgoing = state.edges.filter(edge => edge.from === item.id && visible.has(edge.to) && edge.kind === 'node');
+        outgoing.slice(0, 14).forEach(edge => {
+          if (queued.has(edge.to)) return;
+          queued.add(edge.to);
+          state.treeEdges.add(edge);
+          queue.push({ id: edge.to, depth: item.depth + 1 });
+        });
+      }
+
+      for (const id of visible) {
+        if (!seen.has(id)) {
+          const depth = Math.max(0, levels.size);
+          if (!levels.has(depth)) levels.set(depth, []);
+          levels.get(depth).push(id);
+        }
+      }
+
+      state.layout = new Map();
+      [...levels.entries()].forEach(([depth, ids]) => {
+        const rowWidth = Math.max(0, ids.length - 1) * (cardW + gapX);
+        ids.forEach((id, index) => {
+          state.layout.set(id, {
+            x: index * (cardW + gapX) - rowWidth / 2,
+            y: depth * (cardH + gapY)
+          });
+        });
+      });
+    }
+
+    function collectReachable(root, limit) {
+      const visible = new Set();
+      const queue = [root];
+      while (queue.length && visible.size < limit) {
+        const id = queue.shift();
+        if (!id || visible.has(id) || !state.nodes.has(id)) continue;
+        visible.add(id);
+      state.edges
+          .filter(edge => edge.from === id && edge.kind === 'node')
+          .slice(0, 14)
+          .forEach(edge => queue.push(edge.to));
+      }
+      return visible;
+    }
+
+    function drawGraph() {
+      el.svg.innerHTML = '';
+      if (!state.layout.size) return;
+
+      const defs = createSvg('defs');
+      defs.innerHTML = '<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#596273"></path></marker>';
+      el.svg.appendChild(defs);
+
+      const graph = createSvg('g', { id: 'graph' });
+      graph.setAttribute('transform', `translate(${state.transform.x} ${state.transform.y}) scale(${state.transform.scale})`);
+      el.svg.appendChild(graph);
+
+      const edgeLayer = createSvg('g');
+      const nodeLayer = createSvg('g');
+      graph.appendChild(edgeLayer);
+      graph.appendChild(nodeLayer);
+
+      const search = el.searchInput.value.trim().toLowerCase();
+      const laidOut = new Set(state.layout.keys());
+      const visibleEdges = state.edges.filter(edge => shouldDrawEdge(edge, laidOut));
+      const edgeIndexes = indexEdgesBySource(visibleEdges);
+
+      visibleEdges.forEach(edge => drawEdge(edgeLayer, edge, edgeIndexes.get(edge)));
+      [...state.layout.keys()].forEach(id => drawNode(nodeLayer, state.nodes.get(id), search));
+    }
+
+    function shouldDrawEdge(edge, laidOut) {
+      if (!laidOut.has(edge.from)) return false;
+      if (edge.kind === 'node') {
+        if (!laidOut.has(edge.to)) return false;
+        if (state.treeEdges.has(edge)) return true;
+        return state.selected === edge.from;
+      }
+      if (edge.kind === 'action') return state.selected === edge.from;
+      return false;
+    }
+
+    function indexEdgesBySource(edges) {
+      const sourceCounts = new Map();
+      const result = new Map();
+      edges.forEach(edge => {
+        const next = sourceCounts.get(edge.from) || 0;
+        sourceCounts.set(edge.from, next + 1);
+        result.set(edge, next);
+      });
+      return result;
+    }
+
+    function drawEdge(layer, edge, sourceIndex = 0) {
+      const from = state.layout.get(edge.from);
+      const to = state.layout.get(edge.to);
+      if (!from) return;
+
+      let end = to;
+      if (!end) {
+        const siblings = state.edges.filter(candidate => candidate.from === edge.from && candidate.kind !== 'node');
+        const index = Math.max(0, siblings.findIndex(candidate => candidate === edge));
+        const offset = (index - (siblings.length - 1) / 2) * (actionW + 12);
+        end = {
+          x: from.x + cardW / 2 + offset - actionW / 2,
+          y: from.y + cardH + 42
+        };
+      }
+
+      const startX = from.x + cardW / 2;
+      const startY = from.y + cardH;
+      const endX = to ? end.x + cardW / 2 : end.x + actionW / 2;
+      const endY = end.y;
+      const mid = Math.max(42, (endY - startY) / 2);
+      const path = `M ${startX} ${startY} C ${startX} ${startY + mid}, ${endX} ${endY - mid}, ${endX} ${endY}`;
+      const item = createSvg('path', {
+        d: path,
+        class: `edge ${edge.kind}`,
+        markerEnd: 'url(#arrow)'
+      });
+      const title = createSvg('title');
+      title.textContent = edge.label ? naturalizeCondition(edge.label) : `${shortName(edge.from)} -> ${shortName(edge.to)}`;
+      item.appendChild(title);
+      layer.appendChild(item);
+      drawEdgeLabel(layer, edge, startX, startY, endX, endY, sourceIndex);
+      if (!to && edge.kind === 'action' && sourceIndex < 4) drawActionLeaf(layer, edge, end);
+    }
+
+    function drawEdgeLabel(layer, edge, startX, startY, endX, endY, sourceIndex) {
+      if (!edge.label || edge.kind === 'external') return;
+      const isSelectedPath = edge.from === state.root || edge.from === state.selected;
+      if (!isSelectedPath || sourceIndex > 5) return;
+      const text = compactText(shortCondition(edge.label), 18);
+      const x = startX + (endX - startX) * .5 - 44;
+      const y = startY + (endY - startY) * .5 - 12;
+      const group = createSvg('g', {
+        class: `edge-label ${edge.kind}`,
+        transform: `translate(${x} ${y})`
+      });
+      const labelTitle = createSvg('title');
+      labelTitle.textContent = naturalizeCondition(edge.label);
+      group.appendChild(labelTitle);
+      const lines = wrapText(text, 11).slice(0, 1);
+      const width = Math.min(88, Math.max(34, ...lines.map(line => line.length * 5 + 12)));
+      const height = 14;
+      group.appendChild(createSvg('rect', { width, height }));
+      lines.forEach((line, index) => {
+        const labelText = createSvg('text', { x: 6, y: 10 + index * 12 });
+        labelText.textContent = line;
+        group.appendChild(labelText);
+      });
+      layer.appendChild(group);
+    }
+
+    function drawActionLeaf(layer, edge, pos) {
+      const group = createSvg('g', {
+        class: 'bt-leaf',
+        transform: `translate(${pos.x} ${pos.y})`
+      });
+      const title = createSvg('title');
+      title.textContent = naturalizeAction(edge.raw || edge.to);
+      group.appendChild(title);
+      group.appendChild(createSvg('rect', { width: actionW, height: actionH }));
+      const kind = createSvg('text', { x: 10, y: 14, class: 'leaf-kind' });
+      kind.textContent = 'TASK';
+      group.appendChild(kind);
+      const name = createSvg('text', { x: 48, y: 14 });
+      name.textContent = compactText(summarizeAction(edge.raw || edge.to), 18);
+      group.appendChild(name);
+      layer.appendChild(group);
+    }
+
+    function drawNode(layer, node, search) {
+      if (!node) return;
+      const pos = state.layout.get(node.id);
+      const outgoing = state.edges.filter(edge => edge.from === node.id);
+      const nodeKind = behaviorTreeKind(node, outgoing);
+      const group = createSvg('g', {
+        class: [
+          'node-card',
+          nodeKind.className,
+          node.id === state.root ? 'is-root' : '',
+          matchesSearch(node, search) ? 'is-highlight' : ''
+        ].join(' '),
+        transform: `translate(${pos.x} ${pos.y})`,
+        tabindex: '0'
+      });
+
+      group.addEventListener('click', () => {
+        state.selected = node.id;
+        updateDetails(node);
+        drawGraph();
+      });
+
+      group.appendChild(createSvg('rect', { width: cardW, height: cardH }));
+      group.appendChild(createSvg('rect', { x: 0, y: 0, width: cardW, height: 26, class: 'node-strip' }));
+      const kind = createSvg('text', { x: 12, y: 17, class: 'node-kind' });
+      kind.textContent = nodeKind.label;
+      group.appendChild(kind);
+
+      const title = createSvg('text', { x: 78, y: 17 });
+      title.textContent = compactText(node.name, 18);
+      group.appendChild(title);
+
+      const meta = createSvg('text', { x: 12, y: 42, class: 'meta' });
+      meta.textContent = compactText(node.file.replace(/^.*[\\/]/, ''), 22);
+      group.appendChild(meta);
+
+      const badge = createSvg('text', { x: 150, y: 42, class: 'badge' });
+      badge.textContent = `${outgoing.filter(edge => edge.kind === 'node').length}→ ${node.actions.length}⚡`;
+      group.appendChild(badge);
+
+      const summaries = summarizeNodeBehavior(node, outgoing);
+      const summaryLine = summaries[0] || '结束当前节点';
+      const summary = createSvg('text', {
+        x: 12,
+        y: 61,
+        class: summaryLine.startsWith('条件') ? 'condition' : 'behavior'
+      });
+      summary.textContent = compactText(summaryLine.replace(/^(行为|条件|跳到)\s*/, ''), 27);
+      group.appendChild(summary);
+
+      layer.appendChild(group);
+    }
+
+    function behaviorTreeKind(node, outgoing) {
+      if (node.id === state.root) return { label: 'ROOT', className: 'sequence' };
+      const branchCount = outgoing.filter(edge => edge.kind === 'node').length;
+      if (branchCount > 1) return { label: 'SELECTOR', className: 'selector' };
+      if (node.actions.length || outgoing.some(edge => edge.kind === 'action')) return { label: 'TASK', className: 'task' };
+      if (node.conditions.length || node.switches.length || node.randoms.length) return { label: 'CONDITION', className: 'sequence' };
+      return { label: 'SEQUENCE', className: 'sequence' };
+    }
+
+    function summarizeNodeBehavior(node, outgoing) {
+      const lines = [];
+      const firstSwitch = node.switches.find(item => item.condition);
+      if (firstSwitch) {
+        lines.push(`条件 ${shortCondition(firstSwitch.condition)}`);
+      } else if (node.conditions.length) {
+        lines.push(`条件 ${shortCondition(node.conditions[0])}`);
+      }
+
+      if (node.actions.length) {
+        lines.push(`行为 ${summarizeAction(node.actions[0])}`);
+      } else {
+        const actionEdge = outgoing.find(edge => edge.kind === 'action');
+        if (actionEdge) lines.push(`行为 ${summarizeAction(actionEdge.raw || actionEdge.to)}`);
+      }
+
+      const operations = extractNodeOperations(node);
+      for (const operation of operations) {
+        if (lines.length >= 2) break;
+        if (!lines.includes(`行为 ${operation}`)) lines.push(`行为 ${operation}`);
+      }
+
+      const firstJump = outgoing.find(edge => edge.kind === 'node');
+      if (firstJump) {
+        lines.push(`跳到 ${shortName(firstJump.to)}`);
+      }
+
+      if (!lines.length) {
+        lines.push('行为 结束当前节点');
+      }
+
+      return lines.slice(0, 3);
+    }
+
+    function matchesSearch(node, search) {
+      if (!search) return false;
+      return [
+        node.id,
+        node.name,
+        node.file,
+        ...node.conditions,
+        ...node.randoms,
+        ...node.switches.map(item => `${item.target} ${item.condition}`),
+        ...node.actions,
+        ...node.refs.map(ref => ref.target)
+      ].some(value => String(value).toLowerCase().includes(search));
+    }
+
+    function updateDetails(node) {
+      if (!node) return;
+      const outgoing = state.edges.filter(edge => edge.from === node.id);
+      const jumps = outgoing.filter(edge => edge.kind === 'node');
+      const external = outgoing.filter(edge => edge.kind === 'external');
+
+      el.details.innerHTML = `
+        <h3>${escapeHtml(node.name)}</h3>
+        <div class="pill">${escapeHtml(node.file)} : ${node.line || '-'}</div>
+        ${renderList('条件', node.conditions.map(naturalizeCondition))}
+        ${renderList('随机分支', node.randoms.map(naturalizeCondition))}
+        ${renderSwitchList('切换条件', node.switches)}
+        ${renderList('动作调用', node.actions, 'action')}
+        ${renderEdgeList('节点跳转', jumps)}
+        ${renderEdgeList('外部引用', external, 'external')}
+        <div class="details-section">
+          <h4>原始代码</h4>
+          <div class="code">${escapeHtml(trimBody(node.body.join('\n')))}</div>
+        </div>
+      `;
+
+      el.details.querySelectorAll('[data-node]').forEach(button => {
+        button.addEventListener('click', () => {
+          const target = button.getAttribute('data-node');
+          if (state.nodes.has(target)) {
+            state.selected = target;
+            state.root = state.root || target;
+            updateDetails(state.nodes.get(target));
+            focusNode(target);
+          }
+        });
+      });
+    }
+
+    function renderList(title, items, kind = '') {
+      if (!items.length) return '';
+      return `
+        <div class="details-section">
+          <h4>${title}</h4>
+          <div class="list">
+            ${items.slice(0, 80).map(item => `<div class="pill ${kind}">${escapeHtml(item)}</div>`).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSwitchList(title, items) {
+      if (!items.length) return '';
+      return `
+        <div class="details-section">
+          <h4>${title}</h4>
+          <div class="list">
+            ${items.slice(0, 80).map(item => `
+              <div class="pill">
+                <strong>${escapeHtml(item.target)}</strong>
+                <div style="color:#9aa4b2;margin-top:4px">${escapeHtml(naturalizeCondition(item.condition))}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderEdgeList(title, edges, kind = '') {
+      if (!edges.length) return '';
+      return `
+        <div class="details-section">
+          <h4>${title}</h4>
+          <div class="list">
+            ${edges.slice(0, 80).map(edge => {
+              const label = state.nodes.has(edge.to) ? shortName(edge.to) : edge.raw;
+              const extra = edge.label ? `<div style="color:#9aa4b2;margin-top:4px">切换条件：${escapeHtml(naturalizeCondition(edge.label))}</div>` : '';
+              if (state.nodes.has(edge.to)) {
+                return `<div class="pill ${kind}"><button data-node="${escapeAttr(edge.to)}">${escapeHtml(label)}${extra}</button></div>`;
+              }
+              return `<div class="pill ${kind}">${escapeHtml(label)}${extra}</div>`;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function updateStats() {
+      const edges = state.edges.filter(edge => edge.kind !== 'action');
+      el.nodeCount.textContent = [...state.nodes.values()].filter(node => node.type === 'node').length;
+      el.edgeCount.textContent = edges.length;
+      el.actionCount.textContent = new Set(state.actions).size;
+      el.externalCount.textContent = state.externals.size;
+    }
+
+    function setupPanZoom() {
+      let dragging = false;
+      let last = { x: 0, y: 0 };
+
+      el.svg.addEventListener('pointerdown', event => {
+        dragging = true;
+        last = { x: event.clientX, y: event.clientY };
+        el.svg.setPointerCapture(event.pointerId);
+      });
+
+      el.svg.addEventListener('pointermove', event => {
+        if (!dragging) return;
+        state.transform.x += event.clientX - last.x;
+        state.transform.y += event.clientY - last.y;
+        last = { x: event.clientX, y: event.clientY };
+        drawGraph();
+      });
+
+      el.svg.addEventListener('pointerup', () => {
+        dragging = false;
+      });
+
+      el.svg.addEventListener('wheel', event => {
+        event.preventDefault();
+        zoomAt(event.deltaY < 0 ? 1.08 : .92, event.offsetX, event.offsetY);
+      }, { passive: false });
+    }
+
+    function zoomAt(factor, cx = el.svg.clientWidth / 2, cy = el.svg.clientHeight / 2) {
+      const next = clamp(state.transform.scale * factor, .22, 2.6);
+      const ratio = next / state.transform.scale;
+      state.transform.x = cx - (cx - state.transform.x) * ratio;
+      state.transform.y = cy - (cy - state.transform.y) * ratio;
+      state.transform.scale = next;
+      drawGraph();
+    }
+
+    function fitView() {
+      if (!state.layout.size) return;
+      const positions = [...state.layout.values()];
+      const minX = Math.min(...positions.map(pos => pos.x));
+      const minY = Math.min(...positions.map(pos => pos.y));
+      const maxX = Math.max(...positions.map(pos => pos.x + cardW));
+      const maxY = Math.max(...positions.map(pos => pos.y + cardH + actionH + 68));
+      const width = Math.max(1, maxX - minX);
+      const height = Math.max(1, maxY - minY);
+      const scale = clamp(Math.min((el.svg.clientWidth - 96) / width, (el.svg.clientHeight - 96) / height), .18, 1.15);
+      state.transform = { x: 48 - minX * scale, y: 48 - minY * scale, scale };
+      drawGraph();
+    }
+
+    function focusNode(id) {
+      const pos = state.layout.get(id);
+      if (!pos) return;
+      state.transform.x = el.svg.clientWidth / 2 - (pos.x + cardW / 2) * state.transform.scale;
+      state.transform.y = el.svg.clientHeight / 2 - (pos.y + cardH / 2) * state.transform.scale;
+      drawGraph();
+    }
+
+    function exportSvg() {
+      if (!state.layout.size) return;
+      const text = new XMLSerializer().serializeToString(el.svg);
+      download('behavior-tree.svg', text, 'image/svg+xml');
+    }
+
+    function exportJson() {
+      if (!state.nodes.size) return;
+      const data = {
+        files: state.files.map(file => file.name),
+        root: state.root,
+        nodes: [...state.nodes.values()],
+        edges: state.edges
+      };
+      download('behavior-tree.json', JSON.stringify(data, null, 2), 'application/json');
+    }
+
+    function download(name, text, type) {
+      const blob = new Blob([text], { type });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = name;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function createSvg(tag, attrs = {}) {
+      const node = document.createElementNS(svgNS, tag);
+      Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, value));
+      return node;
+    }
+
+    function shortName(id) {
+      return id.includes('::') ? id.split('::').pop() : id.replace(/^action:/, '');
+    }
+
+    function extractNodeOperations(node) {
+      const operations = [];
+      for (const rawLine of node.body) {
+        const line = rawLine.trim();
+        if (!line || /^(def|endf|if|elif|else|endif|random|elser|endr|return)\b/.test(line)) continue;
+        if (/^>>\s*/.test(line) || /^import/.test(line)) continue;
+
+        const actionMatch = line.match(/^->\s*(.+)$/);
+        if (actionMatch) {
+          operations.push(naturalizeAction(actionMatch[1]));
+          continue;
+        }
+
+        if (/^reset\b/.test(line)) {
+          operations.push('重置当前行为选择');
+          continue;
+        }
+
+        if (/^\[[^\]]+\]$/.test(line)) {
+          operations.push(naturalizeRegister(line));
+          continue;
+        }
+
+        if (/^(self\.|function#)/.test(line)) {
+          operations.push(naturalizeAction(line));
+        }
+      }
+      return [...new Set(operations)].filter(Boolean).slice(0, 4);
+    }
+
+    function naturalizeCondition(value) {
+      if (!value) return '';
+      return String(value)
+        .split(/\s+&&\s+/)
+        .map(part => naturalizeSingleCondition(part))
+        .filter(Boolean)
+        .join('，并且 ');
+    }
+
+    function naturalizeSingleCondition(value) {
+      let text = String(value).trim();
+      text = text.replace(/^(if|elif)\s+/, '');
+      if (text === 'else') return '否则';
+
+      const random = text.match(/^(random|elser)\s+(-?\d+)%$/);
+      if (random) return `${random[1] === 'random' ? '随机命中' : '否则随机命中'} ${random[2]}%`;
+
+      text = text.replace(/@ parameter(\d+):([-\w.]+)/g, '，参数$1为$2');
+
+      const compare = text.match(/^(.+?)\.(gt|gte|geq|lt|lte|leq|eq|neq)\(([-\w.]+)\)$/);
+      if (compare) {
+        return `${naturalizeMetric(compare[1])} ${operatorText(compare[2])} ${compare[3]}`;
+      }
+
+      const angle = text.match(/^self\.angle_2d_cw_between\(([-\d.]+),\s*([-\d.]+)\)$/);
+      if (angle) return `目标位于顺时针 ${angle[1]}° 到 ${angle[2]}° 的角度范围内`;
+
+      const target = text.match(/^self\.target\(([-\d.]+)\)(.*)$/);
+      if (target) return naturalizeTargetState(target[1], target[2]);
+
+      const targetArea = text.match(/^self\.targetArea\(([-\d.]+)\)$/);
+      if (targetArea) return `目标区域设为 ${targetArea[1]}`;
+
+      const mapArea = text.match(/^self\.in_map\(st\.([^)]+)\)\.in_area\(([-\d.]+)\)$/);
+      if (mapArea) return `位于 ${mapArea[1].replace(/_/g, ' ')} 地图的 ${mapArea[2]} 区`;
+
+      const functionCall = text.match(/^function#([0-9A-Fa-f]+)\(([^)]*)\)$/);
+      if (functionCall) return naturalizeFunction(functionCall[1], functionCall[2], 'condition');
+
+      const register = text.match(/^\[([^\]]+)\]$/);
+      if (register) return naturalizeRegister(text);
+
+      const known = {
+        'self.above_target()': '自己位于目标上方',
+        'self.enraged()': '处于发怒状态',
+        'self.fatigued()': '处于疲劳状态',
+        'self.target.helpless_0()': '目标处于无助状态',
+        'self.clearTarget()': '清除当前目标'
+      };
+      if (known[text]) return known[text];
+
+      return text
+        .replace(/^self\./, '')
+        .replace(/\(\)/g, '')
+        .replace(/_/g, ' ');
+    }
+
+    function naturalizeMetric(value) {
+      const key = String(value).trim();
+      const names = {
+        'self.distance_2d_to_target()': '与目标的水平距离',
+        'self.distance_3d_to_target()': '与目标的三维距离',
+        'self.vertical_distance_to_target()': '与目标的垂直距离',
+        'self.hp_percent()': '生命值百分比'
+      };
+      return names[key] || key.replace(/^self\./, '').replace(/\(\)/g, '').replace(/_/g, ' ');
+    }
+
+    function operatorText(op) {
+      return {
+        gt: '>',
+        gte: '>=',
+        geq: '>=',
+        lt: '<',
+        lte: '<=',
+        leq: '<=',
+        eq: '=',
+        neq: '!='
+      }[op] || op;
+    }
+
+    function naturalizeAction(value) {
+      let text = String(value).replace(/^action:/, '').trim();
+      text = text.replace(/^->\s*/, '');
+
+      const targetArea = text.match(/^self\.targetArea\(([-\d.]+)\)$/);
+      if (targetArea) return `把目标区域设为 ${targetArea[1]}`;
+
+      const targetEnemy = text.match(/^self\.targetEnemy\(([^)]*)\)$/);
+      if (targetEnemy) return `选择敌对目标：${targetEnemy[1].replace(/_/g, ' ')}`;
+
+      const functionCall = text.match(/^function#([0-9A-Fa-f]+)\(([^)]*)\)$/);
+      if (functionCall) return naturalizeFunction(functionCall[1], functionCall[2], 'action');
+
+      const call = text.match(/^([A-Za-z_][\w.]*)\((.*)\)$/);
+      if (call) {
+        const fullName = call[1];
+        const actionName = fullName.split('.').pop().replace(/_/g, ' ');
+        const owner = fullName.includes('.') ? fullName.split('.').slice(0, -1).join('.') : '';
+        const params = call[2].trim();
+        if (fullName === 'self.clearTarget') return '清除当前目标';
+        return `${owner ? `${owner} ` : ''}执行 ${actionName}${params ? `（参数 ${params}）` : ''}`;
+      }
+
+      return naturalizeRegister(text);
+    }
+
+    function summarizeAction(value) {
+      let text = String(value).replace(/^action:/, '').replace(/^->\s*/, '').trim();
+      const call = text.match(/^([A-Za-z_][\w.]*)\((.*)\)$/);
+      if (!call) return naturalizeAction(value);
+      const fullName = call[1];
+      const actionName = fullName.split('.').pop();
+      const params = call[2].trim();
+      const mapped = ACTION_MEANINGS[actionName] || actionName.replace(/_/g, ' ');
+      return params ? `${mapped}（${params}）` : mapped;
+    }
+
+    const FUNCTION_MEANINGS = {
+      // Source: Leviathon common/default.fexty. These are default THK/FEXTY signatures.
+      3: args => `选择敌对目标：${enumText(TARGET_ENEMY_MEANINGS, args[0])}`,
+      4: args => `目标未知处理（参数 ${args.join(', ') || '无'}）`,
+      5: args => `设置目标区域：${enumText(TARGET_AREA_MEANINGS, args[0])}`,
+      6: args => `与目标的三维距离 <= ${arg(args, 0)}`,
+      7: args => `与目标的三维距离 > ${arg(args, 0)}`,
+      8: args => `与目标的水平距离 <= ${arg(args, 0)}`,
+      9: args => `与目标的水平距离 > ${arg(args, 0)}`,
+      A: args => `重新计算后与目标的三维距离 <= ${arg(args, 0)}`,
+      B: args => `重新计算后与目标的三维距离 > ${arg(args, 0)}`,
+      C: args => `重新计算后与目标的水平距离 <= ${arg(args, 0)}`,
+      D: args => `重新计算后与目标的水平距离 > ${arg(args, 0)}`,
+      E: args => `与目标的垂直距离 <= ${arg(args, 0)}`,
+      F: args => `与目标的垂直距离 > ${arg(args, 0)}`,
+      10: args => args[0] === '1' ? '自身位于目标下方' : '自身位于目标上方',
+      13: args => args[0] === '1' ? '自身位于目标区域下方' : '自身位于目标区域上方',
+      14: args => `目标位于逆时针 ${arg(args, 0)} 到 ${arg(args, 1)} 度范围内`,
+      15: args => `角度判断 15（参数 ${args.join(', ') || '无'}）`,
+      16: args => `目标位于顺时针 ${arg(args, 0)} 到 ${arg(args, 1)} 度范围内`,
+      17: args => `角度判断 17（参数 ${args.join(', ') || '无'}）`,
+      18: args => `角度判断 18（参数 ${args.join(', ') || '无'}）`,
+      19: args => `角度判断 19（参数 ${args.join(', ') || '无'}）`,
+      '1A': args => `角度判断 1A（参数 ${args.join(', ') || '无'}）`,
+      '1B': args => `角度判断 1B（参数 ${args.join(', ') || '无'}）`,
+      '1C': () => '进入战斗状态',
+      '1D': () => '警戒但未进入战斗',
+      '1E': () => '怪物处于发怒状态',
+      '1F': () => '怪物处于疲劳状态',
+      20: () => '怪物中毒',
+      21: () => '怪物防御下降',
+      22: () => '怪物处于瘴气状态',
+      23: () => '怪物可被钩爪抓取',
+      24: args => `目标位于部位 ${arg(args, 0)}`,
+      25: () => '怪物被骑乘',
+      26: () => '骑乘终结技可用',
+      27: () => '骑乘中被刺击',
+      28: () => '骑乘中已硬直两次',
+      '2A': () => '目标被压制',
+      '2B': args => args[0] === '1' ? `疲劳剩余时间 <= ${arg(args, 1)}` : `发怒剩余时间 <= ${arg(args, 1)}`,
+      '2C': args => `生命值百分比 <= ${arg(args, 1)}`,
+      '2E': args => `目标状态为：${enumText(TARGET_STATUS_MEANINGS, args[0])}`,
+      '2F': args => `目标是怪物类型 ${arg(args, 0)}`,
+      37: args => `任务 ID ${questOperator(args[0])} ${arg(args, 1)}`,
+      '5E': () => '清除当前目标',
+      70: () => '怪物正在飞行',
+      76: args => `部位 ${arg(args, 0)} 破坏状态为 ${arg(args, 1)}`,
+      AE: () => '强制换区',
+      B1: () => '强制换区（备用逻辑）',
+      B8: args => `当前任务等级为 ${enumText(RANK_MEANINGS, args[0])}`,
+      BF: args => `位于地图 ${arg(args, 0)} 的区域 ${arg(args, 1)}`,
+      101: () => '推测：雷狼龙处于带电/雷光强化状态',
+      '10A': args => args.length ? '推测：记录本轮已使用特殊招式' : '推测：特殊招式本轮可用',
+      3000: args => hpFunctionText(args),
+      3001: args => staminaFunctionText(args),
+      3002: args => args[0] === '1' ? '刷新发怒状态' : '进入发怒状态',
+      3003: args => args[0] === '1' ? '读取尸体保留时间' : `设置尸体保留时间为 ${arg(args, 1)}`
+    };
+
+    const TARGET_ENEMY_MEANINGS = {
+      1: '随机玩家或随从',
+      2: '当前 AI 目标',
+      13: '上一个攻击者',
+      29: '任意怪物',
+      41: '最近的怪物',
+      43: '最近的实体',
+      48: '最近的实体 2',
+      49: '唯一目标',
+      50: '随机玩家或随从 2 / 满足条件的最近目标',
+      66: '上一个目标',
+      75: '最近的实体 3'
+    };
+
+    const TARGET_AREA_MEANINGS = {
+      10: '最近入口',
+      '3B': '下一个出口',
+      12: '全局中心',
+      25: '当前区域中心',
+      26: '当前区域空中中心',
+      31: '最近怪物所在区域',
+      '3D': '未知空中区域',
+      '3E': '未知地面区域'
+    };
+
+    const TARGET_STATUS_MEANINGS = {
+      5: '无助状态 0',
+      6: '无助状态 1',
+      12: '战斗中',
+      18: '中毒',
+      19: '猛毒',
+      '1A': '裂伤',
+      '1B': '爆破异常',
+      '1C': '麻痹',
+      '1D': '眩晕 0',
+      '1E': '睡眠',
+      20: '火属性异常',
+      21: '雷属性异常',
+      22: '水属性异常',
+      23: '冰属性异常',
+      24: '龙属性异常',
+      25: '防御下降',
+      29: '眩晕 1',
+      '2B': '瘴气',
+      '2D': '泥缠'
+    };
+
+    const TARGET_CONTROLLER_STATES = {
+      0: '空中/高低差相关目标',
+      3: '特殊目标状态，推测需要重定位或重新选目标',
+      4: '特殊目标状态，推测需要重定位、追击或切换目标',
+      7: '目标控制器状态 #7，常见于近身/正面处理',
+      10: '目标控制器状态 #10，常见于当前目标追踪处理',
+      11: '目标控制器状态 #11，常见于特殊目标过滤',
+      12: '墙面/高低差攻击目标',
+      13: '非小型怪或特殊对象目标过滤',
+      14: '可上墙/墙面跳跃攻击目标',
+      39: '目标控制器状态 #39，常见于短距离修正',
+      52: '垂直差/场地边界相关目标',
+      55: '全局特殊目标处理'
+    };
+
+    const RANK_MEANINGS = {
+      0: '下位',
+      1: '上位',
+      2: '大师等级',
+      3: '历战王'
+    };
+
+    const ACTION_MEANINGS = {
+      dash: '冲刺/位移',
+      jump_attack_wall_up: '上墙跳跃攻击',
+      jump_attack_wall_down: '下落跳跃攻击',
+      jump_attack_lightning: '雷电跳跃攻击',
+      damage_drop_to_ground: '受击倒地',
+      fly_dash: '飞扑冲刺',
+      turn_left: '左转',
+      turn_right: '右转',
+      walk: '行走',
+      run: '奔跑'
+    };
+
+    function naturalizeFunction(id, args = '', mode = 'condition') {
+      const key = id.toUpperCase();
+      const known = FUNCTION_MEANINGS[key];
+      const parsedArgs = parseFunctionArgs(args);
+      if (typeof known === 'function') return known(parsedArgs);
+      if (known) return args ? `${known}（参数 ${args}）` : known;
+      const suffix = args ? `（参数 ${args}）` : '';
+      return mode === 'condition' ? `未知函数 #${key} 判断通过${suffix}` : `执行未知函数 #${key}${suffix}`;
+    }
+
+    function parseFunctionArgs(args = '') {
+      return String(args)
+        .split(',')
+        .map(item => item.trim())
+        .filter(Boolean)
+        .map(item => item.replace(/^0x/i, '').toUpperCase());
+    }
+
+    function arg(args, index) {
+      return args[index] || '?';
+    }
+
+    function enumText(map, value) {
+      const key = String(value || '').toUpperCase();
+      return map[key] || map[Number.parseInt(key, 16)] || value || '未知';
+    }
+
+    function naturalizeTargetState(id, suffix = '') {
+      const key = String(id || '').toUpperCase();
+      const meaning = TARGET_CONTROLLER_STATES[key] || TARGET_CONTROLLER_STATES[Number.parseInt(key, 10)];
+      const extra = suffix ? suffix.replace(/，参数(\d+)为/g, '，附加参数$1=') : '';
+      return meaning ? `目标控制器状态 #${key}：${meaning}${extra}` : `目标控制器状态 #${key}${extra}`;
+    }
+
+    function questOperator(value) {
+      return {
+        0: '=',
+        1: '>=',
+        2: '>',
+        3: '<=',
+        4: '<',
+        5: '!='
+      }[String(value || '')] || '判断';
+    }
+
+    function hpFunctionText(args) {
+      const value = arg(args, 1);
+      return {
+        0: `回复生命值 ${value}`,
+        1: `按万分比回复生命值 ${value}`,
+        2: `造成伤害 ${value}`,
+        3: `按万分比造成伤害 ${value}`,
+        10: '读取当前生命值',
+        11: '读取最大生命值'
+      }[String(args[0] || '')] || `生命值操作（参数 ${args.join(', ') || '无'}）`;
+    }
+
+    function staminaFunctionText(args) {
+      const value = arg(args, 1);
+      return {
+        0: `增加耐力 ${value}`,
+        1: `按万分比增加耐力 ${value}`,
+        10: '读取当前耐力'
+      }[String(args[0] || '')] || `耐力操作（参数 ${args.join(', ') || '无'}）`;
+    }
+
+    function shortCondition(value) {
+      const full = naturalizeCondition(value);
+      return full
+        .replace(/目标控制器状态 #([0-9A-F]+)：/g, '目标#$1 ')
+        .replace(/目标控制器状态 #([0-9A-F]+)/g, '目标#$1')
+        .replace(/推测需要/g, '')
+        .replace(/目标控制器状态/g, '目标状态')
+        .replace(/与目标的水平距离/g, '水平距离')
+        .replace(/与目标的三维距离/g, '三维距离')
+        .replace(/与目标的垂直距离/g, '垂直距离')
+        .replace(/处于发怒状态/g, '发怒')
+        .replace(/处于疲劳状态/g, '疲劳')
+        .replace(/未知函数 #([0-9A-F]+) 判断通过/g, '#$1通过')
+        .replace(/随机命中\s*/g, '随机')
+        .replace(/否则随机命中\s*/g, '否则随机')
+        .replace(/，并且/g, ' + ');
+    }
+
+    function naturalizeRegister(value) {
+      return String(value)
+        .replace(/^\[|\]$/g, '')
+        .replace(/RegisterVar(\d+)/g, '变量$1')
+        .replace(/\+\+/g, '增加 1')
+        .replace(/\|-/g, '清空')
+        .replace(/==/g, '=')
+        .replace(/<=/g, '<=')
+        .replace(/>=/g, '>=')
+        .replace(/_/g, ' ');
+    }
+
+    function trimBody(text) {
+      const lines = text.split('\n');
+      if (lines.length <= 140) return text;
+      return `${lines.slice(0, 140).join('\n')}\n...`;
+    }
+
+    function compactText(value, max) {
+      const text = String(value).replace(/\s+/g, ' ').trim();
+      return text.length > max ? `${text.slice(0, max - 1)}...` : text;
+    }
+
+    function wrapText(value, max) {
+      const text = String(value).replace(/\s+/g, ' ').trim();
+      if (text.length <= max) return [text];
+      const lines = [];
+      let rest = text;
+      while (rest.length > max && lines.length < 3) {
+        let index = rest.lastIndexOf(' ', max);
+        if (index < 10) index = max;
+        lines.push(rest.slice(0, index).trim());
+        rest = rest.slice(index).trim();
+      }
+      if (rest) lines.push(rest);
+      return lines;
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value).replace(/`/g, '&#096;');
+    }
+
+    function showToast(message) {
+      el.toast.textContent = message;
+      el.toast.classList.add('show');
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => el.toast.classList.remove('show'), 1800);
+    }
+  </script>
+</body>
+</html>
