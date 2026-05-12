@@ -1,8 +1,10 @@
 .tools {
   padding: 20px;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 5px #333;
+  background-color: rgba(18,18,18,0.88);
+  border-radius: 14px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(18px);
 }
 .tools-title {
   color: #007fff;
@@ -102,15 +104,22 @@
 }
 .tools-list li {
   width: calc(50% - 8px);
-  display: flex;
   padding: 10px;
   margin-top: 15px;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 2px 2px 5px #ccc;
+  cursor: pointer;
 }
 .tools-list li:hover {
   box-shadow: 1px 1px 5px inset #ccc;
+}
+.tools-list li .tool-card {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
 }
 .tools-list li .tool-cover {
   width: 120px;
