@@ -1,0 +1,13 @@
+<svg width="240" height="240" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="240" height="240" rx="28" fill="#0E1116"/>
+  <path d="M40 78L120 32L200 78L120 124L40 78Z" fill="#18202B" stroke="#39C6A6" stroke-width="4"/>
+  <path d="M40 78V162L120 208V124L40 78Z" fill="#151B24" stroke="#2E6F68" stroke-width="4"/>
+  <path d="M200 78V162L120 208V124L200 78Z" fill="#111821" stroke="#315F8C" stroke-width="4"/>
+  <path d="M72 80L120 53L168 80L120 107L72 80Z" fill="#243142" stroke="#6BA8FF" stroke-width="3"/>
+  <path d="M80 136L104 122L128 136L104 150L80 136Z" fill="#EF7474"/>
+  <path d="M136 153L160 139L184 153L160 167L136 153Z" fill="#F0BD55"/>
+  <path d="M67 160L88 148L109 160L88 172L67 160Z" fill="#39C6A6"/>
+  <path d="M64 94V131M88 108V145M112 122V159" stroke="#2D3848" stroke-width="3"/>
+  <path d="M176 94V131M152 108V145M128 122V159" stroke="#2D3848" stroke-width="3"/>
+  <text x="120" y="222" text-anchor="middle" fill="#EDF2F7" font-family="Arial, sans-serif" font-size="21" font-weight="800">WHITEBOX</text>
+</svg>

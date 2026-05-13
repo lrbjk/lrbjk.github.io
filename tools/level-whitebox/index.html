@@ -1,0 +1,1813 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Level Whitebox Builder | lirb</title>
+  <style>
+    :root {
+      --bg: #0e1116;
+      --panel: #171b22;
+      --panel-2: #202632;
+      --line: #303846;
+      --text: #edf2f7;
+      --muted: #9ba7b6;
+      --accent: #39c6a6;
+      --blue: #6ba8ff;
+      --yellow: #f0bd55;
+      --red: #ef7474;
+      --purple: #b899ff;
+      --canvas: #11161e;
+      --grid: #2a3341;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      color: var(--text);
+      background: var(--bg);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .app {
+      height: 100vh;
+      min-height: 760px;
+      display: grid;
+      grid-template-rows: 58px minmax(0, 1fr);
+      background:
+        linear-gradient(135deg, rgba(57, 198, 166, .08), transparent 32%),
+        linear-gradient(315deg, rgba(107, 168, 255, .08), transparent 34%),
+        var(--bg);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(14, 17, 22, .94);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 250px;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      border: 1px solid rgba(57, 198, 166, .45);
+      background: rgba(57, 198, 166, .08);
+      font-weight: 800;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: 0;
+      line-height: 1.15;
+    }
+
+    .brand p {
+      margin: 3px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .toolbar,
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .toolbar {
+      justify-content: center;
+      flex: 1;
+    }
+
+    .icon-btn,
+    .text-btn,
+    .seg-btn,
+    .toolbar-select {
+      min-height: 34px;
+      border-radius: 7px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 11px;
+      white-space: nowrap;
+    }
+
+    .toolbar-select {
+      width: 74px;
+      padding: 0 8px;
+      outline: none;
+    }
+
+    .icon-btn {
+      width: 36px;
+      padding: 0;
+      font-size: 16px;
+    }
+
+    .text-btn:hover,
+    .icon-btn:hover,
+    .seg-btn:hover,
+    .toolbar-select:hover {
+      border-color: rgba(57, 198, 166, .55);
+    }
+
+    .segmented {
+      display: flex;
+      padding: 3px;
+      gap: 3px;
+      background: #10151d;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .seg-btn {
+      min-height: 28px;
+      background: transparent;
+      border-color: transparent;
+      padding: 0 10px;
+      color: var(--muted);
+    }
+
+    .seg-btn.active {
+      color: var(--text);
+      background: rgba(57, 198, 166, .16);
+      border-color: rgba(57, 198, 166, .38);
+    }
+
+    .workspace {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 260px minmax(420px, 1fr) 300px;
+    }
+
+    .sidebar,
+    .inspector {
+      min-height: 0;
+      overflow: auto;
+      background: rgba(23, 27, 34, .95);
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--line);
+    }
+
+    .inspector {
+      border-left: 1px solid var(--line);
+    }
+
+    .panel-section {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-title {
+      margin: 0 0 10px;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .template-grid,
+    .object-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .template-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .object-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .library-btn {
+      min-height: 48px;
+      border-radius: 8px;
+      background: #111721;
+      border: 1px solid var(--line);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    .library-btn:hover {
+      border-color: rgba(107, 168, 255, .5);
+      background: #151d29;
+    }
+
+    .swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      flex: 0 0 auto;
+    }
+
+    .library-name {
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .library-meta {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .stage-shell {
+      min-height: 0;
+      display: grid;
+      grid-template-rows: 40px minmax(0, 1fr) 34px;
+      background: var(--canvas);
+    }
+
+    .stage-head,
+    .stage-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .stage-foot {
+      border-top: 1px solid rgba(255, 255, 255, .08);
+      border-bottom: 0;
+    }
+
+    .stage-wrap {
+      position: relative;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    #stage {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: crosshair;
+      background: var(--canvas);
+    }
+
+    .hint {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      max-width: 420px;
+      padding: 9px 11px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, .08);
+      background: rgba(14, 17, 22, .78);
+      color: var(--muted);
+      font-size: 12px;
+      pointer-events: none;
+    }
+
+    .field {
+      margin-bottom: 10px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      color: var(--text);
+      background: #111721;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 8px 9px;
+      outline: none;
+    }
+
+    .field textarea {
+      min-height: 74px;
+      resize: vertical;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .entity-list {
+      display: grid;
+      gap: 7px;
+      max-height: 250px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .entity-item {
+      width: 100%;
+      min-height: 36px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 9px;
+      background: #111721;
+      border: 1px solid var(--line);
+      text-align: left;
+    }
+
+    .entity-item.active {
+      border-color: rgba(57, 198, 166, .7);
+      background: rgba(57, 198, 166, .1);
+    }
+
+    .entity-item span:first-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 12px;
+    }
+
+    .pill {
+      color: #07110f;
+      background: var(--accent);
+      border-radius: 999px;
+      padding: 2px 7px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .empty {
+      margin: 0;
+      padding: 16px;
+      color: var(--muted);
+      background: #111721;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .danger {
+      background: rgba(239, 116, 116, .14);
+      border-color: rgba(239, 116, 116, .38);
+      color: #ffd6d6;
+    }
+
+    .primary {
+      background: rgba(57, 198, 166, .18);
+      border-color: rgba(57, 198, 166, .45);
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      padding: 10px 12px;
+      background: #0b0f14;
+      border: 1px solid rgba(57, 198, 166, .45);
+      border-radius: 8px;
+      color: var(--text);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, .35);
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: .18s ease;
+      font-size: 13px;
+      z-index: 20;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      body { overflow: auto; }
+      .app { height: auto; min-height: 100vh; }
+      .topbar { flex-wrap: wrap; height: auto; padding: 10px; }
+      .brand { min-width: 100%; }
+      .toolbar { justify-content: flex-start; flex-wrap: wrap; }
+      .workspace { grid-template-columns: 1fr; }
+      .sidebar,
+      .inspector { max-height: none; border: 0; }
+      .stage-shell { height: 70vh; min-height: 520px; }
+      .object-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      .object-grid { grid-template-columns: 1fr 1fr; }
+      .field-row { grid-template-columns: 1fr; }
+      .toolbar-group { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">LW</div>
+        <div>
+          <h1>Level Whitebox Builder</h1>
+          <p>快速搭建关卡草图、玩法点位和导出文档</p>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="segmented" aria-label="view mode">
+          <button class="seg-btn active" data-view="2d">2D</button>
+          <button class="seg-btn" data-view="3d">3D</button>
+        </div>
+        <div class="toolbar-group" id="view3dTools">
+          <select id="viewPreset3d" class="toolbar-select" title="3D 视角预设">
+            <option value="iso">Iso</option>
+            <option value="front">Front</option>
+            <option value="back">Back</option>
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+          </select>
+          <button class="icon-btn" id="rotateLeftBtn" title="3D 视角左转">↺</button>
+          <button class="icon-btn" id="rotateRightBtn" title="3D 视角右转">↻</button>
+          <button class="icon-btn" id="zoomInBtn" title="3D 视角放大">＋</button>
+          <button class="icon-btn" id="zoomOutBtn" title="3D 视角缩小">－</button>
+          <button class="icon-btn" id="resetViewBtn" title="重置 3D 视角">⌂</button>
+        </div>
+        <div class="toolbar-group">
+          <button class="icon-btn" id="undoBtn" title="撤销">↶</button>
+          <button class="icon-btn" id="redoBtn" title="重做">↷</button>
+          <button class="icon-btn" id="duplicateBtn" title="复制选中对象">⧉</button>
+          <button class="icon-btn danger" id="deleteBtn" title="删除选中对象">⌫</button>
+        </div>
+        <div class="toolbar-group">
+          <button class="text-btn" id="exportPngBtn">导出 PNG</button>
+          <button class="text-btn" id="exportJsonBtn">导出 JSON</button>
+          <button class="text-btn" id="exportMdBtn">导出 Markdown</button>
+          <button class="text-btn" id="importBtn">导入 JSON</button>
+        </div>
+      </div>
+
+      <div class="toolbar-group">
+        <button class="text-btn primary" id="saveBtn">保存本地</button>
+        <button class="text-btn" id="copyBtn">复制数据</button>
+      </div>
+    </header>
+
+    <section class="workspace">
+      <aside class="sidebar">
+        <div class="panel-section">
+          <h2 class="section-title">Create New Level</h2>
+          <div class="template-grid">
+            <button class="library-btn" data-template="side">
+              <span class="swatch" style="background:#39c6a6"></span>
+              <span><span class="library-name">2D Side-Scroller</span><span class="library-meta">平台跳跃 / 横板动作</span></span>
+            </button>
+            <button class="library-btn" data-template="top">
+              <span class="swatch" style="background:#6ba8ff"></span>
+              <span><span class="library-name">2D Top-Down</span><span class="library-meta">俯视角 ARPG / 解谜</span></span>
+            </button>
+            <button class="library-btn" data-template="room">
+              <span class="swatch" style="background:#f0bd55"></span>
+              <span><span class="library-name">3D Room / Dungeon</span><span class="library-meta">房间、地牢、Boss 区</span></span>
+            </button>
+            <button class="library-btn" data-template="corridor">
+              <span class="swatch" style="background:#b899ff"></span>
+              <span><span class="library-name">3D Chase Corridor</span><span class="library-meta">追逐路线 / 压迫节奏</span></span>
+            </button>
+            <button class="library-btn" data-template="empty">
+              <span class="swatch" style="background:#9ba7b6"></span>
+              <span><span class="library-name">Empty Scene</span><span class="library-meta">空白白盒文档</span></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h2 class="section-title">Geometry</h2>
+          <div class="object-grid" id="geometryLibrary"></div>
+        </div>
+
+        <div class="panel-section">
+          <h2 class="section-title">Gameplay</h2>
+          <div class="object-grid" id="gameplayLibrary"></div>
+        </div>
+
+        <div class="panel-section">
+          <h2 class="section-title">Annotation</h2>
+          <div class="object-grid" id="annotationLibrary"></div>
+        </div>
+      </aside>
+
+      <section class="stage-shell">
+        <div class="stage-head">
+          <span id="levelNameLabel">Level_Whitebox</span>
+          <span id="statsLabel">0 objects</span>
+        </div>
+        <div class="stage-wrap" id="stageWrap">
+          <canvas id="stage"></canvas>
+          <div class="hint">单击选择对象，拖拽移动。3D 模式会自动吸附到其他组件的边缘和中心线；右键或 Alt 拖拽平移，Shift 拖拽旋转视角。</div>
+        </div>
+        <div class="stage-foot">
+          <span id="coordLabel">x: 0, y: 0</span>
+          <span>3D: drag to move and align · wheel zoom · right/Alt drag pan · Shift drag rotate · view presets</span>
+        </div>
+      </section>
+
+      <aside class="inspector">
+        <div class="panel-section">
+          <h2 class="section-title">Level Settings</h2>
+          <div class="field">
+            <label for="levelName">Name</label>
+            <input id="levelName" value="Level_Whitebox">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="gridSize">Grid Size</label>
+              <input id="gridSize" type="number" min="0.25" step="0.25" value="1">
+            </div>
+            <div class="field">
+              <label for="unit">Unit</label>
+              <select id="unit">
+                <option value="meter">meter</option>
+                <option value="tile">tile</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="jumpDistance">Jump Distance</label>
+              <input id="jumpDistance" type="number" min="0" step="0.5" value="5">
+            </div>
+            <div class="field">
+              <label for="dashDistance">Dash Distance</label>
+              <input id="dashDistance" type="number" min="0" step="0.5" value="4">
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h2 class="section-title">Inspector</h2>
+          <div id="inspectorContent"></div>
+        </div>
+
+        <div class="panel-section">
+          <h2 class="section-title">Objects <span id="objectCount">0</span></h2>
+          <div class="entity-list" id="entityList"></div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <input class="file-input" id="fileInput" type="file" accept="application/json,.json">
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const TYPES = {
+      Block: { group: 'geometry', label: 'Block', color: '#d8dee9', w: 4, h: 3, d: 2, icon: '□' },
+      Platform: { group: 'geometry', label: 'Platform', color: '#39c6a6', w: 7, h: 1, d: 1, icon: '▰' },
+      Wall: { group: 'geometry', label: 'Wall', color: '#7f8da3', w: 1, h: 5, d: 3, icon: '▌' },
+      Ramp: { group: 'geometry', label: 'Ramp', color: '#b899ff', w: 4, h: 2, d: 3, icon: '◢' },
+      Stairs: { group: 'geometry', label: 'Stairs', color: '#f0bd55', w: 4, h: 2, d: 3, icon: '▟' },
+      PlayerSpawn: { group: 'gameplay', label: 'Player Spawn', color: '#6ba8ff', w: 1.2, h: 1.2, d: 1.8, icon: '◎' },
+      EnemySpawn: { group: 'gameplay', label: 'Enemy Spawn', color: '#ef7474', w: 1.2, h: 1.2, d: 1.8, icon: '◆' },
+      ItemSpawn: { group: 'gameplay', label: 'Item Point', color: '#f0bd55', w: 1, h: 1, d: 1, icon: '✦' },
+      TriggerZone: { group: 'gameplay', label: 'Trigger Zone', color: '#b899ff', w: 4, h: 3, d: 2, icon: '▣' },
+      Checkpoint: { group: 'gameplay', label: 'Checkpoint', color: '#39c6a6', w: 2, h: 2, d: 2, icon: '⚑' },
+      CameraZone: { group: 'gameplay', label: 'Camera Zone', color: '#56d4ff', w: 6, h: 4, d: 2, icon: '▤' },
+      CombatZone: { group: 'annotation', label: 'Combat Zone', color: '#ef7474', w: 6, h: 4, d: 2, icon: '⚔' },
+      SafeZone: { group: 'annotation', label: 'Safe Zone', color: '#39c6a6', w: 5, h: 4, d: 2, icon: '○' },
+      PuzzleZone: { group: 'annotation', label: 'Puzzle Zone', color: '#f0bd55', w: 5, h: 4, d: 2, icon: '?' },
+      Path: { group: 'annotation', label: 'Route Line', color: '#ffffff', w: 6, h: .25, d: .25, icon: '→' },
+      Note: { group: 'annotation', label: 'Text Note', color: '#ffffff', w: 4, h: 1, d: 1, icon: 'T' }
+    };
+
+    const el = {
+      canvas: document.getElementById('stage'),
+      wrap: document.getElementById('stageWrap'),
+      levelName: document.getElementById('levelName'),
+      levelNameLabel: document.getElementById('levelNameLabel'),
+      gridSize: document.getElementById('gridSize'),
+      unit: document.getElementById('unit'),
+      jumpDistance: document.getElementById('jumpDistance'),
+      dashDistance: document.getElementById('dashDistance'),
+      statsLabel: document.getElementById('statsLabel'),
+      coordLabel: document.getElementById('coordLabel'),
+      inspectorContent: document.getElementById('inspectorContent'),
+      entityList: document.getElementById('entityList'),
+      objectCount: document.getElementById('objectCount'),
+      toast: document.getElementById('toast'),
+      fileInput: document.getElementById('fileInput')
+    };
+
+    const ctx = el.canvas.getContext('2d');
+    const px = 32;
+    const state = {
+      view: '2d',
+      selectedId: null,
+      drag: null,
+      camera3d: { yaw: Math.PI / 4, zoom: 28, panX: 0, panY: 0 },
+      guides3d: [],
+      history: [],
+      future: [],
+      doc: createDocument('Level_Whitebox', '2D')
+    };
+
+    function createDocument(name, mode) {
+      return {
+        id: id('level'),
+        name,
+        mode,
+        settings: {
+          gridSize: 1,
+          unit: 'meter',
+          playerHeight: 1.8,
+          playerJumpDistance: 5,
+          playerDashDistance: 4,
+          playerMoveSpeed: 6
+        },
+        entities: []
+      };
+    }
+
+    function id(prefix) {
+      return `${prefix}_${Math.random().toString(36).slice(2, 8)}`;
+    }
+
+    function bootstrap() {
+      buildLibrary();
+      bindEvents();
+      const saved = localStorage.getItem('level-whitebox-doc');
+      if (saved) {
+        try {
+          state.doc = normalizeDocument(JSON.parse(saved));
+          state.selectedId = state.doc.entities[0]?.id || null;
+        } catch (error) {
+          loadTemplate('side');
+        }
+      } else {
+        loadTemplate('side');
+      }
+      resizeCanvas();
+      updateAll();
+    }
+
+    function buildLibrary() {
+      const groups = {
+        geometry: document.getElementById('geometryLibrary'),
+        gameplay: document.getElementById('gameplayLibrary'),
+        annotation: document.getElementById('annotationLibrary')
+      };
+      Object.keys(TYPES).forEach(type => {
+        const item = TYPES[type];
+        const button = document.createElement('button');
+        button.className = 'library-btn';
+        button.dataset.addType = type;
+        button.innerHTML = `<span class="swatch" style="background:${item.color}"></span><span><span class="library-name">${item.icon} ${item.label}</span><span class="library-meta">${type}</span></span>`;
+        groups[item.group].appendChild(button);
+      });
+    }
+
+    function bindEvents() {
+      window.addEventListener('resize', resizeCanvas);
+      document.querySelectorAll('[data-view]').forEach(button => {
+        button.addEventListener('click', () => {
+          state.view = button.dataset.view;
+          state.doc.mode = state.view === '2d' ? '2D' : '3D';
+          document.querySelectorAll('[data-view]').forEach(item => item.classList.toggle('active', item === button));
+          updateAll();
+        });
+      });
+      document.querySelectorAll('[data-template]').forEach(button => {
+        button.addEventListener('click', () => {
+          pushHistory();
+          loadTemplate(button.dataset.template);
+          updateAll();
+        });
+      });
+      document.body.addEventListener('click', event => {
+        const addButton = event.target.closest('[data-add-type]');
+        if (addButton) addEntity(addButton.dataset.addType);
+      });
+      el.canvas.addEventListener('pointerdown', onPointerDown);
+      el.canvas.addEventListener('pointermove', onPointerMove);
+      el.canvas.addEventListener('wheel', onWheel, { passive: false });
+      el.canvas.addEventListener('contextmenu', event => event.preventDefault());
+      window.addEventListener('pointerup', onPointerUp);
+      el.levelName.addEventListener('change', () => updateSettings({ name: el.levelName.value.trim() || 'Level_Whitebox' }));
+      el.gridSize.addEventListener('change', () => updateSettings({ gridSize: number(el.gridSize.value, 1) }));
+      el.unit.addEventListener('change', () => updateSettings({ unit: el.unit.value }));
+      el.jumpDistance.addEventListener('change', () => updateSettings({ playerJumpDistance: number(el.jumpDistance.value, 5) }));
+      el.dashDistance.addEventListener('change', () => updateSettings({ playerDashDistance: number(el.dashDistance.value, 4) }));
+      document.getElementById('undoBtn').addEventListener('click', undo);
+      document.getElementById('redoBtn').addEventListener('click', redo);
+      document.getElementById('duplicateBtn').addEventListener('click', duplicateSelected);
+      document.getElementById('deleteBtn').addEventListener('click', deleteSelected);
+      document.getElementById('exportPngBtn').addEventListener('click', exportPng);
+      document.getElementById('exportJsonBtn').addEventListener('click', exportJson);
+      document.getElementById('exportMdBtn').addEventListener('click', exportMarkdown);
+      document.getElementById('copyBtn').addEventListener('click', copyJson);
+      document.getElementById('saveBtn').addEventListener('click', saveLocal);
+      document.getElementById('importBtn').addEventListener('click', () => el.fileInput.click());
+      document.getElementById('rotateLeftBtn').addEventListener('click', () => rotate3d(-Math.PI / 12));
+      document.getElementById('rotateRightBtn').addEventListener('click', () => rotate3d(Math.PI / 12));
+      document.getElementById('zoomInBtn').addEventListener('click', () => zoom3d(1.12));
+      document.getElementById('zoomOutBtn').addEventListener('click', () => zoom3d(1 / 1.12));
+      document.getElementById('resetViewBtn').addEventListener('click', reset3dView);
+      document.getElementById('viewPreset3d').addEventListener('change', event => set3dViewPreset(event.target.value));
+      el.fileInput.addEventListener('change', importJson);
+      window.addEventListener('keydown', event => {
+        if (event.target.matches('input, textarea, select')) return;
+        if (event.key === 'Delete' || event.key === 'Backspace') deleteSelected();
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') undo();
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') redo();
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'd') {
+          event.preventDefault();
+          duplicateSelected();
+        }
+      });
+    }
+
+    function loadTemplate(template) {
+      const templates = {
+        side: {
+          name: 'SideScroller_Whitebox',
+          mode: '2D',
+          entities: [
+            entity('Platform', -8, 4, 0, 8, 1, 1, 'Start Platform', '玩家出生点附近的平台'),
+            entity('Platform', 3, 1, 0, 6, 1, 1, 'Jump Platform', '第一次跳跃测试区域'),
+            entity('PlayerSpawn', -10, 2.6, 0, 1.2, 1.2, 1.8, 'PlayerSpawn_01', ''),
+            entity('EnemySpawn', 4, -0.5, 0, 1.2, 1.2, 1.8, 'EnemySpawn_01', '落地后第一次遇敌'),
+            entity('TriggerZone', 0, -1, 0, 4, 3, 1, 'Trigger_Tutorial', '进入后显示跳跃教学'),
+            entity('CameraZone', -2, 1, 0, 18, 8, 1, 'Camera_Main', '横板镜头边界')
+          ]
+        },
+        top: {
+          name: 'TopDown_Blockout',
+          mode: '2D',
+          entities: [
+            entity('Block', 0, 0, 0, 8, 6, 1, 'Main Room', '第一个探索空间'),
+            entity('Wall', -5, 0, 0, 1, 8, 3, 'Left Wall', ''),
+            entity('Wall', 5, 0, 0, 1, 8, 3, 'Right Wall', ''),
+            entity('PlayerSpawn', -2, 1, 0, 1.2, 1.2, 1.8, 'PlayerSpawn_01', ''),
+            entity('ItemSpawn', 2, 1, 0, 1, 1, 1, 'Key_A', '引导玩家进入右侧门'),
+            entity('PuzzleZone', 1, -2, 0, 5, 2.5, 1, 'Puzzle_01', '轻量谜题区域')
+          ]
+        },
+        room: {
+          name: 'Dungeon_Room_Whitebox',
+          mode: '3D',
+          entities: [
+            entity('Block', 0, 0, 0, 10, 8, .4, 'Floor', '主房间地面'),
+            entity('Wall', -5.5, 0, 1.8, .5, 8, 3.6, 'Left Wall', ''),
+            entity('Wall', 5.5, 0, 1.8, .5, 8, 3.6, 'Right Wall', ''),
+            entity('Wall', 0, -4.2, 1.8, 10, .5, 3.6, 'Back Wall', ''),
+            entity('PlayerSpawn', -3, 2, .9, 1.2, 1.2, 1.8, 'PlayerSpawn_01', ''),
+            entity('CombatZone', 1, 0, .5, 6, 5, 1, 'CombatZone_01', '第一次战斗空间'),
+            entity('EnemySpawn', 3, -1, .9, 1.2, 1.2, 1.8, 'EnemySpawn_01', '右侧刷出近战敌人'),
+            entity('TriggerZone', 0, 3.2, .8, 3, 1, 1.6, 'Trigger_Door_01', '进入后开门')
+          ]
+        },
+        corridor: {
+          name: 'Chase_Corridor_Whitebox',
+          mode: '3D',
+          entities: [
+            entity('Block', 0, 0, 0, 6, 18, .4, 'Corridor Floor', '追逐路线地面'),
+            entity('Wall', -3.4, 0, 1.8, .5, 18, 3.6, 'Left Wall', ''),
+            entity('Wall', 3.4, 0, 1.8, .5, 18, 3.6, 'Right Wall', ''),
+            entity('PlayerSpawn', 0, 7, .9, 1.2, 1.2, 1.8, 'PlayerSpawn_01', ''),
+            entity('Path', 0, 0, .2, 1, 14, .2, 'Chase Route', '主要逃亡路线'),
+            entity('TriggerZone', 0, 4.5, .8, 5, 2, 1.6, 'Trigger_Chase_Start', '触发追逐'),
+            entity('SafeZone', 0, -7, .5, 5, 3, 1, 'SafeZone_Exit', '结束追逐并给玩家喘息')
+          ]
+        },
+        empty: {
+          name: 'Empty_Whitebox',
+          mode: '2D',
+          entities: []
+        }
+      };
+      const data = templates[template];
+      state.doc = createDocument(data.name, data.mode);
+      state.doc.entities = data.entities;
+      state.selectedId = state.doc.entities[0]?.id || null;
+      state.view = data.mode === '3D' ? '3d' : '2d';
+      document.querySelectorAll('[data-view]').forEach(button => {
+        button.classList.toggle('active', button.dataset.view === state.view);
+      });
+    }
+
+    function entity(type, x, y, z, sx, sy, sz, name, note) {
+      const preset = TYPES[type];
+      return {
+        id: id(type.toLowerCase()),
+        name: name || `${type}_${Date.now().toString().slice(-4)}`,
+        type,
+        transform: {
+          position: { x, y, z },
+          rotation: { x: 0, y: 0, z: 0 },
+          scale: { x: sx || preset.w, y: sy || preset.h, z: sz || preset.d }
+        },
+        properties: defaultProperties(type),
+        note: note || ''
+      };
+    }
+
+    function defaultProperties(type) {
+      const base = {};
+      if (['Block', 'Platform', 'Wall', 'Ramp', 'Stairs'].includes(type)) base.collision = true;
+      if (type === 'EnemySpawn') Object.assign(base, { enemyType: 'Melee', count: 1, difficulty: 1 });
+      if (type === 'TriggerZone') Object.assign(base, { triggerType: 'OnEnter', target: '', action: 'Open', once: true });
+      if (['CombatZone', 'SafeZone', 'PuzzleZone'].includes(type)) Object.assign(base, { rhythm: type.replace('Zone', ''), purpose: '' });
+      if (type === 'CameraZone') Object.assign(base, { cameraMode: 'Bounds' });
+      return base;
+    }
+
+    function addEntity(type) {
+      pushHistory();
+      const preset = TYPES[type];
+      const count = state.doc.entities.filter(item => item.type === type).length + 1;
+      const next = entity(type, count * 1.5 - 1.5, count * -1.2 + 1.2, type.includes('Zone') ? .5 : 0, preset.w, preset.h, preset.d, `${type}_${String(count).padStart(2, '0')}`, '');
+      if (type === 'Note') next.note = '玩法意图备注';
+      state.doc.entities.push(next);
+      state.selectedId = next.id;
+      updateAll();
+    }
+
+    function updateSettings(partial) {
+      pushHistory();
+      if (partial.name !== undefined) state.doc.name = partial.name;
+      Object.keys(partial).forEach(key => {
+        if (key !== 'name') state.doc.settings[key] = partial[key];
+      });
+      updateAll();
+    }
+
+    function updateAll() {
+      el.levelName.value = state.doc.name;
+      el.levelNameLabel.textContent = state.doc.name;
+      el.gridSize.value = state.doc.settings.gridSize;
+      el.unit.value = state.doc.settings.unit;
+      el.jumpDistance.value = state.doc.settings.playerJumpDistance;
+      el.dashDistance.value = state.doc.settings.playerDashDistance;
+      el.statsLabel.textContent = `${state.doc.entities.length} objects · ${state.doc.mode}`;
+      el.objectCount.textContent = state.doc.entities.length;
+      document.getElementById('view3dTools').style.display = state.view === '3d' ? 'flex' : 'none';
+      document.getElementById('viewPreset3d').value = current3dPreset();
+      render();
+      renderInspector();
+      renderEntityList();
+    }
+
+    function renderInspector() {
+      const selected = getSelected();
+      if (!selected) {
+        el.inspectorContent.innerHTML = '<p class="empty">选择一个对象后，可以编辑名称、位置、尺寸、玩法属性和备注。</p>';
+        return;
+      }
+      const t = selected.transform;
+      el.inspectorContent.innerHTML = `
+        <div class="field-row">
+          <button class="text-btn" data-select-prev>上一个</button>
+          <button class="text-btn" data-select-next>下一个</button>
+        </div>
+        <div class="field"><label>Name</label><input data-field="name" value="${escapeAttr(selected.name)}"></div>
+        <div class="field"><label>Type</label><select data-field="type">${Object.keys(TYPES).map(type => `<option value="${type}" ${type === selected.type ? 'selected' : ''}>${TYPES[type].label}</option>`).join('')}</select></div>
+        <div class="field-row">
+          <div class="field"><label>X</label><input type="number" step="0.25" data-path="transform.position.x" value="${t.position.x}"></div>
+          <div class="field"><label>Y</label><input type="number" step="0.25" data-path="transform.position.y" value="${t.position.y}"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Z</label><input type="number" step="0.25" data-path="transform.position.z" value="${t.position.z}"></div>
+          <div class="field"><label>Rotation Z</label><input type="number" step="1" data-path="transform.rotation.z" value="${t.rotation.z}"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Width</label><input type="number" min="0.25" step="0.25" data-path="transform.scale.x" value="${t.scale.x}"></div>
+          <div class="field"><label>Height</label><input type="number" min="0.25" step="0.25" data-path="transform.scale.y" value="${t.scale.y}"></div>
+        </div>
+        <div class="field"><label>Depth</label><input type="number" min="0.25" step="0.25" data-path="transform.scale.z" value="${t.scale.z}"></div>
+        <div class="field"><label>Tag / Purpose</label><input data-prop="tag" value="${escapeAttr(selected.properties.tag || selected.properties.purpose || '')}"></div>
+        <div class="field"><label>Note</label><textarea data-field="note">${escapeHtml(selected.note || '')}</textarea></div>
+      `;
+      el.inspectorContent.querySelector('[data-select-prev]').addEventListener('click', () => selectNeighbor(-1));
+      el.inspectorContent.querySelector('[data-select-next]').addEventListener('click', () => selectNeighbor(1));
+      el.inspectorContent.querySelectorAll('input, select, textarea').forEach(input => {
+        input.addEventListener('change', () => {
+          pushHistory();
+          if (input.dataset.field === 'name') selected.name = input.value;
+          if (input.dataset.field === 'type') {
+            selected.type = input.value;
+            selected.properties = { ...defaultProperties(input.value), ...selected.properties };
+          }
+          if (input.dataset.field === 'note') selected.note = input.value;
+          if (input.dataset.path) setPath(selected, input.dataset.path, number(input.value, 0));
+          if (input.dataset.prop) {
+            selected.properties[input.dataset.prop] = input.value;
+            if ('purpose' in selected.properties) selected.properties.purpose = input.value;
+          }
+          updateAll();
+        });
+      });
+    }
+
+    function renderEntityList() {
+      if (!state.doc.entities.length) {
+        el.entityList.innerHTML = '<p class="empty">还没有对象。可以从左侧对象库添加。</p>';
+        return;
+      }
+      el.entityList.innerHTML = state.doc.entities.map(item => `
+        <button class="entity-item ${item.id === state.selectedId ? 'active' : ''}" data-select="${item.id}">
+          <span>${escapeHtml(item.name)}</span>
+          <span class="pill">${item.type}</span>
+        </button>
+      `).join('');
+      el.entityList.querySelectorAll('[data-select]').forEach(button => {
+        button.addEventListener('pointerdown', event => {
+          event.preventDefault();
+          state.selectedId = button.dataset.select;
+          updateAll();
+        });
+      });
+    }
+
+    function resizeCanvas() {
+      const rect = el.wrap.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      el.canvas.width = Math.max(320, Math.floor(rect.width * dpr));
+      el.canvas.height = Math.max(320, Math.floor(rect.height * dpr));
+      el.canvas.style.width = `${rect.width}px`;
+      el.canvas.style.height = `${rect.height}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      render();
+    }
+
+    function render() {
+      const rect = el.canvas.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+      state.view === '2d' ? render2d(rect) : render3d(rect);
+    }
+
+    function render2d(rect) {
+      drawGrid(rect);
+      drawAssist(rect);
+      state.doc.entities.forEach(item => drawEntity2d(item, rect));
+    }
+
+    function drawGrid(rect) {
+      ctx.save();
+      ctx.strokeStyle = varColor('--grid');
+      ctx.lineWidth = 1;
+      const origin = origin2d(rect);
+      for (let x = origin.x % px; x < rect.width; x += px) line(x, 0, x, rect.height);
+      for (let y = origin.y % px; y < rect.height; y += px) line(0, y, rect.width, y);
+      ctx.strokeStyle = 'rgba(255,255,255,.22)';
+      line(origin.x, 0, origin.x, rect.height);
+      line(0, origin.y, rect.width, origin.y);
+      ctx.restore();
+    }
+
+    function drawAssist(rect) {
+      const spawn = state.doc.entities.find(item => item.type === 'PlayerSpawn');
+      if (!spawn) return;
+      const p = worldToScreen(spawn.transform.position.x, spawn.transform.position.y, rect);
+      const jump = state.doc.settings.playerJumpDistance * px;
+      const dash = state.doc.settings.playerDashDistance * px;
+      ctx.save();
+      ctx.strokeStyle = 'rgba(107,168,255,.5)';
+      ctx.setLineDash([6, 6]);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, jump, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(240,189,85,.65)';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, dash, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = 'rgba(237,242,247,.75)';
+      ctx.font = '12px sans-serif';
+      ctx.fillText('jump', p.x + jump + 6, p.y);
+      ctx.fillText('dash', p.x + dash + 6, p.y + 16);
+      ctx.restore();
+    }
+
+    function drawEntity2d(item, rect) {
+      const box = screenBox(item, rect);
+      const selected = item.id === state.selectedId;
+      const color = TYPES[item.type]?.color || '#fff';
+      ctx.save();
+      ctx.translate(box.cx, box.cy);
+      ctx.rotate((item.transform.rotation.z || 0) * Math.PI / 180);
+      if (['PlayerSpawn', 'EnemySpawn', 'ItemSpawn', 'Checkpoint'].includes(item.type)) {
+        ctx.fillStyle = color;
+        ctx.strokeStyle = '#0b0f14';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, Math.max(9, Math.min(box.w, box.h) / 2), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = '#0b0f14';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.font = 'bold 13px sans-serif';
+        ctx.fillText(TYPES[item.type].icon, 0, 0);
+      } else if (item.type === 'Note') {
+        ctx.fillStyle = 'rgba(255,255,255,.08)';
+        ctx.strokeStyle = 'rgba(255,255,255,.35)';
+        roundRect(-box.w / 2, -box.h / 2, box.w, box.h, 7, true, true);
+        ctx.fillStyle = '#edf2f7';
+        ctx.font = '12px sans-serif';
+        wrapLabel(item.note || item.name, -box.w / 2 + 8, -box.h / 2 + 17, box.w - 16);
+      } else {
+        ctx.fillStyle = hexToRgba(color, item.type.includes('Zone') ? .22 : .72);
+        ctx.strokeStyle = selected ? '#ffffff' : hexToRgba(color, .95);
+        ctx.lineWidth = selected ? 2 : 1.3;
+        roundRect(-box.w / 2, -box.h / 2, box.w, box.h, 6, true, true);
+      }
+      if (item.type !== 'Note') {
+        ctx.fillStyle = '#edf2f7';
+        ctx.font = '12px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        ctx.fillText(item.name, -box.w / 2 + 6, -box.h / 2 + 6);
+      }
+      if (selected) {
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 4]);
+        ctx.strokeRect(-box.w / 2 - 4, -box.h / 2 - 4, box.w + 8, box.h + 8);
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(box.w / 2 - 4, box.h / 2 - 4, 10, 10);
+      }
+      ctx.restore();
+    }
+
+    function render3d(rect) {
+      drawIsoGrid(rect);
+      const items = [...state.doc.entities].sort((a, b) => depth3d(a) - depth3d(b));
+      items.forEach(item => drawEntity3d(item, rect));
+      drawGuides3d(rect);
+    }
+
+    function drawIsoGrid(rect) {
+      ctx.save();
+      ctx.strokeStyle = 'rgba(255,255,255,.08)';
+      ctx.lineWidth = 1;
+      for (let i = -16; i <= 16; i++) {
+        const a = isoToScreen(-16, i, 0, rect);
+        const b = isoToScreen(16, i, 0, rect);
+        const c = isoToScreen(i, -16, 0, rect);
+        const d = isoToScreen(i, 16, 0, rect);
+        line(a.x, a.y, b.x, b.y);
+        line(c.x, c.y, d.x, d.y);
+      }
+      ctx.restore();
+    }
+
+    function drawEntity3d(item, rect) {
+      const color = TYPES[item.type]?.color || '#fff';
+      const p = item.transform.position;
+      const s = item.transform.scale;
+      const selected = item.id === state.selectedId;
+      if (['PlayerSpawn', 'EnemySpawn', 'ItemSpawn', 'Checkpoint'].includes(item.type)) {
+        const center = isoToScreen(p.x, p.y, p.z + s.z, rect);
+        ctx.save();
+        ctx.fillStyle = color;
+        ctx.strokeStyle = selected ? '#fff' : '#0b0f14';
+        ctx.lineWidth = selected ? 3 : 2;
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, 10, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = '#edf2f7';
+        ctx.font = '12px sans-serif';
+        ctx.fillText(item.name, center.x + 12, center.y - 12);
+        ctx.restore();
+        return;
+      }
+      const x0 = p.x - s.x / 2;
+      const x1 = p.x + s.x / 2;
+      const y0 = p.y - s.y / 2;
+      const y1 = p.y + s.y / 2;
+      const z0 = p.z;
+      const z1 = p.z + Math.max(.15, s.z);
+      const pts = {
+        a: isoToScreen(x0, y0, z0, rect),
+        b: isoToScreen(x1, y0, z0, rect),
+        c: isoToScreen(x1, y1, z0, rect),
+        d: isoToScreen(x0, y1, z0, rect),
+        e: isoToScreen(x0, y0, z1, rect),
+        f: isoToScreen(x1, y0, z1, rect),
+        g: isoToScreen(x1, y1, z1, rect),
+        h: isoToScreen(x0, y1, z1, rect)
+      };
+      ctx.save();
+      poly([pts.e, pts.f, pts.g, pts.h], hexToRgba(color, item.type.includes('Zone') ? .2 : .72), selected ? '#fff' : hexToRgba(color, .95));
+      poly([pts.b, pts.c, pts.g, pts.f], shade(color, -.18), selected ? '#fff' : hexToRgba(color, .8));
+      poly([pts.d, pts.c, pts.g, pts.h], shade(color, -.32), selected ? '#fff' : hexToRgba(color, .7));
+      ctx.fillStyle = '#edf2f7';
+      ctx.font = '12px sans-serif';
+      ctx.fillText(item.name, pts.h.x + 4, pts.h.y - 6);
+      ctx.restore();
+    }
+
+    function onPointerDown(event) {
+      const rect = el.canvas.getBoundingClientRect();
+      const point = eventPoint(event, rect);
+      if (state.view === '3d' && (event.button === 2 || event.altKey)) {
+        state.drag = {
+          mode: 'pan3d',
+          start: point,
+          camera: { ...state.camera3d }
+        };
+        el.canvas.setPointerCapture?.(event.pointerId);
+        return;
+      }
+      const hit = hitTest(point, rect);
+      if (hit) {
+        pushHistory();
+        state.selectedId = hit.id;
+        const selected = getSelected();
+        const box = state.view === '3d' ? isoScreenBox(selected, rect) : screenBox(selected, rect);
+        const resize = Math.abs(point.x - (box.cx + box.w / 2)) < 14 && Math.abs(point.y - (box.cy + box.h / 2)) < 14;
+        state.drag = {
+          mode: state.view === '3d' ? 'move3d' : (resize ? 'resize' : 'move'),
+          start: point,
+          original: structuredClone(selected.transform),
+          startWorld3d: state.view === '3d' ? screenToIsoGround(point.x, point.y, rect, selected.transform.position.z) : null
+        };
+      } else {
+        if (state.view === '3d') {
+          state.drag = {
+            mode: event.shiftKey ? 'rotate3d' : 'pan3d',
+            start: point,
+            camera: { ...state.camera3d }
+          };
+        } else {
+          state.selectedId = null;
+        }
+      }
+      el.canvas.setPointerCapture?.(event.pointerId);
+      updateAll();
+    }
+
+    function onPointerMove(event) {
+      const rect = el.canvas.getBoundingClientRect();
+      const point = eventPoint(event, rect);
+      const world = state.view === '3d' ? screenToIsoGround(point.x, point.y, rect, 0) : screenToWorld(point.x, point.y, rect);
+      el.coordLabel.textContent = `x: ${world.x.toFixed(2)}, y: ${world.y.toFixed(2)}`;
+      if (!state.drag) return;
+      if (state.drag.mode === 'pan3d') {
+        state.camera3d.panX = state.drag.camera.panX + point.x - state.drag.start.x;
+        state.camera3d.panY = state.drag.camera.panY + point.y - state.drag.start.y;
+        render();
+        return;
+      }
+      if (state.drag.mode === 'rotate3d') {
+        state.camera3d.yaw = state.drag.camera.yaw + (point.x - state.drag.start.x) * 0.01;
+        render();
+        return;
+      }
+      const selected = getSelected();
+      if (!selected) return;
+      if (state.drag.mode === 'move3d') {
+        const current = screenToIsoGround(point.x, point.y, rect, selected.transform.position.z);
+        const proposed = {
+          x: snap(state.drag.original.position.x + current.x - state.drag.startWorld3d.x),
+          y: snap(state.drag.original.position.y + current.y - state.drag.startWorld3d.y)
+        };
+        const aligned = alignEntity3d(selected, proposed.x, proposed.y);
+        selected.transform.position.x = aligned.x;
+        selected.transform.position.y = aligned.y;
+        state.guides3d = aligned.guides;
+        render();
+        renderInspector();
+        renderEntityList();
+        return;
+      }
+      const dx = (point.x - state.drag.start.x) / px;
+      const dy = -(point.y - state.drag.start.y) / px;
+      if (state.drag.mode === 'move') {
+        selected.transform.position.x = snap(state.drag.original.position.x + dx);
+        selected.transform.position.y = snap(state.drag.original.position.y + dy);
+      } else {
+        selected.transform.scale.x = Math.max(.25, snap(state.drag.original.scale.x + dx));
+        selected.transform.scale.y = Math.max(.25, snap(state.drag.original.scale.y - dy));
+      }
+      render();
+      renderInspector();
+      renderEntityList();
+    }
+
+    function onPointerUp() {
+      if (state.drag) {
+        state.drag = null;
+        state.guides3d = [];
+        updateAll();
+      }
+    }
+
+    function hitTest(point, rect) {
+      for (let i = state.doc.entities.length - 1; i >= 0; i--) {
+        const item = state.doc.entities[i];
+        const box = state.view === '3d' ? isoScreenBox(item, rect) : screenBox(item, rect);
+        if (point.x >= box.cx - box.w / 2 && point.x <= box.cx + box.w / 2 && point.y >= box.cy - box.h / 2 && point.y <= box.cy + box.h / 2) {
+          return item;
+        }
+      }
+      return null;
+    }
+
+    function onWheel(event) {
+      if (state.view !== '3d') return;
+      event.preventDefault();
+      zoom3d(event.deltaY < 0 ? 1.08 : 1 / 1.08);
+    }
+
+    function rotate3d(delta) {
+      state.camera3d.yaw += delta;
+      render();
+    }
+
+    function zoom3d(factor) {
+      state.camera3d.zoom = Math.max(14, Math.min(64, state.camera3d.zoom * factor));
+      render();
+    }
+
+    function reset3dView() {
+      state.camera3d = { yaw: Math.PI / 4, zoom: 28, panX: 0, panY: 0 };
+      render();
+    }
+
+    function set3dViewPreset(preset) {
+      const presets = {
+        iso: { yaw: Math.PI / 4, zoom: 28, panX: 0, panY: 0 },
+        front: { yaw: 0, zoom: 32, panX: 0, panY: 0 },
+        back: { yaw: Math.PI, zoom: 32, panX: 0, panY: 0 },
+        left: { yaw: -Math.PI / 2, zoom: 32, panX: 0, panY: 0 },
+        right: { yaw: Math.PI / 2, zoom: 32, panX: 0, panY: 0 }
+      };
+      state.camera3d = { ...state.camera3d, ...presets[preset] };
+      render();
+    }
+
+    function current3dPreset() {
+      const yaw = normalizeAngle(state.camera3d.yaw);
+      const presets = [
+        ['iso', Math.PI / 4],
+        ['front', 0],
+        ['back', Math.PI],
+        ['left', -Math.PI / 2],
+        ['right', Math.PI / 2]
+      ];
+      const hit = presets.find(([, angle]) => Math.abs(normalizeAngle(yaw - angle)) < 0.04);
+      return hit ? hit[0] : 'iso';
+    }
+
+    function normalizeAngle(angle) {
+      let next = angle;
+      while (next <= -Math.PI) next += Math.PI * 2;
+      while (next > Math.PI) next -= Math.PI * 2;
+      return next;
+    }
+
+    function duplicateSelected() {
+      const selected = getSelected();
+      if (!selected) return;
+      pushHistory();
+      const copy = structuredClone(selected);
+      copy.id = id(selected.type.toLowerCase());
+      copy.name = `${selected.name}_Copy`;
+      copy.transform.position.x += 1;
+      copy.transform.position.y -= 1;
+      state.doc.entities.push(copy);
+      state.selectedId = copy.id;
+      updateAll();
+    }
+
+    function deleteSelected() {
+      if (!state.selectedId) return;
+      pushHistory();
+      state.doc.entities = state.doc.entities.filter(item => item.id !== state.selectedId);
+      state.selectedId = state.doc.entities[0]?.id || null;
+      updateAll();
+    }
+
+    function pushHistory() {
+      state.history.push(JSON.stringify(state.doc));
+      if (state.history.length > 60) state.history.shift();
+      state.future = [];
+    }
+
+    function undo() {
+      if (!state.history.length) return;
+      state.future.push(JSON.stringify(state.doc));
+      state.doc = normalizeDocument(JSON.parse(state.history.pop()));
+      state.selectedId = state.doc.entities[0]?.id || null;
+      state.view = state.doc.mode === '3D' ? '3d' : '2d';
+      document.querySelectorAll('[data-view]').forEach(button => button.classList.toggle('active', button.dataset.view === state.view));
+      updateAll();
+    }
+
+    function redo() {
+      if (!state.future.length) return;
+      state.history.push(JSON.stringify(state.doc));
+      state.doc = normalizeDocument(JSON.parse(state.future.pop()));
+      state.selectedId = state.doc.entities[0]?.id || null;
+      updateAll();
+    }
+
+    function exportPng() {
+      const link = document.createElement('a');
+      link.download = `${safeName(state.doc.name)}.png`;
+      link.href = el.canvas.toDataURL('image/png');
+      link.click();
+      showToast('PNG 已导出');
+    }
+
+    function exportJson() {
+      download(`${safeName(state.doc.name)}.json`, JSON.stringify(state.doc, null, 2), 'application/json');
+      showToast('JSON 已导出');
+    }
+
+    function exportMarkdown() {
+      const md = buildMarkdown();
+      download(`${safeName(state.doc.name)}.md`, md, 'text/markdown');
+      showToast('Markdown 已导出');
+    }
+
+    async function copyJson() {
+      const text = JSON.stringify(state.doc, null, 2);
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('关卡数据已复制');
+      } catch (error) {
+        download(`${safeName(state.doc.name)}.json`, text, 'application/json');
+        showToast('剪贴板不可用，已改为下载 JSON');
+      }
+    }
+
+    function saveLocal() {
+      localStorage.setItem('level-whitebox-doc', JSON.stringify(state.doc));
+      showToast('已保存到浏览器本地');
+    }
+
+    function importJson(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          pushHistory();
+          state.doc = normalizeDocument(JSON.parse(reader.result));
+          state.selectedId = state.doc.entities[0]?.id || null;
+          state.view = state.doc.mode === '3D' ? '3d' : '2d';
+          document.querySelectorAll('[data-view]').forEach(button => button.classList.toggle('active', button.dataset.view === state.view));
+          updateAll();
+          showToast('JSON 已导入');
+        } catch (error) {
+          showToast('导入失败：JSON 格式不正确');
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    function buildMarkdown() {
+      const groups = groupBy(state.doc.entities, item => item.type);
+      const lines = [
+        `# ${state.doc.name} Design Document`,
+        '',
+        '## Overview',
+        `- Mode: ${state.doc.mode}`,
+        `- Unit: ${state.doc.settings.unit}`,
+        `- Grid Size: ${state.doc.settings.gridSize}`,
+        `- Object Count: ${state.doc.entities.length}`,
+        '',
+        '## Player Spawn'
+      ];
+      (groups.PlayerSpawn || []).forEach(item => lines.push(`- ${item.name}: ${posText(item)}`));
+      lines.push('', '## Gameplay Zones');
+      ['CombatZone', 'SafeZone', 'PuzzleZone', 'TriggerZone', 'CameraZone'].forEach(type => {
+        (groups[type] || []).forEach(item => lines.push(`- ${item.name} (${type}): ${item.note || item.properties.purpose || 'No note'}`));
+      });
+      lines.push('', '## Spawns And Items');
+      ['EnemySpawn', 'ItemSpawn', 'Checkpoint'].forEach(type => {
+        (groups[type] || []).forEach(item => lines.push(`- ${item.name} (${type}): ${posText(item)}${item.note ? ` - ${item.note}` : ''}`));
+      });
+      lines.push('', '## Geometry');
+      ['Block', 'Platform', 'Wall', 'Ramp', 'Stairs'].forEach(type => {
+        (groups[type] || []).forEach(item => lines.push(`- ${item.name} (${type}): ${posText(item)}, size ${sizeText(item)}`));
+      });
+      lines.push('', '## Notes');
+      state.doc.entities.filter(item => item.note).forEach(item => lines.push(`- ${item.name}: ${item.note}`));
+      return lines.join('\n');
+    }
+
+    function normalizeDocument(doc) {
+      const next = createDocument(doc.name || 'Level_Whitebox', doc.mode === '3D' ? '3D' : '2D');
+      next.id = doc.id || next.id;
+      next.settings = { ...next.settings, ...(doc.settings || {}) };
+      next.entities = Array.isArray(doc.entities) ? doc.entities.map(item => ({
+        id: item.id || id('entity'),
+        name: item.name || item.type || 'Entity',
+        type: TYPES[item.type] ? item.type : 'Block',
+        transform: {
+          position: { x: number(item.transform?.position?.x, 0), y: number(item.transform?.position?.y, 0), z: number(item.transform?.position?.z, 0) },
+          rotation: { x: number(item.transform?.rotation?.x, 0), y: number(item.transform?.rotation?.y, 0), z: number(item.transform?.rotation?.z, 0) },
+          scale: { x: number(item.transform?.scale?.x, 1), y: number(item.transform?.scale?.y, 1), z: number(item.transform?.scale?.z, 1) }
+        },
+        properties: { ...defaultProperties(item.type), ...(item.properties || {}) },
+        note: item.note || ''
+      })) : [];
+      return next;
+    }
+
+    function getSelected() {
+      return state.doc.entities.find(item => item.id === state.selectedId);
+    }
+
+    function selectNeighbor(direction) {
+      if (!state.doc.entities.length) return;
+      const current = Math.max(0, state.doc.entities.findIndex(item => item.id === state.selectedId));
+      const next = (current + direction + state.doc.entities.length) % state.doc.entities.length;
+      state.selectedId = state.doc.entities[next].id;
+      updateAll();
+    }
+
+    function origin2d(rect) {
+      return { x: rect.width / 2, y: rect.height / 2 };
+    }
+
+    function worldToScreen(x, y, rect) {
+      const origin = origin2d(rect);
+      return { x: origin.x + x * px, y: origin.y - y * px };
+    }
+
+    function screenToWorld(x, y, rect) {
+      const origin = origin2d(rect);
+      return { x: (x - origin.x) / px, y: -(y - origin.y) / px };
+    }
+
+    function isoToScreen(x, y, z, rect) {
+      const scale = state.camera3d.zoom;
+      const yaw = state.camera3d.yaw;
+      const cos = Math.cos(yaw);
+      const sin = Math.sin(yaw);
+      const u = x * cos - y * sin;
+      const v = x * sin + y * cos;
+      return {
+        x: rect.width / 2 + state.camera3d.panX + u * scale,
+        y: rect.height / 2 + state.camera3d.panY + v * scale * .52 - z * scale
+      };
+    }
+
+    function screenToIsoGround(screenX, screenY, rect, z) {
+      const scale = state.camera3d.zoom;
+      const yaw = state.camera3d.yaw;
+      const cos = Math.cos(yaw);
+      const sin = Math.sin(yaw);
+      const u = (screenX - rect.width / 2 - state.camera3d.panX) / scale;
+      const v = (screenY - rect.height / 2 - state.camera3d.panY + z * scale) / (scale * .52);
+      return {
+        x: u * cos + v * sin,
+        y: -u * sin + v * cos
+      };
+    }
+
+    function depth3d(item) {
+      const p = item.transform.position;
+      const yaw = state.camera3d.yaw;
+      return p.x * Math.sin(yaw) + p.y * Math.cos(yaw) + p.z * 0.8;
+    }
+
+    function isoScreenBox(item, rect) {
+      const p = item.transform.position;
+      const s = item.transform.scale;
+      const points = [
+        isoToScreen(p.x - s.x / 2, p.y - s.y / 2, p.z, rect),
+        isoToScreen(p.x + s.x / 2, p.y - s.y / 2, p.z, rect),
+        isoToScreen(p.x + s.x / 2, p.y + s.y / 2, p.z, rect),
+        isoToScreen(p.x - s.x / 2, p.y + s.y / 2, p.z, rect),
+        isoToScreen(p.x - s.x / 2, p.y - s.y / 2, p.z + Math.max(.15, s.z), rect),
+        isoToScreen(p.x + s.x / 2, p.y - s.y / 2, p.z + Math.max(.15, s.z), rect),
+        isoToScreen(p.x + s.x / 2, p.y + s.y / 2, p.z + Math.max(.15, s.z), rect),
+        isoToScreen(p.x - s.x / 2, p.y + s.y / 2, p.z + Math.max(.15, s.z), rect)
+      ];
+      if (['PlayerSpawn', 'EnemySpawn', 'ItemSpawn', 'Checkpoint'].includes(item.type)) {
+        const center = isoToScreen(p.x, p.y, p.z + s.z, rect);
+        return { cx: center.x, cy: center.y, w: 34, h: 34 };
+      }
+      const xs = points.map(point => point.x);
+      const ys = points.map(point => point.y);
+      const minX = Math.min(...xs);
+      const maxX = Math.max(...xs);
+      const minY = Math.min(...ys);
+      const maxY = Math.max(...ys);
+      return {
+        cx: (minX + maxX) / 2,
+        cy: (minY + maxY) / 2,
+        w: Math.max(22, maxX - minX),
+        h: Math.max(22, maxY - minY)
+      };
+    }
+
+    function alignEntity3d(entity, x, y) {
+      const threshold = Math.max(0.75, state.doc.settings.gridSize * 0.9);
+      const scale = entity.transform.scale;
+      const candidates = {
+        x: [
+          { kind: 'minX', value: x - scale.x / 2 },
+          { kind: 'centerX', value: x },
+          { kind: 'maxX', value: x + scale.x / 2 }
+        ],
+        y: [
+          { kind: 'minY', value: y - scale.y / 2 },
+          { kind: 'centerY', value: y },
+          { kind: 'maxY', value: y + scale.y / 2 }
+        ]
+      };
+      const snapTargetX = findBestAlignment(candidates.x, entity, 'x', threshold);
+      const snapTargetY = findBestAlignment(candidates.y, entity, 'y', threshold);
+      const next = { x, y, guides: [] };
+      if (snapTargetX) {
+        next.x += snapTargetX.delta;
+        next.guides.push({ axis: 'x', value: snapTargetX.value });
+      }
+      if (snapTargetY) {
+        next.y += snapTargetY.delta;
+        next.guides.push({ axis: 'y', value: snapTargetY.value });
+      }
+      return next;
+    }
+
+    function findBestAlignment(sources, entity, axis, threshold) {
+      let best = null;
+      state.doc.entities.forEach(other => {
+        if (other.id === entity.id) return;
+        const bounds = entityBounds2d(other);
+        const targets = axis === 'x'
+          ? [
+              { kind: 'minX', value: bounds.minX },
+              { kind: 'centerX', value: bounds.centerX },
+              { kind: 'maxX', value: bounds.maxX }
+            ]
+          : [
+              { kind: 'minY', value: bounds.minY },
+              { kind: 'centerY', value: bounds.centerY },
+              { kind: 'maxY', value: bounds.maxY }
+            ];
+        targets.forEach(target => {
+          sources.forEach(source => {
+            const delta = target.value - source.value;
+            if (Math.abs(delta) <= threshold && (!best || Math.abs(delta) < Math.abs(best.delta))) {
+              best = { delta, value: target.value, source: source.kind, target: target.kind };
+            }
+          });
+        });
+      });
+      return best;
+    }
+
+    function entityBounds2d(entity) {
+      const p = entity.transform.position;
+      const s = entity.transform.scale;
+      return {
+        minX: p.x - s.x / 2,
+        centerX: p.x,
+        maxX: p.x + s.x / 2,
+        minY: p.y - s.y / 2,
+        centerY: p.y,
+        maxY: p.y + s.y / 2
+      };
+    }
+
+    function drawGuides3d(rect) {
+      if (!state.guides3d.length) return;
+      ctx.save();
+      ctx.strokeStyle = 'rgba(57, 198, 166, .95)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([8, 5]);
+      state.guides3d.forEach(guide => {
+        if (guide.axis === 'x') {
+          const a = isoToScreen(guide.value, -18, 0.03, rect);
+          const b = isoToScreen(guide.value, 18, 0.03, rect);
+          line(a.x, a.y, b.x, b.y);
+        } else {
+          const a = isoToScreen(-18, guide.value, 0.03, rect);
+          const b = isoToScreen(18, guide.value, 0.03, rect);
+          line(a.x, a.y, b.x, b.y);
+        }
+      });
+      ctx.setLineDash([]);
+      ctx.restore();
+    }
+
+    function screenBox(item, rect) {
+      const pos = worldToScreen(item.transform.position.x, item.transform.position.y, rect);
+      return {
+        cx: pos.x,
+        cy: pos.y,
+        w: Math.max(18, item.transform.scale.x * px),
+        h: Math.max(18, item.transform.scale.y * px)
+      };
+    }
+
+    function eventPoint(event, rect) {
+      return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    }
+
+    function snap(value) {
+      const grid = Math.max(.25, number(state.doc.settings.gridSize, 1));
+      return Math.round(value / grid) * grid;
+    }
+
+    function setPath(target, path, value) {
+      const keys = path.split('.');
+      let ref = target;
+      keys.slice(0, -1).forEach(key => ref = ref[key]);
+      ref[keys.at(-1)] = value;
+    }
+
+    function number(value, fallback) {
+      const parsed = Number(value);
+      return Number.isFinite(parsed) ? parsed : fallback;
+    }
+
+    function line(x1, y1, x2, y2) {
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+
+    function poly(points, fill, stroke) {
+      ctx.beginPath();
+      points.forEach((point, index) => index ? ctx.lineTo(point.x, point.y) : ctx.moveTo(point.x, point.y));
+      ctx.closePath();
+      ctx.fillStyle = fill;
+      ctx.fill();
+      ctx.strokeStyle = stroke;
+      ctx.stroke();
+    }
+
+    function roundRect(x, y, w, h, r, fill, stroke) {
+      const radius = Math.min(r, w / 2, h / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.arcTo(x + w, y, x + w, y + h, radius);
+      ctx.arcTo(x + w, y + h, x, y + h, radius);
+      ctx.arcTo(x, y + h, x, y, radius);
+      ctx.arcTo(x, y, x + w, y, radius);
+      ctx.closePath();
+      if (fill) ctx.fill();
+      if (stroke) ctx.stroke();
+    }
+
+    function wrapLabel(text, x, y, maxWidth) {
+      const words = String(text).split(/\s+/);
+      let lineText = '';
+      let lineIndex = 0;
+      words.forEach(word => {
+        const test = lineText ? `${lineText} ${word}` : word;
+        if (ctx.measureText(test).width > maxWidth && lineText) {
+          ctx.fillText(lineText, x, y + lineIndex * 16);
+          lineText = word;
+          lineIndex += 1;
+        } else {
+          lineText = test;
+        }
+      });
+      if (lineText) ctx.fillText(lineText, x, y + lineIndex * 16);
+    }
+
+    function hexToRgba(hex, alpha) {
+      const clean = hex.replace('#', '');
+      const num = parseInt(clean, 16);
+      const r = (num >> 16) & 255;
+      const g = (num >> 8) & 255;
+      const b = num & 255;
+      return `rgba(${r},${g},${b},${alpha})`;
+    }
+
+    function shade(hex, amount) {
+      const clean = hex.replace('#', '');
+      const num = parseInt(clean, 16);
+      const r = Math.max(0, Math.min(255, ((num >> 16) & 255) + 255 * amount));
+      const g = Math.max(0, Math.min(255, ((num >> 8) & 255) + 255 * amount));
+      const b = Math.max(0, Math.min(255, (num & 255) + 255 * amount));
+      return `rgb(${r},${g},${b})`;
+    }
+
+    function varColor(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value).replace(/`/g, '&#096;');
+    }
+
+    function download(filename, text, type) {
+      const blob = new Blob([text], { type });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
+    function safeName(value) {
+      return String(value || 'level').replace(/[^\w.-]+/g, '_');
+    }
+
+    function groupBy(items, getKey) {
+      return items.reduce((map, item) => {
+        const key = getKey(item);
+        map[key] = map[key] || [];
+        map[key].push(item);
+        return map;
+      }, {});
+    }
+
+    function posText(item) {
+      const p = item.transform.position;
+      return `x: ${p.x}, y: ${p.y}, z: ${p.z}`;
+    }
+
+    function sizeText(item) {
+      const s = item.transform.scale;
+      return `${s.x} x ${s.y} x ${s.z}`;
+    }
+
+    function showToast(message) {
+      el.toast.textContent = message;
+      el.toast.classList.add('show');
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => el.toast.classList.remove('show'), 1800);
+    }
+
+    bootstrap();
+  </script>
+</body>
+</html>
