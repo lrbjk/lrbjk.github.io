@@ -634,22 +634,22 @@
 
   <script>
     const TYPES = {
-      Block: { group: 'geometry', label: 'Block', color: '#d8dee9', w: 4, h: 3, d: 2, icon: '□' },
-      Platform: { group: 'geometry', label: 'Platform', color: '#39c6a6', w: 7, h: 1, d: 1, icon: '▰' },
-      Wall: { group: 'geometry', label: 'Wall', color: '#7f8da3', w: 1, h: 5, d: 3, icon: '▌' },
-      Ramp: { group: 'geometry', label: 'Ramp', color: '#b899ff', w: 4, h: 2, d: 3, icon: '◢' },
-      Stairs: { group: 'geometry', label: 'Stairs', color: '#f0bd55', w: 4, h: 2, d: 3, icon: '▟' },
-      PlayerSpawn: { group: 'gameplay', label: 'Player Spawn', color: '#6ba8ff', w: 1.2, h: 1.2, d: 1.8, icon: '◎' },
-      EnemySpawn: { group: 'gameplay', label: 'Enemy Spawn', color: '#ef7474', w: 1.2, h: 1.2, d: 1.8, icon: '◆' },
-      ItemSpawn: { group: 'gameplay', label: 'Item Point', color: '#f0bd55', w: 1, h: 1, d: 1, icon: '✦' },
-      TriggerZone: { group: 'gameplay', label: 'Trigger Zone', color: '#b899ff', w: 4, h: 3, d: 2, icon: '▣' },
-      Checkpoint: { group: 'gameplay', label: 'Checkpoint', color: '#39c6a6', w: 2, h: 2, d: 2, icon: '⚑' },
-      CameraZone: { group: 'gameplay', label: 'Camera Zone', color: '#56d4ff', w: 6, h: 4, d: 2, icon: '▤' },
-      CombatZone: { group: 'annotation', label: 'Combat Zone', color: '#ef7474', w: 6, h: 4, d: 2, icon: '⚔' },
-      SafeZone: { group: 'annotation', label: 'Safe Zone', color: '#39c6a6', w: 5, h: 4, d: 2, icon: '○' },
-      PuzzleZone: { group: 'annotation', label: 'Puzzle Zone', color: '#f0bd55', w: 5, h: 4, d: 2, icon: '?' },
-      Path: { group: 'annotation', label: 'Route Line', color: '#ffffff', w: 6, h: .25, d: .25, icon: '→' },
-      Note: { group: 'annotation', label: 'Text Note', color: '#ffffff', w: 4, h: 1, d: 1, icon: 'T' }
+      Block: { group: 'geometry', label: 'Block', zh: '方块', color: '#d8dee9', w: 4, h: 3, d: 2, icon: '□' },
+      Platform: { group: 'geometry', label: 'Platform', zh: '平台', color: '#39c6a6', w: 7, h: 1, d: 1, icon: '▰' },
+      Wall: { group: 'geometry', label: 'Wall', zh: '墙体', color: '#7f8da3', w: 1, h: 5, d: 3, icon: '▌' },
+      Ramp: { group: 'geometry', label: 'Ramp', zh: '斜坡', color: '#b899ff', w: 4, h: 2, d: 3, icon: '◢' },
+      Stairs: { group: 'geometry', label: 'Stairs', zh: '楼梯', color: '#f0bd55', w: 4, h: 2, d: 3, icon: '▟' },
+      PlayerSpawn: { group: 'gameplay', label: 'Player Spawn', zh: '玩家出生点', color: '#6ba8ff', w: 1.2, h: 1.2, d: 1.8, icon: '◎' },
+      EnemySpawn: { group: 'gameplay', label: 'Enemy Spawn', zh: '敌人出生点', color: '#ef7474', w: 1.2, h: 1.2, d: 1.8, icon: '◆' },
+      ItemSpawn: { group: 'gameplay', label: 'Item Point', zh: '道具点', color: '#f0bd55', w: 1, h: 1, d: 1, icon: '✦' },
+      TriggerZone: { group: 'gameplay', label: 'Trigger Zone', zh: '触发区', color: '#b899ff', w: 4, h: 3, d: 2, icon: '▣' },
+      Checkpoint: { group: 'gameplay', label: 'Checkpoint', zh: '检查点', color: '#39c6a6', w: 2, h: 2, d: 2, icon: '⚑' },
+      CameraZone: { group: 'gameplay', label: 'Camera Zone', zh: '镜头区域', color: '#56d4ff', w: 6, h: 4, d: 2, icon: '▤' },
+      CombatZone: { group: 'annotation', label: 'Combat Zone', zh: '战斗区', color: '#ef7474', w: 6, h: 4, d: 2, icon: '⚔' },
+      SafeZone: { group: 'annotation', label: 'Safe Zone', zh: '安全区', color: '#39c6a6', w: 5, h: 4, d: 2, icon: '○' },
+      PuzzleZone: { group: 'annotation', label: 'Puzzle Zone', zh: '解谜区', color: '#f0bd55', w: 5, h: 4, d: 2, icon: '?' },
+      Path: { group: 'annotation', label: 'Route Line', zh: '路线', color: '#ffffff', w: 6, h: .25, d: .25, icon: '→' },
+      Note: { group: 'annotation', label: 'Text Note', zh: '备注文本', color: '#ffffff', w: 4, h: 1, d: 1, icon: 'T' }
     };
 
     const el = {
@@ -734,7 +734,7 @@
         const button = document.createElement('button');
         button.className = 'library-btn';
         button.dataset.addType = type;
-        button.innerHTML = `<span class="swatch" style="background:${item.color}"></span><span><span class="library-name">${item.icon} ${item.label}</span><span class="library-meta">${type}</span></span>`;
+        button.innerHTML = `<span class="swatch" style="background:${item.color}"></span><span><span class="library-name">${item.icon} ${item.label}</span><span class="library-meta">${item.zh}</span></span>`;
         groups[item.group].appendChild(button);
       });
     }
