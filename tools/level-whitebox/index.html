@@ -136,6 +136,18 @@
       outline: none;
     }
 
+    .toolbar-range {
+      width: 118px;
+      accent-color: var(--accent);
+    }
+
+    .angle-readout {
+      min-width: 38px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: right;
+    }
+
     .icon-btn {
       width: 36px;
       padding: 0;
@@ -481,6 +493,12 @@
             <option value="left">Left</option>
             <option value="right">Right</option>
           </select>
+          <input id="yawSlider3d" class="toolbar-range" type="range" min="0" max="360" step="1" value="45" title="360° 水平观察角度">
+          <span id="yawReadout3d" class="angle-readout">45°</span>
+          <input id="pitchSlider3d" class="toolbar-range" type="range" min="0" max="360" step="1" value="55" title="Pitch 俯仰角">
+          <span id="pitchReadout3d" class="angle-readout">55°</span>
+          <input id="rollSlider3d" class="toolbar-range" type="range" min="0" max="360" step="1" value="0" title="Roll 翻滚角">
+          <span id="rollReadout3d" class="angle-readout">0°</span>
           <button class="icon-btn" id="rotateLeftBtn" title="3D 视角左转">↺</button>
           <button class="icon-btn" id="rotateRightBtn" title="3D 视角右转">↻</button>
           <button class="icon-btn" id="zoomInBtn" title="3D 视角放大">＋</button>
@@ -558,11 +576,11 @@
         </div>
         <div class="stage-wrap" id="stageWrap">
           <canvas id="stage"></canvas>
-          <div class="hint">单击选择对象，拖拽移动。3D 模式会自动吸附到其他组件的边缘和中心线；右键或 Alt 拖拽平移，Shift 拖拽旋转视角。</div>
+          <div class="hint">单击选择对象，拖拽移动。2D 空白处拖拽可平移画布，滚轮缩放；3D 支持欧拉角观察和平移。</div>
         </div>
         <div class="stage-foot">
           <span id="coordLabel">x: 0, y: 0</span>
-          <span>3D: drag to move and align · wheel zoom · right/Alt drag pan · Shift drag rotate · view presets</span>
+          <span>2D: blank drag pan · wheel zoom | 3D: Yaw / Pitch / Roll · Shift drag orbit</span>
         </div>
       </section>
 
@@ -658,7 +676,8 @@
       view: '2d',
       selectedId: null,
       drag: null,
-      camera3d: { yaw: Math.PI / 4, zoom: 28, panX: 0, panY: 0 },
+      camera2d: { zoom: 1, panX: 0, panY: 0 },
+      camera3d: { yaw: Math.PI / 4, pitch: 55 * Math.PI / 180, roll: 0, zoom: 28, panX: 0, panY: 0 },
       guides3d: [],
       history: [],
       future: [],
@@ -767,6 +786,9 @@
       document.getElementById('zoomOutBtn').addEventListener('click', () => zoom3d(1 / 1.12));
       document.getElementById('resetViewBtn').addEventListener('click', reset3dView);
       document.getElementById('viewPreset3d').addEventListener('change', event => set3dViewPreset(event.target.value));
+      document.getElementById('yawSlider3d').addEventListener('input', event => set3dYawDegrees(Number(event.target.value)));
+      document.getElementById('pitchSlider3d').addEventListener('input', event => set3dPitchDegrees(Number(event.target.value)));
+      document.getElementById('rollSlider3d').addEventListener('input', event => set3dRollDegrees(Number(event.target.value)));
       el.fileInput.addEventListener('change', importJson);
       window.addEventListener('keydown', event => {
         if (event.target.matches('input, textarea, select')) return;
@@ -811,13 +833,13 @@
           mode: '3D',
           entities: [
             entity('Block', 0, 0, 0, 10, 8, .4, 'Floor', '主房间地面'),
-            entity('Wall', -5.5, 0, 1.8, .5, 8, 3.6, 'Left Wall', ''),
-            entity('Wall', 5.5, 0, 1.8, .5, 8, 3.6, 'Right Wall', ''),
-            entity('Wall', 0, -4.2, 1.8, 10, .5, 3.6, 'Back Wall', ''),
-            entity('PlayerSpawn', -3, 2, .9, 1.2, 1.2, 1.8, 'PlayerSpawn_01', ''),
+            entity('Wall', -5.5, 0, .4, .5, 8, 3.6, 'Left Wall', ''),
+            entity('Wall', 5.5, 0, .4, .5, 8, 3.6, 'Right Wall', ''),
+            entity('Wall', 0, -4.2, .4, 10, .5, 3.6, 'Back Wall', ''),
+            entity('PlayerSpawn', -3, 2, .4, 1.2, 1.2, 1.8, 'PlayerSpawn_01', ''),
             entity('CombatZone', 1, 0, .5, 6, 5, 1, 'CombatZone_01', '第一次战斗空间'),
-            entity('EnemySpawn', 3, -1, .9, 1.2, 1.2, 1.8, 'EnemySpawn_01', '右侧刷出近战敌人'),
-            entity('TriggerZone', 0, 3.2, .8, 3, 1, 1.6, 'Trigger_Door_01', '进入后开门')
+            entity('EnemySpawn', 3, -1, .4, 1.2, 1.2, 1.8, 'EnemySpawn_01', '右侧刷出近战敌人'),
+            entity('TriggerZone', 0, 3.2, .4, 3, 1, 1.6, 'Trigger_Door_01', '进入后开门')
           ]
         },
         corridor: {
@@ -825,9 +847,9 @@
           mode: '3D',
           entities: [
             entity('Block', 0, 0, 0, 6, 18, .4, 'Corridor Floor', '追逐路线地面'),
-            entity('Wall', -3.4, 0, 1.8, .5, 18, 3.6, 'Left Wall', ''),
-            entity('Wall', 3.4, 0, 1.8, .5, 18, 3.6, 'Right Wall', ''),
-            entity('PlayerSpawn', 0, 7, .9, 1.2, 1.2, 1.8, 'PlayerSpawn_01', ''),
+            entity('Wall', -3.4, 0, .4, .5, 18, 3.6, 'Left Wall', ''),
+            entity('Wall', 3.4, 0, .4, .5, 18, 3.6, 'Right Wall', ''),
+            entity('PlayerSpawn', 0, 7, .4, 1.2, 1.2, 1.8, 'PlayerSpawn_01', ''),
             entity('Path', 0, 0, .2, 1, 14, .2, 'Chase Route', '主要逃亡路线'),
             entity('TriggerZone', 0, 4.5, .8, 5, 2, 1.6, 'Trigger_Chase_Start', '触发追逐'),
             entity('SafeZone', 0, -7, .5, 5, 3, 1, 'SafeZone_Exit', '结束追逐并给玩家喘息')
@@ -905,7 +927,7 @@
       el.statsLabel.textContent = `${state.doc.entities.length} objects · ${state.doc.mode}`;
       el.objectCount.textContent = state.doc.entities.length;
       document.getElementById('view3dTools').style.display = state.view === '3d' ? 'flex' : 'none';
-      document.getElementById('viewPreset3d').value = current3dPreset();
+      updateCameraControls();
       render();
       renderInspector();
       renderEntityList();
@@ -922,6 +944,10 @@
         <div class="field-row">
           <button class="text-btn" data-select-prev>上一个</button>
           <button class="text-btn" data-select-next>下一个</button>
+        </div>
+        <div class="field-row">
+          <button class="text-btn" data-snap-floor>贴到地板</button>
+          <button class="text-btn" data-zero-z>Z 归零</button>
         </div>
         <div class="field"><label>Name</label><input data-field="name" value="${escapeAttr(selected.name)}"></div>
         <div class="field"><label>Type</label><select data-field="type">${Object.keys(TYPES).map(type => `<option value="${type}" ${type === selected.type ? 'selected' : ''}>${TYPES[type].label}</option>`).join('')}</select></div>
@@ -943,6 +969,8 @@
       `;
       el.inspectorContent.querySelector('[data-select-prev]').addEventListener('click', () => selectNeighbor(-1));
       el.inspectorContent.querySelector('[data-select-next]').addEventListener('click', () => selectNeighbor(1));
+      el.inspectorContent.querySelector('[data-snap-floor]').addEventListener('click', snapSelectedToFloor);
+      el.inspectorContent.querySelector('[data-zero-z]').addEventListener('click', zeroSelectedZ);
       el.inspectorContent.querySelectorAll('input, select, textarea').forEach(input => {
         input.addEventListener('change', () => {
           pushHistory();
@@ -1010,8 +1038,9 @@
       ctx.strokeStyle = varColor('--grid');
       ctx.lineWidth = 1;
       const origin = origin2d(rect);
-      for (let x = origin.x % px; x < rect.width; x += px) line(x, 0, x, rect.height);
-      for (let y = origin.y % px; y < rect.height; y += px) line(0, y, rect.width, y);
+      const step = px * state.camera2d.zoom;
+      for (let x = origin.x % step; x < rect.width; x += step) line(x, 0, x, rect.height);
+      for (let y = origin.y % step; y < rect.height; y += step) line(0, y, rect.width, y);
       ctx.strokeStyle = 'rgba(255,255,255,.22)';
       line(origin.x, 0, origin.x, rect.height);
       line(0, origin.y, rect.width, origin.y);
@@ -1166,6 +1195,15 @@
     function onPointerDown(event) {
       const rect = el.canvas.getBoundingClientRect();
       const point = eventPoint(event, rect);
+      if (state.view === '3d' && event.shiftKey) {
+        state.drag = {
+          mode: 'rotate3d',
+          start: point,
+          camera: { ...state.camera3d }
+        };
+        el.canvas.setPointerCapture?.(event.pointerId);
+        return;
+      }
       if (state.view === '3d' && (event.button === 2 || event.altKey)) {
         state.drag = {
           mode: 'pan3d',
@@ -1197,6 +1235,11 @@
           };
         } else {
           state.selectedId = null;
+          state.drag = {
+            mode: 'pan2d',
+            start: point,
+            camera: { ...state.camera2d }
+          };
         }
       }
       el.canvas.setPointerCapture?.(event.pointerId);
@@ -1209,6 +1252,12 @@
       const world = state.view === '3d' ? screenToIsoGround(point.x, point.y, rect, 0) : screenToWorld(point.x, point.y, rect);
       el.coordLabel.textContent = `x: ${world.x.toFixed(2)}, y: ${world.y.toFixed(2)}`;
       if (!state.drag) return;
+      if (state.drag.mode === 'pan2d') {
+        state.camera2d.panX = state.drag.camera.panX + point.x - state.drag.start.x;
+        state.camera2d.panY = state.drag.camera.panY + point.y - state.drag.start.y;
+        render();
+        return;
+      }
       if (state.drag.mode === 'pan3d') {
         state.camera3d.panX = state.drag.camera.panX + point.x - state.drag.start.x;
         state.camera3d.panY = state.drag.camera.panY + point.y - state.drag.start.y;
@@ -1217,28 +1266,31 @@
       }
       if (state.drag.mode === 'rotate3d') {
         state.camera3d.yaw = state.drag.camera.yaw + (point.x - state.drag.start.x) * 0.01;
+        state.camera3d.pitch = state.drag.camera.pitch + (point.y - state.drag.start.y) * 0.01;
+        updateCameraControls();
         render();
         return;
       }
       const selected = getSelected();
       if (!selected) return;
+      const scale2d = px * state.camera2d.zoom;
       if (state.drag.mode === 'move3d') {
         const current = screenToIsoGround(point.x, point.y, rect, selected.transform.position.z);
-        const proposed = {
-          x: snap(state.drag.original.position.x + current.x - state.drag.startWorld3d.x),
-          y: snap(state.drag.original.position.y + current.y - state.drag.startWorld3d.y)
+        const raw = {
+          x: state.drag.original.position.x + current.x - state.drag.startWorld3d.x,
+          y: state.drag.original.position.y + current.y - state.drag.startWorld3d.y
         };
-        const aligned = alignEntity3d(selected, proposed.x, proposed.y);
-        selected.transform.position.x = aligned.x;
-        selected.transform.position.y = aligned.y;
+        const aligned = alignEntity3d(selected, raw.x, raw.y);
+        selected.transform.position.x = aligned.guides.some(guide => guide.axis === 'x') ? aligned.x : snap(aligned.x);
+        selected.transform.position.y = aligned.guides.some(guide => guide.axis === 'y') ? aligned.y : snap(aligned.y);
         state.guides3d = aligned.guides;
         render();
         renderInspector();
         renderEntityList();
         return;
       }
-      const dx = (point.x - state.drag.start.x) / px;
-      const dy = -(point.y - state.drag.start.y) / px;
+      const dx = (point.x - state.drag.start.x) / scale2d;
+      const dy = -(point.y - state.drag.start.y) / scale2d;
       if (state.drag.mode === 'move') {
         selected.transform.position.x = snap(state.drag.original.position.x + dx);
         selected.transform.position.y = snap(state.drag.original.position.y + dy);
@@ -1271,13 +1323,23 @@
     }
 
     function onWheel(event) {
-      if (state.view !== '3d') return;
       event.preventDefault();
-      zoom3d(event.deltaY < 0 ? 1.08 : 1 / 1.08);
+      if (state.view === '3d') {
+        zoom3d(event.deltaY < 0 ? 1.08 : 1 / 1.08);
+        return;
+      }
+      const rect = el.canvas.getBoundingClientRect();
+      const before = screenToWorld(event.clientX - rect.left, event.clientY - rect.top, rect);
+      state.camera2d.zoom = Math.max(.35, Math.min(3, state.camera2d.zoom * (event.deltaY < 0 ? 1.08 : 1 / 1.08)));
+      const after = screenToWorld(event.clientX - rect.left, event.clientY - rect.top, rect);
+      state.camera2d.panX += (after.x - before.x) * px * state.camera2d.zoom;
+      state.camera2d.panY -= (after.y - before.y) * px * state.camera2d.zoom;
+      render();
     }
 
     function rotate3d(delta) {
       state.camera3d.yaw += delta;
+      updateCameraControls();
       render();
     }
 
@@ -1287,32 +1349,80 @@
     }
 
     function reset3dView() {
-      state.camera3d = { yaw: Math.PI / 4, zoom: 28, panX: 0, panY: 0 };
+      state.camera3d = { yaw: Math.PI / 4, pitch: 55 * Math.PI / 180, roll: 0, zoom: 28, panX: 0, panY: 0 };
+      updateCameraControls();
       render();
     }
 
     function set3dViewPreset(preset) {
       const presets = {
-        iso: { yaw: Math.PI / 4, zoom: 28, panX: 0, panY: 0 },
-        front: { yaw: 0, zoom: 32, panX: 0, panY: 0 },
-        back: { yaw: Math.PI, zoom: 32, panX: 0, panY: 0 },
-        left: { yaw: -Math.PI / 2, zoom: 32, panX: 0, panY: 0 },
-        right: { yaw: Math.PI / 2, zoom: 32, panX: 0, panY: 0 }
+        iso: { yaw: Math.PI / 4, pitch: 55 * Math.PI / 180, roll: 0, zoom: 28, panX: 0, panY: 0 },
+        front: { yaw: 0, pitch: Math.PI / 2, roll: 0, zoom: 32, panX: 0, panY: 0 },
+        back: { yaw: Math.PI, pitch: Math.PI / 2, roll: 0, zoom: 32, panX: 0, panY: 0 },
+        left: { yaw: -Math.PI / 2, pitch: Math.PI / 2, roll: 0, zoom: 32, panX: 0, panY: 0 },
+        right: { yaw: Math.PI / 2, pitch: Math.PI / 2, roll: 0, zoom: 32, panX: 0, panY: 0 }
       };
       state.camera3d = { ...state.camera3d, ...presets[preset] };
+      updateCameraControls();
       render();
+    }
+
+    function set3dYawDegrees(degrees) {
+      state.camera3d.yaw = degrees * Math.PI / 180;
+      updateCameraControls();
+      render();
+    }
+
+    function set3dPitchDegrees(degrees) {
+      state.camera3d.pitch = degrees * Math.PI / 180;
+      updateCameraControls();
+      render();
+    }
+
+    function set3dRollDegrees(degrees) {
+      state.camera3d.roll = degrees * Math.PI / 180;
+      updateCameraControls();
+      render();
+    }
+
+    function updateCameraControls() {
+      const yawSlider = document.getElementById('yawSlider3d');
+      const pitchSlider = document.getElementById('pitchSlider3d');
+      const rollSlider = document.getElementById('rollSlider3d');
+      const yawReadout = document.getElementById('yawReadout3d');
+      const pitchReadout = document.getElementById('pitchReadout3d');
+      const rollReadout = document.getElementById('rollReadout3d');
+      const preset = document.getElementById('viewPreset3d');
+      const yaw = angleDegrees(state.camera3d.yaw);
+      const pitch = angleDegrees(state.camera3d.pitch);
+      const roll = angleDegrees(state.camera3d.roll);
+      yawSlider.value = String(yaw);
+      pitchSlider.value = String(pitch);
+      rollSlider.value = String(roll);
+      yawReadout.textContent = `Y ${yaw}°`;
+      pitchReadout.textContent = `P ${pitch}°`;
+      rollReadout.textContent = `R ${roll}°`;
+      preset.value = current3dPreset();
+    }
+
+    function angleDegrees(radians) {
+      const degrees = Math.round((normalizeAngle(radians) * 180 / Math.PI + 360) % 360);
+      return degrees === 360 ? 0 : degrees;
     }
 
     function current3dPreset() {
       const yaw = normalizeAngle(state.camera3d.yaw);
+      const pitch = normalizeAngle(state.camera3d.pitch);
+      const roll = normalizeAngle(state.camera3d.roll);
+      if (Math.abs(roll) > 0.04) return 'iso';
       const presets = [
-        ['iso', Math.PI / 4],
-        ['front', 0],
-        ['back', Math.PI],
-        ['left', -Math.PI / 2],
-        ['right', Math.PI / 2]
+        ['iso', Math.PI / 4, 55 * Math.PI / 180],
+        ['front', 0, Math.PI / 2],
+        ['back', Math.PI, Math.PI / 2],
+        ['left', -Math.PI / 2, Math.PI / 2],
+        ['right', Math.PI / 2, Math.PI / 2]
       ];
-      const hit = presets.find(([, angle]) => Math.abs(normalizeAngle(yaw - angle)) < 0.04);
+      const hit = presets.find(([, angle, presetPitch]) => Math.abs(normalizeAngle(yaw - angle)) < 0.04 && Math.abs(normalizeAngle(pitch - presetPitch)) < 0.04);
       return hit ? hit[0] : 'iso';
     }
 
@@ -1487,50 +1597,111 @@
       updateAll();
     }
 
+    function snapSelectedToFloor() {
+      const selected = getSelected();
+      if (!selected) return;
+      pushHistory();
+      selected.transform.position.z = findFloorTopZ(selected);
+      updateAll();
+      showToast('已贴到地板');
+    }
+
+    function zeroSelectedZ() {
+      const selected = getSelected();
+      if (!selected) return;
+      pushHistory();
+      selected.transform.position.z = 0;
+      updateAll();
+      showToast('Z 已归零');
+    }
+
+    function findFloorTopZ(entity) {
+      const bounds = entityBounds2d(entity);
+      const floors = state.doc.entities
+        .filter(item => item.id !== entity.id)
+        .filter(item => ['Block', 'Platform'].includes(item.type))
+        .filter(item => footprintOverlaps(bounds, entityBounds2d(item)))
+        .map(item => item.transform.position.z + item.transform.scale.z)
+        .filter(top => top <= entity.transform.position.z + 2);
+      return floors.length ? Math.max(...floors) : 0;
+    }
+
+    function footprintOverlaps(a, b) {
+      return a.minX <= b.maxX && a.maxX >= b.minX && a.minY <= b.maxY && a.maxY >= b.minY;
+    }
+
     function origin2d(rect) {
-      return { x: rect.width / 2, y: rect.height / 2 };
+      return { x: rect.width / 2 + state.camera2d.panX, y: rect.height / 2 + state.camera2d.panY };
     }
 
     function worldToScreen(x, y, rect) {
       const origin = origin2d(rect);
-      return { x: origin.x + x * px, y: origin.y - y * px };
+      const scale = px * state.camera2d.zoom;
+      return { x: origin.x + x * scale, y: origin.y - y * scale };
     }
 
     function screenToWorld(x, y, rect) {
       const origin = origin2d(rect);
-      return { x: (x - origin.x) / px, y: -(y - origin.y) / px };
+      const scale = px * state.camera2d.zoom;
+      return { x: (x - origin.x) / scale, y: -(y - origin.y) / scale };
     }
 
     function isoToScreen(x, y, z, rect) {
       const scale = state.camera3d.zoom;
-      const yaw = state.camera3d.yaw;
-      const cos = Math.cos(yaw);
-      const sin = Math.sin(yaw);
-      const u = x * cos - y * sin;
-      const v = x * sin + y * cos;
+      const projected = project3d(x, y, z);
       return {
-        x: rect.width / 2 + state.camera3d.panX + u * scale,
-        y: rect.height / 2 + state.camera3d.panY + v * scale * .52 - z * scale
+        x: rect.width / 2 + state.camera3d.panX + projected.x * scale,
+        y: rect.height / 2 + state.camera3d.panY + projected.y * scale
       };
     }
 
     function screenToIsoGround(screenX, screenY, rect, z) {
       const scale = state.camera3d.zoom;
+      const sx = (screenX - rect.width / 2 - state.camera3d.panX) / scale;
+      const sy = (screenY - rect.height / 2 - state.camera3d.panY) / scale;
       const yaw = state.camera3d.yaw;
-      const cos = Math.cos(yaw);
-      const sin = Math.sin(yaw);
-      const u = (screenX - rect.width / 2 - state.camera3d.panX) / scale;
-      const v = (screenY - rect.height / 2 - state.camera3d.panY + z * scale) / (scale * .52);
+      const pitch = state.camera3d.pitch;
+      const roll = state.camera3d.roll;
+      const cosR = Math.cos(roll);
+      const sinR = Math.sin(roll);
+      const cosP = Math.cos(pitch);
+      const sinP = Math.sin(pitch);
+      const cosY = Math.cos(yaw);
+      const sinY = Math.sin(yaw);
+      const x2 = sx * cosR + sy * sinR;
+      const y2 = -sx * sinR + sy * cosR;
+      const safeCosP = Math.abs(cosP) < 0.05 ? (cosP < 0 ? -0.05 : 0.05) : cosP;
+      const y1 = (y2 + z * sinP) / safeCosP;
       return {
-        x: u * cos + v * sin,
-        y: -u * sin + v * cos
+        x: x2 * cosY + y1 * sinY,
+        y: -x2 * sinY + y1 * cosY
       };
     }
 
     function depth3d(item) {
       const p = item.transform.position;
+      return project3d(p.x, p.y, p.z).depth;
+    }
+
+    function project3d(x, y, z) {
       const yaw = state.camera3d.yaw;
-      return p.x * Math.sin(yaw) + p.y * Math.cos(yaw) + p.z * 0.8;
+      const pitch = state.camera3d.pitch;
+      const roll = state.camera3d.roll;
+      const cosY = Math.cos(yaw);
+      const sinY = Math.sin(yaw);
+      const cosP = Math.cos(pitch);
+      const sinP = Math.sin(pitch);
+      const cosR = Math.cos(roll);
+      const sinR = Math.sin(roll);
+      const x1 = x * cosY - y * sinY;
+      const y1 = x * sinY + y * cosY;
+      const y2 = y1 * cosP - z * sinP;
+      const z2 = y1 * sinP + z * cosP;
+      return {
+        x: x1 * cosR - y2 * sinR,
+        y: x1 * sinR + y2 * cosR,
+        depth: z2
+      };
     }
 
     function isoScreenBox(item, rect) {
@@ -1565,7 +1736,7 @@
     }
 
     function alignEntity3d(entity, x, y) {
-      const threshold = Math.max(0.75, state.doc.settings.gridSize * 0.9);
+      const threshold = Math.max(1.15, state.doc.settings.gridSize * 1.25);
       const scale = entity.transform.scale;
       const candidates = {
         x: [
@@ -1660,8 +1831,8 @@
       return {
         cx: pos.x,
         cy: pos.y,
-        w: Math.max(18, item.transform.scale.x * px),
-        h: Math.max(18, item.transform.scale.y * px)
+        w: Math.max(18, item.transform.scale.x * px * state.camera2d.zoom),
+        h: Math.max(18, item.transform.scale.y * px * state.camera2d.zoom)
       };
     }
 
