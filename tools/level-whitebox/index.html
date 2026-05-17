@@ -32,6 +32,7 @@
       font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
       overflow-x: hidden;
       overflow-y: auto;
+      overscroll-behavior: none;
     }
 
     button,
@@ -51,7 +52,7 @@
       height: 100vh;
       min-height: 760px;
       display: grid;
-      grid-template-rows: 58px minmax(0, 1fr);
+      grid-template-rows: auto minmax(0, 1fr);
       background:
         linear-gradient(135deg, rgba(57, 198, 166, .08), transparent 32%),
         linear-gradient(315deg, rgba(107, 168, 255, .08), transparent 34%),
@@ -63,9 +64,11 @@
       align-items: center;
       justify-content: space-between;
       gap: 18px;
-      padding: 0 16px;
+      min-height: 58px;
+      padding: 8px 16px;
       border-bottom: 1px solid var(--line);
       background: rgba(14, 17, 22, .94);
+      flex-wrap: wrap;
     }
 
     .brand {
@@ -111,6 +114,7 @@
     .toolbar {
       justify-content: center;
       flex: 1;
+      flex-wrap: wrap;
     }
 
     .icon-btn,
@@ -137,7 +141,7 @@
     }
 
     .toolbar-range {
-      width: 118px;
+      width: clamp(72px, 8vw, 118px);
       accent-color: var(--accent);
     }
 
@@ -187,7 +191,7 @@
     .workspace {
       min-height: 0;
       display: grid;
-      grid-template-columns: 260px minmax(420px, 1fr) 300px;
+      grid-template-columns: minmax(210px, 240px) minmax(0, 1fr) minmax(260px, 300px);
     }
 
     .sidebar,
@@ -276,6 +280,7 @@
       display: grid;
       grid-template-rows: 40px minmax(0, 1fr) 34px;
       background: var(--canvas);
+      min-width: 0;
     }
 
     .stage-head,
@@ -299,21 +304,58 @@
       position: relative;
       min-height: 0;
       overflow: hidden;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .scene-toolbar {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      z-index: 4;
+      display: grid;
+      gap: 2px;
+      padding: 3px;
+      border: 1px solid #080a0d;
+      background: rgba(18, 19, 21, .92);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .28);
+    }
+
+    .scene-tool {
+      width: 31px;
+      height: 31px;
+      border-radius: 0;
+      border: 1px solid #2d3034;
+      background: #30343a;
+      color: #d8dee9;
+      font-size: 16px;
+      line-height: 1;
+      display: grid;
+      place-items: center;
+      padding: 0;
+    }
+
+    .scene-tool.active {
+      color: #ffffff;
+      background: #486b91;
+      border-color: #7aa6d9;
     }
 
     #stage {
       width: 100%;
       height: 100%;
       display: block;
-      cursor: crosshair;
-      background: var(--canvas);
+      cursor: default;
+      background: #3f4142;
+      touch-action: none;
+      user-select: none;
     }
 
     .hint {
       position: absolute;
       left: 14px;
       bottom: 14px;
-      max-width: 420px;
+      max-width: 640px;
       padding: 9px 11px;
       border-radius: 8px;
       border: 1px solid rgba(255, 255, 255, .08);
@@ -321,6 +363,18 @@
       color: var(--muted);
       font-size: 12px;
       pointer-events: none;
+    }
+
+    .shortcut-panel {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px 14px;
+      line-height: 1.4;
+    }
+
+    .shortcut-panel b {
+      color: #edf2f7;
+      font-weight: 700;
     }
 
     .field {
@@ -449,23 +503,53 @@
       display: none;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 1160px) {
+      .brand { min-width: auto; }
+      .toolbar { order: 3; min-width: 100%; justify-content: flex-start; }
+      .workspace {
+        grid-template-columns: minmax(200px, 220px) minmax(0, 1fr) minmax(250px, 280px);
+      }
+    }
+
+    @media (max-width: 920px) {
+      .workspace {
+        grid-template-columns: 220px minmax(0, 1fr);
+        grid-template-rows: minmax(560px, 1fr) auto;
+      }
+      .stage-shell { grid-column: 2; grid-row: 1; min-height: 560px; }
+      .sidebar { grid-column: 1; grid-row: 1 / span 2; }
+      .inspector { grid-column: 2; grid-row: 2; max-height: 42vh; border-left: 0; border-top: 1px solid var(--line); }
+      .entity-list { max-height: 180px; }
+    }
+
+    @media (max-width: 760px) {
       body { overflow: auto; }
       .app { height: auto; min-height: 100vh; }
       .topbar { flex-wrap: wrap; height: auto; padding: 10px; }
       .brand { min-width: 100%; }
-      .toolbar { justify-content: flex-start; flex-wrap: wrap; }
+      .toolbar { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+      .icon-btn,
+      .text-btn,
+      .seg-btn,
+      .toolbar-select { min-height: 42px; }
       .workspace { grid-template-columns: 1fr; }
       .sidebar,
       .inspector { max-height: none; border: 0; }
-      .stage-shell { height: 70vh; min-height: 520px; }
+      .stage-shell { height: 72vh; min-height: 520px; }
+      .scene-toolbar { left: 8px; top: 8px; }
+      .scene-tool { width: 44px; height: 44px; font-size: 18px; }
+      .hint { left: 8px; right: 8px; bottom: 8px; max-width: none; font-size: 11px; }
+      .shortcut-panel { grid-template-columns: 1fr 1fr; gap: 5px 10px; }
       .object-grid { grid-template-columns: repeat(3, 1fr); }
+      .library-btn,
+      .entity-item { min-height: 44px; }
     }
 
     @media (max-width: 640px) {
       .object-grid { grid-template-columns: 1fr 1fr; }
       .field-row { grid-template-columns: 1fr; }
       .toolbar-group { flex-wrap: wrap; }
+      .shortcut-panel { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -484,6 +568,11 @@
         <div class="segmented" aria-label="view mode">
           <button class="seg-btn active" data-view="2d">2D</button>
           <button class="seg-btn" data-view="3d">3D</button>
+        </div>
+        <div class="segmented" aria-label="transform tool">
+          <button class="seg-btn active" data-tool="move" title="W Move / 移动">Move 移动</button>
+          <button class="seg-btn" data-tool="rotate" title="E Rotate / 旋转">Rotate 旋转</button>
+          <button class="seg-btn" data-tool="scale" title="R Scale / 缩放">Scale 缩放</button>
         </div>
         <div class="toolbar-group" id="view3dTools">
           <select id="viewPreset3d" class="toolbar-select" title="3D 视角预设">
@@ -576,11 +665,37 @@
         </div>
         <div class="stage-wrap" id="stageWrap">
           <canvas id="stage"></canvas>
-          <div class="hint">单击选择对象，拖拽移动。2D 空白处拖拽可平移画布，滚轮缩放；3D 支持欧拉角观察和平移。</div>
+          <div class="scene-toolbar" aria-label="scene transform tools">
+            <button class="scene-tool active" data-tool="move" title="Move / W">✥</button>
+            <button class="scene-tool" data-tool="rotate" title="Rotate / E">↻</button>
+            <button class="scene-tool" data-tool="scale" title="Scale / R">□</button>
+            <button class="scene-tool" id="frameSceneBtn" title="Frame selected / F">◎</button>
+          </div>
+          <div class="hint">
+            <div class="shortcut-panel">
+              <span><b>1 / 2</b> 2D / 3D</span>
+              <span><b>W / E / R</b> 移动 / 旋转 / 缩放</span>
+              <span><b>拖拽组件</b> 当前工具编辑</span>
+              <span><b>拖拽手柄</b> 单轴编辑</span>
+              <span><b>Shift + 拖拽</b> 3D 视角环绕</span>
+              <span><b>Alt / 右键拖拽</b> 平移视角</span>
+              <span><b>滚轮 / +/-</b> 缩放视角</span>
+              <span><b>A / S / D</b> 平移视角</span>
+              <span><b>F</b> 聚焦选中</span>
+              <span><b>X / Y / Z</b> 旋转选中轴</span>
+              <span><b>Shift + X/Y/Z</b> 反向旋转</span>
+              <span><b>[ / ]</b> 快速旋转</span>
+              <span><b>Ctrl + Z / Y</b> 撤销 / 重做</span>
+              <span><b>Ctrl + D</b> 复制</span>
+              <span><b>Delete</b> 删除</span>
+              <span><b>Ctrl + S</b> 保存本地</span>
+              <span><b>Ctrl + R</b> 重置视角</span>
+            </div>
+          </div>
         </div>
         <div class="stage-foot">
           <span id="coordLabel">x: 0, y: 0</span>
-          <span>2D: blank drag pan · wheel zoom | 3D: Yaw / Pitch / Roll · Shift drag orbit</span>
+          <span>Iso 3D · Shift drag orbit · Alt/right drag pan · W/E/R tools</span>
         </div>
       </section>
 
@@ -672,13 +787,16 @@
 
     const ctx = el.canvas.getContext('2d');
     const px = 32;
+    const activePointers = new Map();
     const state = {
       view: '2d',
+      tool: 'move',
       selectedId: null,
       drag: null,
       camera2d: { zoom: 1, panX: 0, panY: 0 },
       camera3d: { yaw: Math.PI / 4, pitch: 55 * Math.PI / 180, roll: 0, zoom: 28, panX: 0, panY: 0 },
       guides3d: [],
+      touchGesture: null,
       history: [],
       future: [],
       doc: createDocument('Level_Whitebox', '2D')
@@ -749,6 +867,9 @@
           updateAll();
         });
       });
+      document.querySelectorAll('[data-tool]').forEach(button => {
+        button.addEventListener('click', () => setTool(button.dataset.tool));
+      });
       document.querySelectorAll('[data-template]').forEach(button => {
         button.addEventListener('click', () => {
           pushHistory();
@@ -765,6 +886,7 @@
       el.canvas.addEventListener('wheel', onWheel, { passive: false });
       el.canvas.addEventListener('contextmenu', event => event.preventDefault());
       window.addEventListener('pointerup', onPointerUp);
+      window.addEventListener('pointercancel', onPointerUp);
       el.levelName.addEventListener('change', () => updateSettings({ name: el.levelName.value.trim() || 'Level_Whitebox' }));
       el.gridSize.addEventListener('change', () => updateSettings({ gridSize: number(el.gridSize.value, 1) }));
       el.unit.addEventListener('change', () => updateSettings({ unit: el.unit.value }));
@@ -785,21 +907,116 @@
       document.getElementById('zoomInBtn').addEventListener('click', () => zoom3d(1.12));
       document.getElementById('zoomOutBtn').addEventListener('click', () => zoom3d(1 / 1.12));
       document.getElementById('resetViewBtn').addEventListener('click', reset3dView);
+      document.getElementById('frameSceneBtn').addEventListener('click', frameSelected);
       document.getElementById('viewPreset3d').addEventListener('change', event => set3dViewPreset(event.target.value));
       document.getElementById('yawSlider3d').addEventListener('input', event => set3dYawDegrees(Number(event.target.value)));
       document.getElementById('pitchSlider3d').addEventListener('input', event => set3dPitchDegrees(Number(event.target.value)));
       document.getElementById('rollSlider3d').addEventListener('input', event => set3dRollDegrees(Number(event.target.value)));
       el.fileInput.addEventListener('change', importJson);
       window.addEventListener('keydown', event => {
-        if (event.target.matches('input, textarea, select')) return;
-        if (event.key === 'Delete' || event.key === 'Backspace') deleteSelected();
-        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') undo();
-        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') redo();
-        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'd') {
-          event.preventDefault();
-          duplicateSelected();
-        }
+        if (event.target?.matches?.('input, textarea, select')) return;
+        handleShortcut(event);
       });
+    }
+
+    function handleShortcut(event) {
+      const key = event.key.toLowerCase();
+      const ctrl = event.ctrlKey || event.metaKey;
+      if (!ctrl && key === 'w') {
+        event.preventDefault();
+        setTool('move');
+        return;
+      }
+      if (!ctrl && key === 'e') {
+        event.preventDefault();
+        setTool('rotate');
+        return;
+      }
+      if (!ctrl && key === 'r') {
+        event.preventDefault();
+        setTool('scale');
+        return;
+      }
+      if (event.key === 'Delete' || event.key === 'Backspace') {
+        event.preventDefault();
+        deleteSelected();
+        return;
+      }
+      if (ctrl && key === 'z') {
+        event.preventDefault();
+        undo();
+        return;
+      }
+      if (ctrl && key === 'y') {
+        event.preventDefault();
+        redo();
+        return;
+      }
+      if (ctrl && key === 'd') {
+        event.preventDefault();
+        duplicateSelected();
+        return;
+      }
+      if (ctrl && key === 's') {
+        event.preventDefault();
+        saveLocal();
+        return;
+      }
+      if (key === '1' || key === '2') {
+        event.preventDefault();
+        document.querySelector(`[data-view="${key === '1' ? '2d' : '3d'}"]`).click();
+        return;
+      }
+      if (key === 'f') {
+        event.preventDefault();
+        frameSelected();
+        return;
+      }
+      if (ctrl && key === 'r') {
+        event.preventDefault();
+        resetActiveCamera();
+        return;
+      }
+      if (key === '+' || key === '=') {
+        event.preventDefault();
+        state.view === '3d' ? zoom3d(1.1) : zoom2d(1.1);
+        return;
+      }
+      if (key === '-' || key === '_') {
+        event.preventDefault();
+        state.view === '3d' ? zoom3d(1 / 1.1) : zoom2d(1 / 1.1);
+        return;
+      }
+      if (!ctrl && ['a', 's', 'd'].includes(key)) {
+        event.preventDefault();
+        panActiveCamera(key);
+        return;
+      }
+      if (state.view === '3d' && key === 'q') {
+        event.preventDefault();
+        rotate3d(-Math.PI / 18);
+        return;
+      }
+      if (state.view === '3d' && key === 'e') {
+        event.preventDefault();
+        rotate3d(Math.PI / 18);
+        return;
+      }
+      if (key === 'x' || key === 'y' || key === 'z') {
+        event.preventDefault();
+        rotateSelectedAxis(key, event.shiftKey ? -15 : 15);
+        return;
+      }
+      if (key === '[' || key === ']') {
+        event.preventDefault();
+        rotateSelected(key === '[' ? -15 : 15);
+      }
+    }
+
+    function setTool(tool) {
+      state.tool = tool;
+      document.querySelectorAll('[data-tool]').forEach(button => button.classList.toggle('active', button.dataset.tool === tool));
+      render();
     }
 
     function loadTemplate(template) {
@@ -927,6 +1144,7 @@
       el.statsLabel.textContent = `${state.doc.entities.length} objects · ${state.doc.mode}`;
       el.objectCount.textContent = state.doc.entities.length;
       document.getElementById('view3dTools').style.display = state.view === '3d' ? 'flex' : 'none';
+      document.querySelectorAll('[data-tool]').forEach(button => button.classList.toggle('active', button.dataset.tool === state.tool));
       updateCameraControls();
       render();
       renderInspector();
@@ -958,6 +1176,10 @@
         <div class="field-row">
           <div class="field"><label>Z</label><input type="number" step="0.25" data-path="transform.position.z" value="${t.position.z}"></div>
           <div class="field"><label>Rotation Z</label><input type="number" step="1" data-path="transform.rotation.z" value="${t.rotation.z}"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Rotation X</label><input type="number" step="1" data-path="transform.rotation.x" value="${t.rotation.x}"></div>
+          <div class="field"><label>Rotation Y</label><input type="number" step="1" data-path="transform.rotation.y" value="${t.rotation.y}"></div>
         </div>
         <div class="field-row">
           <div class="field"><label>Width</label><input type="number" min="0.25" step="0.25" data-path="transform.scale.x" value="${t.scale.x}"></div>
@@ -1031,6 +1253,7 @@
       drawGrid(rect);
       drawAssist(rect);
       state.doc.entities.forEach(item => drawEntity2d(item, rect));
+      drawSelectedGizmo(rect);
     }
 
     function drawGrid(rect) {
@@ -1125,23 +1348,81 @@
 
     function render3d(rect) {
       drawIsoGrid(rect);
-      const items = [...state.doc.entities].sort((a, b) => depth3d(a) - depth3d(b));
-      items.forEach(item => drawEntity3d(item, rect));
+      const faces = [];
+      const markers = [];
+      state.doc.entities.forEach(item => {
+        if (['PlayerSpawn', 'EnemySpawn', 'ItemSpawn', 'Checkpoint'].includes(item.type)) {
+          markers.push(item);
+        } else {
+          faces.push(...entityFaces3d(item, rect));
+        }
+      });
+      drawFaces(faces);
+      markers.sort((a, b) => depth3d(a) - depth3d(b)).forEach(item => drawEntity3d(item, rect));
+      state.doc.entities.forEach(item => drawEntityLabel3d(item, rect));
       drawGuides3d(rect);
+      drawSelectedGizmo(rect);
+      drawViewAxisGizmo(rect);
     }
 
     function drawIsoGrid(rect) {
       ctx.save();
-      ctx.strokeStyle = 'rgba(255,255,255,.08)';
+      ctx.fillStyle = '#414344';
+      ctx.fillRect(0, 0, rect.width, rect.height);
+      ctx.strokeStyle = 'rgba(255,255,255,.18)';
       ctx.lineWidth = 1;
-      for (let i = -16; i <= 16; i++) {
-        const a = isoToScreen(-16, i, 0, rect);
-        const b = isoToScreen(16, i, 0, rect);
-        const c = isoToScreen(i, -16, 0, rect);
-        const d = isoToScreen(i, 16, 0, rect);
+      for (let i = -24; i <= 24; i++) {
+        const a = isoToScreen(-24, i, 0, rect);
+        const b = isoToScreen(24, i, 0, rect);
+        const c = isoToScreen(i, -24, 0, rect);
+        const d = isoToScreen(i, 24, 0, rect);
         line(a.x, a.y, b.x, b.y);
         line(c.x, c.y, d.x, d.y);
       }
+      ctx.strokeStyle = 'rgba(255,255,255,.38)';
+      const x0 = isoToScreen(-24, 0, 0, rect);
+      const x1 = isoToScreen(24, 0, 0, rect);
+      const y0 = isoToScreen(0, -24, 0, rect);
+      const y1 = isoToScreen(0, 24, 0, rect);
+      line(x0.x, x0.y, x1.x, x1.y);
+      line(y0.x, y0.y, y1.x, y1.y);
+      ctx.restore();
+    }
+
+    function drawViewAxisGizmo(rect) {
+      const origin = { x: rect.width - 84, y: 62 };
+      const axes = [
+        { name: 'X', color: '#ef4444', point: project3d(1, 0, 0) },
+        { name: 'Y', color: '#8dd36f', point: project3d(0, 1, 0) },
+        { name: 'Z', color: '#6ba8ff', point: project3d(0, 0, 1) }
+      ].sort((a, b) => a.point.depth - b.point.depth);
+      ctx.save();
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = 'rgba(20, 24, 29, .35)';
+      roundRect(origin.x - 34, origin.y - 34, 76, 82, 8, true, false);
+      axes.forEach(axis => {
+        const end = {
+          x: origin.x + axis.point.x * 32,
+          y: origin.y + axis.point.y * 32
+        };
+        ctx.strokeStyle = axis.color;
+        ctx.fillStyle = axis.color;
+        ctx.lineWidth = 2;
+        line(origin.x, origin.y, end.x, end.y);
+        ctx.beginPath();
+        ctx.arc(end.x, end.y, 9, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(axis.name, end.x, end.y + 1);
+      });
+      ctx.fillStyle = '#aeb8c4';
+      ctx.strokeStyle = 'rgba(255,255,255,.55)';
+      roundRect(origin.x - 9, origin.y - 9, 18, 18, 4, true, true);
+      ctx.fillStyle = 'rgba(237,242,247,.72)';
+      ctx.font = '12px sans-serif';
+      ctx.fillText('Iso', origin.x + 18, origin.y + 41);
       ctx.restore();
     }
 
@@ -1154,8 +1435,8 @@
         const center = isoToScreen(p.x, p.y, p.z + s.z, rect);
         ctx.save();
         ctx.fillStyle = color;
-        ctx.strokeStyle = selected ? '#fff' : '#0b0f14';
-        ctx.lineWidth = selected ? 3 : 2;
+        ctx.strokeStyle = selected ? '#ff8a00' : '#0b0f14';
+        ctx.lineWidth = selected ? 4 : 2;
         ctx.beginPath();
         ctx.arc(center.x, center.y, 10, 0, Math.PI * 2);
         ctx.fill();
@@ -1166,35 +1447,400 @@
         ctx.restore();
         return;
       }
+    }
+
+    function drawEntityLabel3d(item, rect) {
+      const p = item.transform.position;
+      const s = item.transform.scale;
+      const label = isoToScreen(p.x, p.y, p.z + Math.max(.15, s.z), rect);
+      ctx.save();
+      ctx.fillStyle = '#edf2f7';
+      ctx.font = '12px sans-serif';
+      ctx.fillText(item.name, label.x + 4, label.y - 6);
+      ctx.restore();
+    }
+
+    function drawSelectedGizmo(rect) {
+      const selected = getSelected();
+      if (!selected) return;
+      const center = gizmoCenter(selected, rect);
+      const axes = gizmoAxes(selected, rect);
+      ctx.save();
+      ctx.font = 'bold 12px sans-serif';
+      ctx.textAlign = 'center';
+      if (state.tool === 'rotate') {
+        drawRotationGizmo(center, axes);
+        ctx.restore();
+        return;
+      }
+      axes.forEach(axis => {
+        if (state.tool === 'move') {
+          ctx.lineWidth = 4;
+          ctx.strokeStyle = axis.color;
+          ctx.fillStyle = axis.color;
+          line(center.x, center.y, axis.end.x, axis.end.y);
+          drawArrowHead(center, axis.end, axis.color);
+        }
+        if (state.tool === 'scale') {
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = axis.color;
+          ctx.fillStyle = axis.color;
+          line(center.x, center.y, axis.scale.x, axis.scale.y);
+          ctx.fillRect(axis.scale.x - 9, axis.scale.y - 9, 18, 18);
+          ctx.strokeStyle = '#0b0f14';
+          ctx.strokeRect(axis.scale.x - 9, axis.scale.y - 9, 18, 18);
+        }
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = axis.color;
+        const labelPoint = state.tool === 'scale' ? axis.scale : axis.end;
+        ctx.fillText(axis.name.toUpperCase(), labelPoint.x + 14, labelPoint.y + 4);
+      });
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(center.x, center.y, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#ff8a00';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawRotationGizmo(center, axes) {
+      const radius = state.view === '3d' ? 72 : 62;
+      ctx.globalAlpha = .24;
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1.3;
+      ctx.beginPath();
+      ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+      if (state.view === '2d') {
+        const zAxis = axes.find(axis => axis.name === 'z');
+        drawEllipseRing(center, radius, radius, 0, zAxis.color, 'Z');
+      } else {
+        drawEllipseRing(center, radius * .42, radius, 0, '#ef4444', 'X');
+        drawEllipseRing(center, radius, radius * .34, 0, '#22c55e', 'Y');
+        drawEllipseRing(center, radius * .68, radius, -Math.PI / 4, '#3b82f6', 'Z');
+      }
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(center.x, center.y, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#ff8a00';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    function drawEllipseRing(center, rx, ry, rotation, color, label) {
+      ctx.save();
+      ctx.translate(center.x, center.y);
+      ctx.rotate(rotation);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = color;
+      ctx.font = 'bold 12px sans-serif';
+      ctx.fillText(label, rx + 13, 4);
+      ctx.restore();
+    }
+
+    function hitGizmo(point, rect) {
+      const selected = getSelected();
+      if (!selected) return null;
+      const center = gizmoCenter(selected, rect);
+      const axes = gizmoAxes(selected, rect);
+      if (state.tool === 'scale') {
+        const scaleHit = axes.find(axis => distance(point, axis.scale) <= 16);
+        if (scaleHit) return { mode: 'gizmo-scale', axis: scaleHit.name, center, vector: scaleHit.vector };
+      }
+      if (state.tool === 'rotate') {
+        const rotateHit = hitRotationGizmo(point, center, axes);
+        if (rotateHit) return { mode: 'gizmo-rotate', axis: rotateHit.name, center };
+      }
+      if (state.tool === 'move') {
+        const moveHit = axes.find(axis => distanceToSegment(point, center, axis.end) <= 10);
+        if (moveHit) return { mode: 'gizmo-move', axis: moveHit.name, center, vector: moveHit.vector };
+      }
+      return null;
+    }
+
+    function hitRotationGizmo(point, center, axes) {
+      if (state.view === '2d') {
+        const zAxis = axes.find(axis => axis.name === 'z');
+        return Math.abs(distance(point, center) - 62) <= 12 ? zAxis : null;
+      }
+      const rings = [
+        { name: 'x', rx: 72 * .42, ry: 72, rotation: 0 },
+        { name: 'y', rx: 72, ry: 72 * .34, rotation: 0 },
+        { name: 'z', rx: 72 * .68, ry: 72, rotation: -Math.PI / 4 }
+      ];
+      const hit = rings.find(ring => ellipseDistance(point, center, ring.rx, ring.ry, ring.rotation) <= .22);
+      return hit ? axes.find(axis => axis.name === hit.name) : null;
+    }
+
+    function ellipseDistance(point, center, rx, ry, rotation) {
+      const dx = point.x - center.x;
+      const dy = point.y - center.y;
+      const cos = Math.cos(-rotation);
+      const sin = Math.sin(-rotation);
+      const x = dx * cos - dy * sin;
+      const y = dx * sin + dy * cos;
+      return Math.abs(Math.sqrt((x * x) / (rx * rx) + (y * y) / (ry * ry)) - 1);
+    }
+
+    function gizmoCenter(entity, rect) {
+      const p = entity.transform.position;
+      if (state.view === '3d') return isoToScreen(p.x, p.y, p.z + entity.transform.scale.z / 2, rect);
+      return worldToScreen(p.x, p.y, rect);
+    }
+
+    function gizmoAxes(entity, rect) {
+      const center = gizmoCenter(entity, rect);
+      if (state.view === '3d') {
+        const p = entity.transform.position;
+        const origin = { x: p.x, y: p.y, z: p.z + entity.transform.scale.z / 2 };
+        return [
+          axisFromWorld('x', '#ef4444', center, isoToScreen(origin.x + 2, origin.y, origin.z, rect), 30),
+          axisFromWorld('y', '#22c55e', center, isoToScreen(origin.x, origin.y + 2, origin.z, rect), 42),
+          axisFromWorld('z', '#3b82f6', center, isoToScreen(origin.x, origin.y, origin.z + 2, rect), 54)
+        ];
+      }
+      return [
+        axisFromWorld('x', '#ef4444', center, { x: center.x + 66, y: center.y }, 30),
+        axisFromWorld('y', '#22c55e', center, { x: center.x, y: center.y - 66 }, 42),
+        axisFromWorld('z', '#3b82f6', center, { x: center.x + 46, y: center.y - 46 }, 54)
+      ].filter(axis => state.tool === 'rotate' ? axis.name === 'z' : axis.name !== 'z');
+    }
+
+    function axisFromWorld(name, color, center, end, radius) {
+      const raw = { x: end.x - center.x, y: end.y - center.y };
+      const length = Math.max(1, Math.hypot(raw.x, raw.y));
+      const vector = { x: raw.x / length, y: raw.y / length };
+      return {
+        name,
+        color,
+        vector,
+        radius,
+        end: { x: center.x + vector.x * 66, y: center.y + vector.y * 66 },
+        scale: { x: center.x + vector.x * 82, y: center.y + vector.y * 82 }
+      };
+    }
+
+    function drawArrowHead(start, end, color) {
+      const angle = Math.atan2(end.y - start.y, end.x - start.x);
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(end.x, end.y);
+      ctx.lineTo(end.x - 12 * Math.cos(angle - .45), end.y - 12 * Math.sin(angle - .45));
+      ctx.lineTo(end.x - 12 * Math.cos(angle + .45), end.y - 12 * Math.sin(angle + .45));
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function entityFaces3d(item, rect) {
+      const color = TYPES[item.type]?.color || '#fff';
+      if (item.type === 'Ramp') return rampFaces3d(item, rect, color);
+      if (item.type === 'Stairs') return stairsFaces3d(item, rect, color);
+      return boxFaces3d(item, rect, color);
+    }
+
+    function drawBox3d(item, rect, color, selected) {
+      drawFaces(boxFaces3d(item, rect, color), selected ? '#fff' : hexToRgba(color, .86));
+    }
+
+    function boxFaces3d(item, rect, color) {
+      const p = item.transform.position;
+      const s = item.transform.scale;
       const x0 = p.x - s.x / 2;
       const x1 = p.x + s.x / 2;
       const y0 = p.y - s.y / 2;
       const y1 = p.y + s.y / 2;
       const z0 = p.z;
       const z1 = p.z + Math.max(.15, s.z);
-      const pts = {
-        a: isoToScreen(x0, y0, z0, rect),
-        b: isoToScreen(x1, y0, z0, rect),
-        c: isoToScreen(x1, y1, z0, rect),
-        d: isoToScreen(x0, y1, z0, rect),
-        e: isoToScreen(x0, y0, z1, rect),
-        f: isoToScreen(x1, y0, z1, rect),
-        g: isoToScreen(x1, y1, z1, rect),
-        h: isoToScreen(x0, y1, z1, rect)
+      const vertices = {
+        a: entityPoint3d(item, x0, y0, z0, rect),
+        b: entityPoint3d(item, x1, y0, z0, rect),
+        c: entityPoint3d(item, x1, y1, z0, rect),
+        d: entityPoint3d(item, x0, y1, z0, rect),
+        e: entityPoint3d(item, x0, y0, z1, rect),
+        f: entityPoint3d(item, x1, y0, z1, rect),
+        g: entityPoint3d(item, x1, y1, z1, rect),
+        h: entityPoint3d(item, x0, y1, z1, rect)
       };
-      ctx.save();
-      poly([pts.e, pts.f, pts.g, pts.h], hexToRgba(color, item.type.includes('Zone') ? .2 : .72), selected ? '#fff' : hexToRgba(color, .95));
-      poly([pts.b, pts.c, pts.g, pts.f], shade(color, -.18), selected ? '#fff' : hexToRgba(color, .8));
-      poly([pts.d, pts.c, pts.g, pts.h], shade(color, -.32), selected ? '#fff' : hexToRgba(color, .7));
-      ctx.fillStyle = '#edf2f7';
-      ctx.font = '12px sans-serif';
-      ctx.fillText(item.name, pts.h.x + 4, pts.h.y - 6);
-      ctx.restore();
+      const stroke = item.id === state.selectedId ? '#ff8a00' : shade(color, -.5);
+      return [
+        face([vertices.a, vertices.b, vertices.c, vertices.d], shade(color, -.42), stroke),
+        face([vertices.e, vertices.f, vertices.g, vertices.h], item.type.includes('Zone') ? hexToRgba(color, .28) : color, stroke),
+        face([vertices.a, vertices.b, vertices.f, vertices.e], shade(color, -.2), stroke),
+        face([vertices.b, vertices.c, vertices.g, vertices.f], shade(color, -.28), stroke),
+        face([vertices.c, vertices.d, vertices.h, vertices.g], shade(color, -.36), stroke),
+        face([vertices.d, vertices.a, vertices.e, vertices.h], shade(color, -.14), stroke)
+      ];
+    }
+
+    function drawRamp3d(item, rect, color, selected) {
+      drawFaces(rampFaces3d(item, rect, color), selected ? '#fff' : hexToRgba(color, .88));
+    }
+
+    function rampFaces3d(item, rect, color) {
+      const p = item.transform.position;
+      const s = item.transform.scale;
+      const x0 = p.x - s.x / 2;
+      const x1 = p.x + s.x / 2;
+      const y0 = p.y - s.y / 2;
+      const y1 = p.y + s.y / 2;
+      const z0 = p.z;
+      const z1 = p.z + Math.max(.15, s.z);
+      const vertices = {
+        a: entityPoint3d(item, x0, y0, z0, rect),
+        b: entityPoint3d(item, x1, y0, z0, rect),
+        c: entityPoint3d(item, x1, y1, z0, rect),
+        d: entityPoint3d(item, x0, y1, z0, rect),
+        e: entityPoint3d(item, x0, y1, z1, rect),
+        f: entityPoint3d(item, x1, y1, z1, rect)
+      };
+      const stroke = item.id === state.selectedId ? '#ff8a00' : shade(color, -.5);
+      return [
+        face([vertices.a, vertices.b, vertices.c, vertices.d], shade(color, -.42), stroke),
+        face([vertices.d, vertices.c, vertices.f, vertices.e], shade(color, -.28), stroke),
+        face([vertices.a, vertices.d, vertices.e], shade(color, -.18), stroke),
+        face([vertices.b, vertices.c, vertices.f], shade(color, -.34), stroke),
+        face([vertices.a, vertices.b, vertices.f, vertices.e], color, stroke)
+      ];
+    }
+
+    function drawStairs3d(item, rect, color, selected) {
+      drawFaces(stairsFaces3d(item, rect, color), selected ? '#fff' : hexToRgba(color, .86));
+    }
+
+    function stairsFaces3d(item, rect, color) {
+      const steps = 4;
+      const p = item.transform.position;
+      const s = item.transform.scale;
+      const faces = [];
+      for (let i = 0; i < steps; i += 1) {
+        const stepDepth = s.y / steps;
+        const stepHeight = s.z * (i + 1) / steps;
+        const localY = -s.y / 2 + stepDepth / 2 + i * stepDepth;
+        faces.push(...localBoxFaces3d(item, rect, color, {
+          center: { x: 0, y: localY, z: stepHeight / 2 },
+          scale: { x: s.x, y: stepDepth, z: stepHeight }
+        }));
+      }
+      return faces;
+    }
+
+    function localBoxFaces3d(item, rect, color, box) {
+      const cx = box.center.x;
+      const cy = box.center.y;
+      const cz = box.center.z;
+      const sx = box.scale.x;
+      const sy = box.scale.y;
+      const sz = box.scale.z;
+      const x0 = cx - sx / 2;
+      const x1 = cx + sx / 2;
+      const y0 = cy - sy / 2;
+      const y1 = cy + sy / 2;
+      const z0 = cz - sz / 2;
+      const z1 = cz + sz / 2;
+      const vertices = {
+        a: entityLocalPoint3d(item, x0, y0, z0, rect),
+        b: entityLocalPoint3d(item, x1, y0, z0, rect),
+        c: entityLocalPoint3d(item, x1, y1, z0, rect),
+        d: entityLocalPoint3d(item, x0, y1, z0, rect),
+        e: entityLocalPoint3d(item, x0, y0, z1, rect),
+        f: entityLocalPoint3d(item, x1, y0, z1, rect),
+        g: entityLocalPoint3d(item, x1, y1, z1, rect),
+        h: entityLocalPoint3d(item, x0, y1, z1, rect)
+      };
+      const stroke = item.id === state.selectedId ? '#ff8a00' : shade(color, -.5);
+      return [
+        face([vertices.a, vertices.b, vertices.c, vertices.d], shade(color, -.42), stroke),
+        face([vertices.e, vertices.f, vertices.g, vertices.h], color, stroke),
+        face([vertices.a, vertices.b, vertices.f, vertices.e], shade(color, -.2), stroke),
+        face([vertices.b, vertices.c, vertices.g, vertices.f], shade(color, -.28), stroke),
+        face([vertices.c, vertices.d, vertices.h, vertices.g], shade(color, -.36), stroke),
+        face([vertices.d, vertices.a, vertices.e, vertices.h], shade(color, -.14), stroke)
+      ];
+    }
+
+    function point3d(x, y, z, rect) {
+      const screen = isoToScreen(x, y, z, rect);
+      return { ...screen, depth: project3d(x, y, z).depth };
+    }
+
+    function entityPoint3d(entity, x, y, z, rect) {
+      const p = entity.transform.position;
+      const rotated = rotateEntityLocalPoint(entity, x - p.x, y - p.y, z - p.z);
+      return point3d(p.x + rotated.x, p.y + rotated.y, p.z + rotated.z, rect);
+    }
+
+    function entityLocalPoint3d(entity, x, y, z, rect) {
+      const p = entity.transform.position;
+      const rotated = rotateEntityLocalPoint(entity, x, y, z);
+      return point3d(p.x + rotated.x, p.y + rotated.y, p.z + rotated.z, rect);
+    }
+
+    function rotateEntityLocalPoint(entity, x, y, z) {
+      const rx = (entity.transform.rotation.x || 0) * Math.PI / 180;
+      const ry = (entity.transform.rotation.y || 0) * Math.PI / 180;
+      const rz = (entity.transform.rotation.z || 0) * Math.PI / 180;
+      let px = x;
+      let py = y * Math.cos(rx) - z * Math.sin(rx);
+      let pz = y * Math.sin(rx) + z * Math.cos(rx);
+      const x2 = px * Math.cos(ry) + pz * Math.sin(ry);
+      const z2 = -px * Math.sin(ry) + pz * Math.cos(ry);
+      px = x2;
+      pz = z2;
+      const x3 = px * Math.cos(rz) - py * Math.sin(rz);
+      const y3 = px * Math.sin(rz) + py * Math.cos(rz);
+      return { x: x3, y: y3, z: pz };
+    }
+
+    function face(points, fill, stroke) {
+      return {
+        points,
+        fill,
+        stroke,
+        depth: points.reduce((sum, point) => sum + point.depth, 0) / points.length
+      };
+    }
+
+    function drawFaces(faces, stroke = null) {
+      faces
+        .sort((a, b) => a.depth - b.depth)
+        .forEach(item => poly(item.points, item.fill, item.stroke || stroke || 'rgba(255,255,255,.45)'));
     }
 
     function onPointerDown(event) {
+      event.preventDefault();
       const rect = el.canvas.getBoundingClientRect();
       const point = eventPoint(event, rect);
+      trackPointer(event, point);
+      if (event.pointerType === 'touch' && activePointers.size >= 2) {
+        state.drag = null;
+        beginTouchGesture();
+        el.canvas.setPointerCapture?.(event.pointerId);
+        return;
+      }
+      const gizmo = hitGizmo(point, rect);
+      if (gizmo) {
+        const selected = getSelected();
+        pushHistory();
+        state.drag = {
+          mode: gizmo.mode,
+          axis: gizmo.axis,
+          start: point,
+          original: structuredClone(selected.transform),
+          center: gizmo.center,
+          vector: gizmo.vector,
+          startAngle: Math.atan2(point.y - gizmo.center.y, point.x - gizmo.center.x)
+        };
+        el.canvas.setPointerCapture?.(event.pointerId);
+        return;
+      }
       if (state.view === '3d' && event.shiftKey) {
         state.drag = {
           mode: 'rotate3d',
@@ -1220,16 +1866,35 @@
         const selected = getSelected();
         const box = state.view === '3d' ? isoScreenBox(selected, rect) : screenBox(selected, rect);
         const resize = Math.abs(point.x - (box.cx + box.w / 2)) < 14 && Math.abs(point.y - (box.cy + box.h / 2)) < 14;
-        state.drag = {
-          mode: state.view === '3d' ? 'move3d' : (resize ? 'resize' : 'move'),
-          start: point,
-          original: structuredClone(selected.transform),
-          startWorld3d: state.view === '3d' ? screenToIsoGround(point.x, point.y, rect, selected.transform.position.z) : null
-        };
+        const center = gizmoCenter(selected, rect);
+        if (state.tool === 'rotate') {
+          state.drag = {
+            mode: 'gizmo-rotate',
+            axis: defaultRotateAxis(),
+            start: point,
+            original: structuredClone(selected.transform),
+            center,
+            startAngle: Math.atan2(point.y - center.y, point.x - center.x)
+          };
+        } else if (state.tool === 'scale') {
+          state.drag = {
+            mode: 'gizmo-scale-uniform',
+            start: point,
+            original: structuredClone(selected.transform),
+            center
+          };
+        } else {
+          state.drag = {
+            mode: state.view === '3d' ? 'move3d' : (resize ? 'resize' : 'move'),
+            start: point,
+            original: structuredClone(selected.transform),
+            startWorld3d: state.view === '3d' ? screenToIsoGround(point.x, point.y, rect, selected.transform.position.z) : null
+          };
+        }
       } else {
         if (state.view === '3d') {
           state.drag = {
-            mode: event.shiftKey ? 'rotate3d' : 'pan3d',
+            mode: event.shiftKey || event.pointerType === 'touch' ? 'rotate3d' : 'pan3d',
             start: point,
             camera: { ...state.camera3d }
           };
@@ -1249,6 +1914,11 @@
     function onPointerMove(event) {
       const rect = el.canvas.getBoundingClientRect();
       const point = eventPoint(event, rect);
+      if (activePointers.has(event.pointerId)) trackPointer(event, point);
+      if (state.touchGesture) {
+        updateTouchGesture();
+        return;
+      }
       const world = state.view === '3d' ? screenToIsoGround(point.x, point.y, rect, 0) : screenToWorld(point.x, point.y, rect);
       el.coordLabel.textContent = `x: ${world.x.toFixed(2)}, y: ${world.y.toFixed(2)}`;
       if (!state.drag) return;
@@ -1265,14 +1935,54 @@
         return;
       }
       if (state.drag.mode === 'rotate3d') {
-        state.camera3d.yaw = state.drag.camera.yaw + (point.x - state.drag.start.x) * 0.01;
-        state.camera3d.pitch = state.drag.camera.pitch + (point.y - state.drag.start.y) * 0.01;
+        state.camera3d.yaw = state.drag.camera.yaw - (point.x - state.drag.start.x) * 0.01;
+        state.camera3d.pitch = state.drag.camera.pitch - (point.y - state.drag.start.y) * 0.01;
         updateCameraControls();
         render();
         return;
       }
       const selected = getSelected();
       if (!selected) return;
+      if (state.drag.mode === 'gizmo-scale') {
+        const unit = state.view === '3d' ? state.camera3d.zoom : px * state.camera2d.zoom;
+        const delta = projectedDrag(point, state.drag) / unit;
+        selected.transform.scale[state.drag.axis] = Math.max(.25, snap(state.drag.original.scale[state.drag.axis] + delta));
+        render();
+        renderInspector();
+        renderEntityList();
+        return;
+      }
+      if (state.drag.mode === 'gizmo-scale-uniform') {
+        const delta = (point.x - state.drag.start.x) - (point.y - state.drag.start.y);
+        const factor = Math.max(.1, 1 + delta / 140);
+        selected.transform.scale.x = Math.max(.25, snap(state.drag.original.scale.x * factor));
+        selected.transform.scale.y = Math.max(.25, snap(state.drag.original.scale.y * factor));
+        if (state.view === '3d') {
+          selected.transform.scale.z = Math.max(.25, snap(state.drag.original.scale.z * factor));
+        }
+        render();
+        renderInspector();
+        renderEntityList();
+        return;
+      }
+      if (state.drag.mode === 'gizmo-rotate') {
+        const angle = Math.atan2(point.y - state.drag.center.y, point.x - state.drag.center.x);
+        const delta = (angle - state.drag.startAngle) * 180 / Math.PI;
+        selected.transform.rotation[state.drag.axis] = snapAngle((state.drag.original.rotation[state.drag.axis] || 0) + delta);
+        render();
+        renderInspector();
+        renderEntityList();
+        return;
+      }
+      if (state.drag.mode === 'gizmo-move') {
+        const unit = state.view === '3d' ? state.camera3d.zoom : px * state.camera2d.zoom;
+        const delta = projectedDrag(point, state.drag) / unit;
+        selected.transform.position[state.drag.axis] = snap(state.drag.original.position[state.drag.axis] + delta);
+        render();
+        renderInspector();
+        renderEntityList();
+        return;
+      }
       const scale2d = px * state.camera2d.zoom;
       if (state.drag.mode === 'move3d') {
         const current = screenToIsoGround(point.x, point.y, rect, selected.transform.position.z);
@@ -1303,7 +2013,9 @@
       renderEntityList();
     }
 
-    function onPointerUp() {
+    function onPointerUp(event) {
+      if (event?.pointerId !== undefined) activePointers.delete(event.pointerId);
+      if (activePointers.size < 2) state.touchGesture = null;
       if (state.drag) {
         state.drag = null;
         state.guides3d = [];
@@ -1311,15 +2023,74 @@
       }
     }
 
+    function trackPointer(event, point) {
+      activePointers.set(event.pointerId, {
+        id: event.pointerId,
+        type: event.pointerType,
+        x: point.x,
+        y: point.y
+      });
+    }
+
+    function beginTouchGesture() {
+      const points = [...activePointers.values()].slice(0, 2);
+      const center = midpoint(points[0], points[1]);
+      state.touchGesture = {
+        view: state.view,
+        center,
+        distance: distance(points[0], points[1]),
+        camera2d: { ...state.camera2d },
+        camera3d: { ...state.camera3d }
+      };
+    }
+
+    function updateTouchGesture() {
+      const points = [...activePointers.values()].slice(0, 2);
+      if (points.length < 2) return;
+      const center = midpoint(points[0], points[1]);
+      const nextDistance = Math.max(20, distance(points[0], points[1]));
+      const factor = nextDistance / Math.max(20, state.touchGesture.distance);
+      const dx = center.x - state.touchGesture.center.x;
+      const dy = center.y - state.touchGesture.center.y;
+      if (state.touchGesture.view === '3d') {
+        state.camera3d.zoom = Math.max(14, Math.min(64, state.touchGesture.camera3d.zoom * factor));
+        state.camera3d.panX = state.touchGesture.camera3d.panX + dx;
+        state.camera3d.panY = state.touchGesture.camera3d.panY + dy;
+        updateCameraControls();
+      } else {
+        state.camera2d.zoom = Math.max(.35, Math.min(3, state.touchGesture.camera2d.zoom * factor));
+        state.camera2d.panX = state.touchGesture.camera2d.panX + dx;
+        state.camera2d.panY = state.touchGesture.camera2d.panY + dy;
+      }
+      render();
+    }
+
+    function midpoint(a, b) {
+      return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+    }
+
     function hitTest(point, rect) {
       for (let i = state.doc.entities.length - 1; i >= 0; i--) {
         const item = state.doc.entities[i];
         const box = state.view === '3d' ? isoScreenBox(item, rect) : screenBox(item, rect);
+        if (state.view === '2d' && !pointInRotatedBox(point, item, rect)) {
+          continue;
+        }
         if (point.x >= box.cx - box.w / 2 && point.x <= box.cx + box.w / 2 && point.y >= box.cy - box.h / 2 && point.y <= box.cy + box.h / 2) {
           return item;
         }
       }
       return null;
+    }
+
+    function pointInRotatedBox(point, item, rect) {
+      const box = screenBox(item, rect);
+      const angle = -(item.transform.rotation.z || 0) * Math.PI / 180;
+      const dx = point.x - box.cx;
+      const dy = point.y - box.cy;
+      const localX = dx * Math.cos(angle) - dy * Math.sin(angle);
+      const localY = dx * Math.sin(angle) + dy * Math.cos(angle);
+      return Math.abs(localX) <= box.w / 2 && Math.abs(localY) <= box.h / 2;
     }
 
     function onWheel(event) {
@@ -1345,6 +2116,51 @@
 
     function zoom3d(factor) {
       state.camera3d.zoom = Math.max(14, Math.min(64, state.camera3d.zoom * factor));
+      render();
+    }
+
+    function zoom2d(factor) {
+      state.camera2d.zoom = Math.max(.35, Math.min(3, state.camera2d.zoom * factor));
+      render();
+    }
+
+    function panActiveCamera(key) {
+      const amount = 44;
+      const dx = key === 'a' ? amount : key === 'd' ? -amount : 0;
+      const dy = key === 'w' ? amount : key === 's' ? -amount : 0;
+      if (state.view === '3d') {
+        state.camera3d.panX += dx;
+        state.camera3d.panY += dy;
+      } else {
+        state.camera2d.panX += dx;
+        state.camera2d.panY += dy;
+      }
+      render();
+    }
+
+    function resetActiveCamera() {
+      if (state.view === '3d') {
+        reset3dView();
+      } else {
+        state.camera2d = { zoom: 1, panX: 0, panY: 0 };
+        render();
+      }
+    }
+
+    function frameSelected() {
+      const selected = getSelected();
+      if (!selected) return;
+      const rect = el.canvas.getBoundingClientRect();
+      const box = state.view === '3d' ? isoScreenBox(selected, rect) : screenBox(selected, rect);
+      const dx = rect.width / 2 - box.cx;
+      const dy = rect.height / 2 - box.cy;
+      if (state.view === '3d') {
+        state.camera3d.panX += dx;
+        state.camera3d.panY += dy;
+      } else {
+        state.camera2d.panX += dx;
+        state.camera2d.panY += dy;
+      }
       render();
     }
 
@@ -1615,6 +2431,31 @@
       showToast('Z 已归零');
     }
 
+    function rotateSelected(degrees) {
+      const selected = getSelected();
+      if (!selected) return;
+      pushHistory();
+      const axis = state.view === '3d' ? 'y' : 'z';
+      selected.transform.rotation[axis] = snapAngle((selected.transform.rotation[axis] || 0) + degrees);
+      updateAll();
+    }
+
+    function rotateSelectedAxis(axis, degrees) {
+      const selected = getSelected();
+      if (!selected) return;
+      pushHistory();
+      selected.transform.rotation[axis] = snapAngle((selected.transform.rotation[axis] || 0) + degrees);
+      updateAll();
+    }
+
+    function defaultRotateAxis() {
+      return 'z';
+    }
+
+    function snapAngle(value) {
+      return Math.round(value / 5) * 5;
+    }
+
     function findFloorTopZ(entity) {
       const bounds = entityBounds2d(entity);
       const floors = state.doc.entities
@@ -1672,10 +2513,24 @@
       const y2 = -sx * sinR + sy * cosR;
       const safeCosP = Math.abs(cosP) < 0.05 ? (cosP < 0 ? -0.05 : 0.05) : cosP;
       const y1 = (y2 + z * sinP) / safeCosP;
-      return {
+      let guess = {
         x: x2 * cosY + y1 * sinY,
         y: -x2 * sinY + y1 * cosY
       };
+      for (let i = 0; i < 6; i += 1) {
+        const current = isoToScreen(guess.x, guess.y, z, rect);
+        const error = { x: screenX - current.x, y: screenY - current.y };
+        if (Math.hypot(error.x, error.y) < .25) break;
+        const px = isoToScreen(guess.x + .1, guess.y, z, rect);
+        const py = isoToScreen(guess.x, guess.y + .1, z, rect);
+        const ax = { x: (px.x - current.x) / .1, y: (px.y - current.y) / .1 };
+        const ay = { x: (py.x - current.x) / .1, y: (py.y - current.y) / .1 };
+        const det = ax.x * ay.y - ay.x * ax.y;
+        if (Math.abs(det) < .001) break;
+        guess.x += (error.x * ay.y - ay.x * error.y) / det;
+        guess.y += (ax.x * error.y - error.x * ax.y) / det;
+      }
+      return guess;
     }
 
     function depth3d(item) {
@@ -1708,14 +2563,14 @@
       const p = item.transform.position;
       const s = item.transform.scale;
       const points = [
-        isoToScreen(p.x - s.x / 2, p.y - s.y / 2, p.z, rect),
-        isoToScreen(p.x + s.x / 2, p.y - s.y / 2, p.z, rect),
-        isoToScreen(p.x + s.x / 2, p.y + s.y / 2, p.z, rect),
-        isoToScreen(p.x - s.x / 2, p.y + s.y / 2, p.z, rect),
-        isoToScreen(p.x - s.x / 2, p.y - s.y / 2, p.z + Math.max(.15, s.z), rect),
-        isoToScreen(p.x + s.x / 2, p.y - s.y / 2, p.z + Math.max(.15, s.z), rect),
-        isoToScreen(p.x + s.x / 2, p.y + s.y / 2, p.z + Math.max(.15, s.z), rect),
-        isoToScreen(p.x - s.x / 2, p.y + s.y / 2, p.z + Math.max(.15, s.z), rect)
+        entityPoint3d(item, p.x - s.x / 2, p.y - s.y / 2, p.z, rect),
+        entityPoint3d(item, p.x + s.x / 2, p.y - s.y / 2, p.z, rect),
+        entityPoint3d(item, p.x + s.x / 2, p.y + s.y / 2, p.z, rect),
+        entityPoint3d(item, p.x - s.x / 2, p.y + s.y / 2, p.z, rect),
+        entityPoint3d(item, p.x - s.x / 2, p.y - s.y / 2, p.z + Math.max(.15, s.z), rect),
+        entityPoint3d(item, p.x + s.x / 2, p.y - s.y / 2, p.z + Math.max(.15, s.z), rect),
+        entityPoint3d(item, p.x + s.x / 2, p.y + s.y / 2, p.z + Math.max(.15, s.z), rect),
+        entityPoint3d(item, p.x - s.x / 2, p.y + s.y / 2, p.z + Math.max(.15, s.z), rect)
       ];
       if (['PlayerSpawn', 'EnemySpawn', 'ItemSpawn', 'Checkpoint'].includes(item.type)) {
         const center = isoToScreen(p.x, p.y, p.z + s.z, rect);
@@ -1838,6 +2693,23 @@
 
     function eventPoint(event, rect) {
       return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    }
+
+    function distance(a, b) {
+      return Math.hypot(a.x - b.x, a.y - b.y);
+    }
+
+    function projectedDrag(point, drag) {
+      return (point.x - drag.start.x) * drag.vector.x + (point.y - drag.start.y) * drag.vector.y;
+    }
+
+    function distanceToSegment(point, a, b) {
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const lengthSq = dx * dx + dy * dy;
+      if (!lengthSq) return distance(point, a);
+      const t = Math.max(0, Math.min(1, ((point.x - a.x) * dx + (point.y - a.y) * dy) / lengthSq));
+      return distance(point, { x: a.x + t * dx, y: a.y + t * dy });
     }
 
     function snap(value) {
