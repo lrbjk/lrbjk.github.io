@@ -6,19 +6,19 @@
   <title>Level Whitebox Builder | lirb</title>
   <style>
     :root {
-      --bg: #0e1116;
-      --panel: #171b22;
-      --panel-2: #202632;
-      --line: #303846;
-      --text: #edf2f7;
-      --muted: #9ba7b6;
+      --bg: #f4f6f1;
+      --panel: #ffffff;
+      --panel-2: #f8faf7;
+      --line: #dde5dc;
+      --text: #26342f;
+      --muted: #6f7d76;
       --accent: #39c6a6;
       --blue: #6ba8ff;
       --yellow: #f0bd55;
       --red: #ef7474;
       --purple: #b899ff;
-      --canvas: #11161e;
-      --grid: #2a3341;
+      --canvas: #fbfcf8;
+      --grid: #e4ebe2;
     }
 
     * { box-sizing: border-box; }
@@ -67,7 +67,7 @@
       min-height: 58px;
       padding: 8px 16px;
       border-bottom: 1px solid var(--line);
-      background: rgba(14, 17, 22, .94);
+      background: rgba(255, 255, 255, .94);
       flex-wrap: wrap;
     }
 
@@ -169,7 +169,7 @@
       display: flex;
       padding: 3px;
       gap: 3px;
-      background: #10151d;
+      background: #eef4ef;
       border: 1px solid var(--line);
       border-radius: 8px;
     }
@@ -198,7 +198,7 @@
     .inspector {
       min-height: 0;
       overflow: auto;
-      background: rgba(23, 27, 34, .95);
+      background: rgba(255, 255, 255, .96);
     }
 
     .sidebar {
@@ -208,6 +208,37 @@
     .inspector {
       border-left: 1px solid var(--line);
     }
+
+    .dock-tabs {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      padding: 8px;
+      background: rgba(255,255,255,.96);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .dock-tab {
+      min-height: 34px;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid transparent;
+      font-size: 13px;
+    }
+
+    .dock-tab.active {
+      color: #0f8f76;
+      background: rgba(57, 198, 166, .12);
+      border-color: rgba(57, 198, 166, .38);
+      font-weight: 700;
+    }
+
+    .dock-panel { display: none; }
+    .dock-panel.active { display: block; }
 
     .panel-section {
       padding: 14px;
@@ -239,10 +270,21 @@
       grid-template-columns: 1fr 1fr;
     }
 
+    .prototype-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .prototype-grid .text-btn {
+      min-height: 38px;
+      justify-content: center;
+    }
+
     .library-btn {
       min-height: 48px;
       border-radius: 8px;
-      background: #111721;
+      background: #ffffff;
       border: 1px solid var(--line);
       color: var(--text);
       display: flex;
@@ -252,9 +294,16 @@
       text-align: left;
     }
 
+
+    .library-btn.active {
+      border-color: rgba(24, 184, 148, .75);
+      background: rgba(57, 198, 166, .12);
+      box-shadow: inset 3px 0 0 #18b894;
+    }
+
     .library-btn:hover {
       border-color: rgba(107, 168, 255, .5);
-      background: #151d29;
+      background: #f5faf7;
     }
 
     .swatch {
@@ -290,14 +339,22 @@
       justify-content: space-between;
       gap: 12px;
       padding: 0 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      border-bottom: 1px solid var(--line);
       color: var(--muted);
       font-size: 12px;
     }
 
     .stage-foot {
-      border-top: 1px solid rgba(255, 255, 255, .08);
+      border-top: 1px solid var(--line);
       border-bottom: 0;
+      flex-wrap: wrap;
+      align-content: center;
+    }
+
+    #brushLabel {
+      color: #174d42;
+      font-weight: 700;
+      min-width: max-content;
     }
 
     .stage-wrap {
@@ -317,17 +374,17 @@
       gap: 2px;
       padding: 3px;
       border: 1px solid #080a0d;
-      background: rgba(18, 19, 21, .92);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, .28);
+      background: rgba(255, 255, 255, .94);
+      box-shadow: 0 10px 24px rgba(72, 90, 78, .18);
     }
 
     .scene-tool {
       width: 31px;
       height: 31px;
       border-radius: 0;
-      border: 1px solid #2d3034;
-      background: #30343a;
-      color: #d8dee9;
+      border: 1px solid #d9e3dc;
+      background: #ffffff;
+      color: #64736c;
       font-size: 16px;
       line-height: 1;
       display: grid;
@@ -337,8 +394,8 @@
 
     .scene-tool.active {
       color: #ffffff;
-      background: #486b91;
-      border-color: #7aa6d9;
+      background: #18b894;
+      border-color: #18b894;
     }
 
     #stage {
@@ -346,7 +403,7 @@
       height: 100%;
       display: block;
       cursor: default;
-      background: #3f4142;
+      background: var(--canvas);
       touch-action: none;
       user-select: none;
     }
@@ -358,8 +415,8 @@
       max-width: 640px;
       padding: 9px 11px;
       border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, .08);
-      background: rgba(14, 17, 22, .78);
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .86);
       color: var(--muted);
       font-size: 12px;
       pointer-events: none;
@@ -373,7 +430,7 @@
     }
 
     .shortcut-panel b {
-      color: #edf2f7;
+      color: #26342f;
       font-weight: 700;
     }
 
@@ -393,7 +450,7 @@
     .field textarea {
       width: 100%;
       color: var(--text);
-      background: #111721;
+      background: #ffffff;
       border: 1px solid var(--line);
       border-radius: 7px;
       padding: 8px 9px;
@@ -428,7 +485,7 @@
       justify-content: space-between;
       gap: 8px;
       padding: 7px 9px;
-      background: #111721;
+      background: #ffffff;
       border: 1px solid var(--line);
       text-align: left;
     }
@@ -458,7 +515,7 @@
       margin: 0;
       padding: 16px;
       color: var(--muted);
-      background: #111721;
+      background: #ffffff;
       border: 1px dashed var(--line);
       border-radius: 8px;
       font-size: 12px;
@@ -481,7 +538,7 @@
       right: 18px;
       bottom: 18px;
       padding: 10px 12px;
-      background: #0b0f14;
+      background: #ffffff;
       border: 1px solid rgba(57, 198, 166, .45);
       border-radius: 8px;
       color: var(--text);
@@ -560,7 +617,7 @@
         <div class="brand-mark">LW</div>
         <div>
           <h1>Level Whitebox Builder</h1>
-          <p>快速搭建关卡草图、玩法点位和导出文档</p>
+          <p>快速搭建关卡草图、玩法点位和导出文档。</p>
         </div>
       </div>
 
@@ -575,30 +632,30 @@
           <button class="seg-btn" data-tool="scale" title="R Scale / 缩放">Scale 缩放</button>
         </div>
         <div class="toolbar-group" id="view3dTools">
-          <select id="viewPreset3d" class="toolbar-select" title="3D 视角预设">
+          <select id="viewPreset3d" class="toolbar-select" title="3D view preset">
             <option value="iso">Iso</option>
             <option value="front">Front</option>
             <option value="back">Back</option>
             <option value="left">Left</option>
             <option value="right">Right</option>
           </select>
-          <input id="yawSlider3d" class="toolbar-range" type="range" min="0" max="360" step="1" value="45" title="360° 水平观察角度">
+          <input id="yawSlider3d" class="toolbar-range" type="range" min="0" max="360" step="1" value="45" title="Yaw">
           <span id="yawReadout3d" class="angle-readout">45°</span>
-          <input id="pitchSlider3d" class="toolbar-range" type="range" min="0" max="360" step="1" value="55" title="Pitch 俯仰角">
+          <input id="pitchSlider3d" class="toolbar-range" type="range" min="0" max="360" step="1" value="55" title="Pitch">
           <span id="pitchReadout3d" class="angle-readout">55°</span>
-          <input id="rollSlider3d" class="toolbar-range" type="range" min="0" max="360" step="1" value="0" title="Roll 翻滚角">
+          <input id="rollSlider3d" class="toolbar-range" type="range" min="0" max="360" step="1" value="0" title="Roll">
           <span id="rollReadout3d" class="angle-readout">0°</span>
-          <button class="icon-btn" id="rotateLeftBtn" title="3D 视角左转">↺</button>
-          <button class="icon-btn" id="rotateRightBtn" title="3D 视角右转">↻</button>
-          <button class="icon-btn" id="zoomInBtn" title="3D 视角放大">＋</button>
-          <button class="icon-btn" id="zoomOutBtn" title="3D 视角缩小">－</button>
-          <button class="icon-btn" id="resetViewBtn" title="重置 3D 视角">⌂</button>
+          <button class="icon-btn" id="rotateLeftBtn" title="Rotate view left">↶</button>
+          <button class="icon-btn" id="rotateRightBtn" title="Rotate view right">↷</button>
+          <button class="icon-btn" id="zoomInBtn" title="Zoom in">+</button>
+          <button class="icon-btn" id="zoomOutBtn" title="Zoom out">-</button>
+          <button class="icon-btn" id="resetViewBtn" title="Reset view">⌂</button>
         </div>
         <div class="toolbar-group">
-          <button class="icon-btn" id="undoBtn" title="撤销">↶</button>
-          <button class="icon-btn" id="redoBtn" title="重做">↷</button>
-          <button class="icon-btn" id="duplicateBtn" title="复制选中对象">⧉</button>
-          <button class="icon-btn danger" id="deleteBtn" title="删除选中对象">⌫</button>
+          <button class="icon-btn" id="undoBtn" title="Undo">↶</button>
+          <button class="icon-btn" id="redoBtn" title="Redo">↷</button>
+          <button class="icon-btn" id="duplicateBtn" title="Duplicate selected">⧉</button>
+          <button class="icon-btn danger" id="deleteBtn" title="Delete selected">⌫</button>
         </div>
         <div class="toolbar-group">
           <button class="text-btn" id="exportPngBtn">导出 PNG</button>
@@ -643,6 +700,16 @@
         </div>
 
         <div class="panel-section">
+          <h2 class="section-title">Quick Prototype</h2>
+          <div class="prototype-grid">
+            <button class="text-btn primary" data-prototype="side-beats" type="button">2D 节奏关卡</button>
+            <button class="text-btn" data-prototype="combat-room" type="button">3D 战斗房间</button>
+            <button class="text-btn" data-prototype="chase-run" type="button">追逐走廊</button>
+            <button class="text-btn" data-prototype="topdown-loop" type="button">俯视探索环路</button>
+          </div>
+        </div>
+
+        <div class="panel-section">
           <h2 class="section-title">Geometry</h2>
           <div class="object-grid" id="geometryLibrary"></div>
         </div>
@@ -675,70 +742,89 @@
             <div class="shortcut-panel">
               <span><b>1 / 2</b> 2D / 3D</span>
               <span><b>W / E / R</b> 移动 / 旋转 / 缩放</span>
+              <span><b>左侧对象库</b> 选择构件</span>
+              <span><b>画布点击/拖拽</b> 放置或拉出尺寸</span>
               <span><b>拖拽组件</b> 当前工具编辑</span>
               <span><b>拖拽手柄</b> 单轴编辑</span>
               <span><b>Shift + 拖拽</b> 3D 视角环绕</span>
               <span><b>Alt / 右键拖拽</b> 平移视角</span>
               <span><b>滚轮 / +/-</b> 缩放视角</span>
-              <span><b>A / S / D</b> 平移视角</span>
               <span><b>F</b> 聚焦选中</span>
-              <span><b>X / Y / Z</b> 旋转选中轴</span>
-              <span><b>Shift + X/Y/Z</b> 反向旋转</span>
-              <span><b>[ / ]</b> 快速旋转</span>
               <span><b>Ctrl + Z / Y</b> 撤销 / 重做</span>
-              <span><b>Ctrl + D</b> 复制</span>
               <span><b>Delete</b> 删除</span>
-              <span><b>Ctrl + S</b> 保存本地</span>
-              <span><b>Ctrl + R</b> 重置视角</span>
             </div>
           </div>
-        </div>
-        <div class="stage-foot">
+        </div>        <div class="stage-foot">
           <span id="coordLabel">x: 0, y: 0</span>
-          <span>Iso 3D · Shift drag orbit · Alt/right drag pan · W/E/R tools</span>
+          <span id="brushLabel">当前：编辑模式</span><span>Iso 3D · Shift drag orbit · Alt/right drag pan · W/E/R tools</span>
         </div>
       </section>
 
       <aside class="inspector">
-        <div class="panel-section">
-          <h2 class="section-title">Level Settings</h2>
-          <div class="field">
-            <label for="levelName">Name</label>
-            <input id="levelName" value="Level_Whitebox">
+        <div class="dock-tabs" aria-label="right panel tabs">
+          <button class="dock-tab active" data-dock-tab="settings">设置</button>
+          <button class="dock-tab" data-dock-tab="layers">图层</button>
+          <button class="dock-tab" data-dock-tab="ai">AI</button>
+        </div>
+
+        <div class="dock-panel active" data-dock-panel="settings">
+          <div class="panel-section">
+            <h2 class="section-title">Level Settings</h2>
+            <div class="field">
+              <label for="levelName">Name</label>
+              <input id="levelName" value="Level_Whitebox">
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="gridSize">Grid Size</label>
+                <input id="gridSize" type="number" min="0.25" step="0.25" value="1">
+              </div>
+              <div class="field">
+                <label for="unit">Unit</label>
+                <select id="unit">
+                  <option value="meter">meter</option>
+                  <option value="tile">tile</option>
+                </select>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="jumpDistance">Jump Distance</label>
+                <input id="jumpDistance" type="number" min="0" step="0.5" value="5">
+              </div>
+              <div class="field">
+                <label for="dashDistance">Dash Distance</label>
+                <input id="dashDistance" type="number" min="0" step="0.5" value="4">
+              </div>
+            </div>
           </div>
-          <div class="field-row">
-            <div class="field">
-              <label for="gridSize">Grid Size</label>
-              <input id="gridSize" type="number" min="0.25" step="0.25" value="1">
-            </div>
-            <div class="field">
-              <label for="unit">Unit</label>
-              <select id="unit">
-                <option value="meter">meter</option>
-                <option value="tile">tile</option>
-              </select>
-            </div>
-          </div>
-          <div class="field-row">
-            <div class="field">
-              <label for="jumpDistance">Jump Distance</label>
-              <input id="jumpDistance" type="number" min="0" step="0.5" value="5">
-            </div>
-            <div class="field">
-              <label for="dashDistance">Dash Distance</label>
-              <input id="dashDistance" type="number" min="0" step="0.5" value="4">
-            </div>
+
+          <div class="panel-section">
+            <h2 class="section-title">Inspector</h2>
+            <div id="inspectorContent"></div>
           </div>
         </div>
 
-        <div class="panel-section">
-          <h2 class="section-title">Inspector</h2>
-          <div id="inspectorContent"></div>
+        <div class="dock-panel" data-dock-panel="layers">
+          <div class="panel-section">
+            <h2 class="section-title">Objects <span id="objectCount">0</span></h2>
+            <div class="entity-list" id="entityList"></div>
+          </div>
         </div>
 
-        <div class="panel-section">
-          <h2 class="section-title">Objects <span id="objectCount">0</span></h2>
-          <div class="entity-list" id="entityList"></div>
+        <div class="dock-panel" data-dock-panel="ai">
+          <div class="panel-section">
+            <h2 class="section-title">AI Layout Assistant</h2>
+            <div class="field">
+              <label for="aiPrompt">Prompt</label>
+              <textarea id="aiPrompt" placeholder="例如：生成一个带教学区、战斗区和奖励房间的 2D 关卡草图"></textarea>
+            </div>
+            <div class="field-row">
+              <button class="text-btn primary" id="generateSketchBtn" type="button">生成草图</button>
+              <button class="text-btn" id="optimizeLayoutBtn" type="button">整理布局</button>
+            </div>
+            <p class="empty">先用规则化模板快速生成可编辑草图：输入横板、3D 战斗、追逐、俯视探索等关键词。</p>
+          </div>
         </div>
       </aside>
     </section>
@@ -778,6 +864,7 @@
       dashDistance: document.getElementById('dashDistance'),
       statsLabel: document.getElementById('statsLabel'),
       coordLabel: document.getElementById('coordLabel'),
+      brushLabel: document.getElementById('brushLabel'),
       inspectorContent: document.getElementById('inspectorContent'),
       entityList: document.getElementById('entityList'),
       objectCount: document.getElementById('objectCount'),
@@ -792,6 +879,7 @@
       view: '2d',
       tool: 'move',
       selectedId: null,
+      placeType: null,
       drag: null,
       camera2d: { zoom: 1, panX: 0, panY: 0 },
       camera3d: { yaw: Math.PI / 4, pitch: 55 * Math.PI / 180, roll: 0, zoom: 28, panX: 0, panY: 0 },
@@ -801,6 +889,28 @@
       future: [],
       doc: createDocument('Level_Whitebox', '2D')
     };
+
+    function clone(value) {
+      if (typeof structuredClone === 'function') return structuredClone(value);
+      return JSON.parse(JSON.stringify(value));
+    }
+
+    function readLocalDoc() {
+      try {
+        return window.localStorage?.getItem('level-whitebox-doc') || null;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function writeLocalDoc(value) {
+      try {
+        window.localStorage?.setItem('level-whitebox-doc', value);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
 
     function createDocument(name, mode) {
       return {
@@ -826,7 +936,7 @@
     function bootstrap() {
       buildLibrary();
       bindEvents();
-      const saved = localStorage.getItem('level-whitebox-doc');
+      const saved = readLocalDoc();
       if (saved) {
         try {
           state.doc = normalizeDocument(JSON.parse(saved));
@@ -870,6 +980,9 @@
       document.querySelectorAll('[data-tool]').forEach(button => {
         button.addEventListener('click', () => setTool(button.dataset.tool));
       });
+      document.querySelectorAll('[data-dock-tab]').forEach(button => {
+        button.addEventListener('click', () => setDockTab(button.dataset.dockTab));
+      });
       document.querySelectorAll('[data-template]').forEach(button => {
         button.addEventListener('click', () => {
           pushHistory();
@@ -877,9 +990,17 @@
           updateAll();
         });
       });
+      document.querySelectorAll('[data-prototype]').forEach(button => {
+        button.addEventListener('click', () => applyPrototype(button.dataset.prototype));
+      });
+      document.getElementById('generateSketchBtn')?.addEventListener('click', generateSketchFromPrompt);
+      document.getElementById('optimizeLayoutBtn')?.addEventListener('click', tidyPrototypeLayout);
       document.body.addEventListener('click', event => {
         const addButton = event.target.closest('[data-add-type]');
-        if (addButton) addEntity(addButton.dataset.addType);
+        if (addButton) {
+          setPlaceType(addButton.dataset.addType);
+          showToast('已选择 ' + TYPES[state.placeType].label + '：在画布中点击放置，拖拽可拉出尺寸');
+        }
       });
       el.canvas.addEventListener('pointerdown', onPointerDown);
       el.canvas.addEventListener('pointermove', onPointerMove);
@@ -935,6 +1056,14 @@
       if (!ctrl && key === 'r') {
         event.preventDefault();
         setTool('scale');
+        return;
+      }
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        state.placeType = null;
+        state.drag = null;
+        updateAll();
+        showToast('已退出放置模式');
         return;
       }
       if (event.key === 'Delete' || event.key === 'Backspace') {
@@ -1013,12 +1142,67 @@
       }
     }
 
-    function setTool(tool) {
+    function setTool(tool, keepPlacement = false) {
       state.tool = tool;
+      if (!keepPlacement) state.placeType = null;
       document.querySelectorAll('[data-tool]').forEach(button => button.classList.toggle('active', button.dataset.tool === tool));
+      updatePlacementButtons();
+      updateBrushLabel();
       render();
     }
 
+    function setPlaceType(type) {
+      state.placeType = type;
+      state.tool = 'move';
+      document.querySelectorAll('[data-tool]').forEach(button => button.classList.toggle('active', button.dataset.tool === 'move'));
+      updatePlacementButtons();
+      updateBrushLabel();
+      render();
+    }
+
+    function setDockTab(tab) {
+      document.querySelectorAll('[data-dock-tab]').forEach(button => button.classList.toggle('active', button.dataset.dockTab === tab));
+      document.querySelectorAll('[data-dock-panel]').forEach(panel => panel.classList.toggle('active', panel.dataset.dockPanel === tab));
+    }
+
+    function updatePlacementButtons() {
+      document.querySelectorAll('[data-add-type]').forEach(button => button.classList.toggle('active', button.dataset.addType === state.placeType));
+    }
+
+    function updateBrushLabel() {
+      if (!el.brushLabel) return;
+      if (state.placeType) {
+        const type = TYPES[state.placeType];
+        el.brushLabel.textContent = `当前：放置 ${type.label} / ${type.zh}`;
+      } else {
+        const toolText = state.tool === 'move' ? '移动' : state.tool === 'rotate' ? '旋转' : '缩放';
+        el.brushLabel.textContent = `当前：编辑模式 · ${toolText}`;
+      }
+    }
+
+    function entity(type, x, y, z, w, h, d, name, note = '') {
+      return {
+        id: id(type.toLowerCase()),
+        name,
+        type,
+        transform: {
+          position: { x, y, z },
+          rotation: { x: 0, y: 0, z: 0 },
+          scale: { x: w, y: h, z: d }
+        },
+        properties: defaultProperties(type),
+        note
+      };
+    }
+
+    function defaultProperties(type) {
+      const base = { tag: '', collision: ['Block', 'Platform', 'Wall', 'Ramp', 'Stairs'].includes(type) };
+      if (type.includes('Zone')) return { ...base, purpose: type.replace('Zone', ''), triggerType: type === 'TriggerZone' ? 'OnEnter' : '' };
+      if (type === 'EnemySpawn') return { ...base, enemyType: 'Melee', count: 1, difficulty: 1 };
+      if (type === 'ItemSpawn') return { ...base, itemType: 'Resource' };
+      if (type === 'Path') return { ...base, purpose: 'Route' };
+      return base;
+    }
     function loadTemplate(template) {
       const templates = {
         side: {
@@ -1028,7 +1212,7 @@
             entity('Platform', -8, 4, 0, 8, 1, 1, 'Start Platform', '玩家出生点附近的平台'),
             entity('Platform', 3, 1, 0, 6, 1, 1, 'Jump Platform', '第一次跳跃测试区域'),
             entity('PlayerSpawn', -10, 2.6, 0, 1.2, 1.2, 1.8, 'PlayerSpawn_01', ''),
-            entity('EnemySpawn', 4, -0.5, 0, 1.2, 1.2, 1.8, 'EnemySpawn_01', '落地后第一次遇敌'),
+            entity('EnemySpawn', 4, -0.5, 0, 1.2, 1.2, 1.8, 'EnemySpawn_01', '落地后的第一次遇敌'),
             entity('TriggerZone', 0, -1, 0, 4, 3, 1, 'Trigger_Tutorial', '进入后显示跳跃教学'),
             entity('CameraZone', -2, 1, 0, 18, 8, 1, 'Camera_Main', '横板镜头边界')
           ]
@@ -1049,82 +1233,218 @@
           name: 'Dungeon_Room_Whitebox',
           mode: '3D',
           entities: [
-            entity('Block', 0, 0, 0, 10, 8, .4, 'Floor', '主房间地面'),
-            entity('Wall', -5.5, 0, .4, .5, 8, 3.6, 'Left Wall', ''),
-            entity('Wall', 5.5, 0, .4, .5, 8, 3.6, 'Right Wall', ''),
-            entity('Wall', 0, -4.2, .4, 10, .5, 3.6, 'Back Wall', ''),
-            entity('PlayerSpawn', -3, 2, .4, 1.2, 1.2, 1.8, 'PlayerSpawn_01', ''),
+            entity('Block', 0, 0, 0, 10, 8, .35, 'Floor', '主房间地板'),
+            entity('Wall', -5.2, 0, .35, .4, 8, 3, 'Left Wall', ''),
+            entity('Wall', 5.2, 0, .35, .4, 8, 3, 'Right Wall', ''),
+            entity('Wall', 0, 4.2, .35, 10, .4, 3, 'Back Wall', ''),
+            entity('PlayerSpawn', -3, -2, .35, 1, 1, 1.8, 'PlayerSpawn_01', ''),
             entity('CombatZone', 1, 0, .5, 6, 5, 1, 'CombatZone_01', '第一次战斗空间'),
-            entity('EnemySpawn', 3, -1, .4, 1.2, 1.2, 1.8, 'EnemySpawn_01', '右侧刷出近战敌人'),
-            entity('TriggerZone', 0, 3.2, .4, 3, 1, 1.6, 'Trigger_Door_01', '进入后开门')
+            entity('EnemySpawn', 3, 1, .35, 1, 1, 1.8, 'EnemySpawn_01', '右侧刷新'),
+            entity('TriggerZone', -1.5, -2.5, .5, 3, 1, 2, 'Trigger_Door_01', '进入后开门')
           ]
         },
         corridor: {
-          name: 'Chase_Corridor_Whitebox',
+          name: 'Chase_Corridor_Blockout',
           mode: '3D',
           entities: [
-            entity('Block', 0, 0, 0, 6, 18, .4, 'Corridor Floor', '追逐路线地面'),
-            entity('Wall', -3.4, 0, .4, .5, 18, 3.6, 'Left Wall', ''),
-            entity('Wall', 3.4, 0, .4, .5, 18, 3.6, 'Right Wall', ''),
-            entity('PlayerSpawn', 0, 7, .4, 1.2, 1.2, 1.8, 'PlayerSpawn_01', ''),
-            entity('Path', 0, 0, .2, 1, 14, .2, 'Chase Route', '主要逃亡路线'),
-            entity('TriggerZone', 0, 4.5, .8, 5, 2, 1.6, 'Trigger_Chase_Start', '触发追逐'),
-            entity('SafeZone', 0, -7, .5, 5, 3, 1, 'SafeZone_Exit', '结束追逐并给玩家喘息')
+            entity('Block', 0, 0, 0, 6, 18, .3, 'Corridor Floor', '追逐路线主路'),
+            entity('Wall', -3.2, 0, .3, .4, 18, 2.8, 'Left Boundary', ''),
+            entity('Wall', 3.2, 0, .3, .4, 18, 2.8, 'Right Boundary', ''),
+            entity('Ramp', 0, 2, .3, 4, 4, 2.5, 'Ramp_01', '节奏抬升'),
+            entity('Stairs', 0, 7, .3, 4, 4, 2.8, 'Stairs_01', '终点前楼梯'),
+            entity('PlayerSpawn', 0, -7, .3, 1, 1, 1.8, 'PlayerSpawn_01', ''),
+            entity('EnemySpawn', 0, -9, .3, 1.2, 1.2, 2, 'ChaserSpawn_01', '从玩家后方出现'),
+            entity('Path', 0, 0, .5, 1, 16, .25, 'Chase Route', '核心追逐路线')
           ]
         },
-        empty: {
-          name: 'Empty_Whitebox',
-          mode: '2D',
-          entities: []
-        }
+        empty: { name: 'Empty_Whitebox', mode: state.view === '3d' ? '3D' : '2D', entities: [] }
       };
       const data = templates[template];
       state.doc = createDocument(data.name, data.mode);
       state.doc.entities = data.entities;
-      state.selectedId = state.doc.entities[0]?.id || null;
       state.view = data.mode === '3D' ? '3d' : '2d';
-      document.querySelectorAll('[data-view]').forEach(button => {
-        button.classList.toggle('active', button.dataset.view === state.view);
-      });
+      state.selectedId = state.doc.entities[0]?.id || null;
+      document.querySelectorAll('[data-view]').forEach(button => button.classList.toggle('active', button.dataset.view === state.view));
+    }
+    function protoEntity(type, x, y, z, w, h, d, name, note = '', properties = {}) {
+      const next = entity(type, x, y, z, w, h, d, name, note);
+      next.properties = { ...next.properties, ...properties };
+      return next;
     }
 
-    function entity(type, x, y, z, sx, sy, sz, name, note) {
-      const preset = TYPES[type];
-      return {
-        id: id(type.toLowerCase()),
-        name: name || `${type}_${Date.now().toString().slice(-4)}`,
-        type,
-        transform: {
-          position: { x, y, z },
-          rotation: { x: 0, y: 0, z: 0 },
-          scale: { x: sx || preset.w, y: sy || preset.h, z: sz || preset.d }
+    function applyPrototype(kind) {
+      const data = prototypeDocument(kind);
+      if (!data) return;
+      pushHistory();
+      state.doc = createDocument(data.name, data.mode);
+      state.doc.entities = data.entities;
+      state.doc.settings = { ...state.doc.settings, ...data.settings };
+      state.view = data.mode === '3D' ? '3d' : '2d';
+      state.selectedId = state.doc.entities[0]?.id || null;
+      state.placeType = null;
+      document.querySelectorAll('[data-view]').forEach(button => button.classList.toggle('active', button.dataset.view === state.view));
+      updateAll();
+      showToast(`已生成 ${data.title}，可以直接拖拽修改`);
+    }
+
+    function prototypeDocument(kind) {
+      const prototypes = {
+        'side-beats': {
+          title: '2D 节奏关卡',
+          name: 'SideScroller_Beat_Prototype',
+          mode: '2D',
+          settings: { playerJumpDistance: 5, playerDashDistance: 4 },
+          entities: [
+            protoEntity('Platform', -10, 1, 0, 7, 1, 1, 'Start_Platform', '教学前的安全起点', { tag: 'Teaching' }),
+            protoEntity('Platform', -2, -1, 0, 5, 1, 1, 'Jump_Test_Platform', '用 5m 跳距验证第一次跳跃', { tag: 'Traversal' }),
+            protoEntity('Platform', 5, -2, 0, 6, 1, 1, 'Combat_Platform', '落地后进入第一次战斗', { tag: 'Combat' }),
+            protoEntity('Platform', 13, 1, 0, 7, 1, 1, 'Reward_Platform', '战斗后给奖励和检查点', { tag: 'Reward' }),
+            protoEntity('PlayerSpawn', -12, 2.6, 0, 1.2, 1.2, 1.8, 'Player_Start', '玩家从左侧进入'),
+            protoEntity('SafeZone', -10, 2.5, 0, 7, 3, 1, 'Beat_01_Tutorial', '节奏：教学。让玩家理解移动和跳跃', { purpose: '教学' }),
+            protoEntity('CombatZone', 5, 0, 0, 7, 4, 1, 'Beat_02_Combat', '节奏：第一次遭遇敌人', { purpose: '战斗' }),
+            protoEntity('SafeZone', 13, 2.5, 0, 7, 3, 1, 'Beat_03_Reward', '节奏：奖励和喘息', { purpose: '奖励' }),
+            protoEntity('EnemySpawn', 4, -.5, 0, 1.2, 1.2, 1.8, 'Enemy_FirstContact', '玩家落地后从右侧刷新', { enemyType: 'Melee', count: 2, difficulty: 1 }),
+            protoEntity('ItemSpawn', 12, 2.6, 0, 1, 1, 1, 'Reward_Item', '奖励补给点', { itemType: 'Health' }),
+            protoEntity('Checkpoint', 15, 2.6, 0, 1, 1, 1, 'Checkpoint_A', '通过第一段后保存'),
+            protoEntity('TriggerZone', -4, .6, 0, 4, 3, 1, 'Trigger_Jump_Tip', '进入后提示跳跃距离', { triggerType: 'OnEnter', action: 'ShowTip' }),
+            protoEntity('CameraZone', 1, 1, 0, 28, 9, 1, 'Camera_Main', '覆盖教学到奖励的主镜头边界'),
+            protoEntity('Path', 1.5, .6, 0, 24, .25, .25, 'Critical_Path', '玩家主路线：教学 -> 战斗 -> 奖励')
+          ]
         },
-        properties: defaultProperties(type),
-        note: note || ''
+        'combat-room': {
+          title: '3D 战斗房间',
+          name: 'Combat_Room_Prototype',
+          mode: '3D',
+          settings: { playerMoveSpeed: 6 },
+          entities: [
+            protoEntity('Block', 0, 0, 0, 14, 10, .35, 'Arena_Floor', '主战斗地板'),
+            protoEntity('Wall', -7.2, 0, .35, .4, 10, 3, 'Left_Wall', '限制战斗边界'),
+            protoEntity('Wall', 7.2, 0, .35, .4, 10, 3, 'Right_Wall', '限制战斗边界'),
+            protoEntity('Wall', 0, 5.2, .35, 14, .4, 3, 'Back_Wall', '后墙'),
+            protoEntity('Block', -3, .8, .35, 2, 1.2, 1.2, 'Cover_Left', '近战绕位/远程掩体'),
+            protoEntity('Block', 3, -1.4, .35, 2, 1.2, 1.2, 'Cover_Right', '制造空间分割'),
+            protoEntity('PlayerSpawn', 0, -3.6, .35, 1, 1, 1.8, 'Player_Entrance', '玩家从房间入口进入'),
+            protoEntity('CombatZone', 0, .2, .5, 10, 7, 1.2, 'Combat_Core', '主要战斗空间：绕掩体移动和拉扯', { purpose: '战斗' }),
+            protoEntity('EnemySpawn', -4, 2, .35, 1.2, 1.2, 1.8, 'Enemy_Left_Group', '左侧第一波敌人', { enemyType: 'Melee', count: 3, difficulty: 2 }),
+            protoEntity('EnemySpawn', 4, 2, .35, 1.2, 1.2, 1.8, 'Enemy_Right_Group', '右侧第二波敌人', { enemyType: 'Ranged', count: 2, difficulty: 2 }),
+            protoEntity('ItemSpawn', 0, -1, .35, 1, 1, 1, 'Resource_Center', '中场补给，诱导玩家冒险拾取'),
+            protoEntity('TriggerZone', 0, -4.2, .5, 4, 1, 2, 'Trigger_Start_Combat', '进入房间后锁门并刷怪', { triggerType: 'OnEnter', action: 'LockDoorAndSpawn' }),
+            protoEntity('SafeZone', 0, -4.2, .5, 5, 1.4, 1, 'Entrance_Buffer', '进入战斗前的观察区', { purpose: '观察' })
+          ]
+        },
+        'chase-run': {
+          title: '追逐走廊',
+          name: 'Chase_Run_Prototype',
+          mode: '3D',
+          settings: { playerMoveSpeed: 7 },
+          entities: [
+            protoEntity('Block', 0, 0, 0, 6, 24, .35, 'Runway_Floor', '连续奔跑主路'),
+            protoEntity('Wall', -3.2, 0, .35, .4, 24, 2.8, 'Left_Boundary', '防止离开路线'),
+            protoEntity('Wall', 3.2, 0, .35, .4, 24, 2.8, 'Right_Boundary', '防止离开路线'),
+            protoEntity('Ramp', 0, -2, .35, 4, 4, 2.2, 'Pressure_Ramp', '通过高度变化制造压迫'),
+            protoEntity('Stairs', 0, 6, .35, 4, 4, 2.6, 'Final_Stairs', '终点前速度变化'),
+            protoEntity('PlayerSpawn', 0, -10, .35, 1, 1, 1.8, 'Player_Start', '追逐开始点'),
+            protoEntity('EnemySpawn', 0, -12, .35, 1.2, 1.2, 2, 'Chaser_Start', '追逐者从玩家后方出现', { enemyType: 'Chaser', count: 1, difficulty: 3 }),
+            protoEntity('TriggerZone', 0, -8, .5, 5, 2, 2, 'Trigger_Chase_Start', '玩家越过后开始追逐', { triggerType: 'OnEnter', action: 'StartChase' }),
+            protoEntity('Path', 0, 0, .5, 1, 22, .25, 'Chase_Critical_Path', '追逐主路线'),
+            protoEntity('CameraZone', 0, 0, .5, 7, 22, 2, 'Camera_Chase', '锁定走廊镜头边界'),
+            protoEntity('SafeZone', 0, 10, .5, 5, 3, 1, 'Exit_Safe_Zone', '追逐结束后的安全区', { purpose: '逃脱奖励' })
+          ]
+        },
+        'topdown-loop': {
+          title: '俯视探索环路',
+          name: 'TopDown_Exploration_Loop',
+          mode: '2D',
+          settings: { playerMoveSpeed: 5 },
+          entities: [
+            protoEntity('Block', -5, 0, 0, 6, 5, 1, 'Start_Room', '入口房间，给玩家目标'),
+            protoEntity('Block', 3, 0, 0, 6, 5, 1, 'Puzzle_Room', '解谜房间，取得钥匙'),
+            protoEntity('Block', 3, -6, 0, 6, 5, 1, 'Reward_Room', '绕回后的奖励房间'),
+            protoEntity('Path', -1, 0, 0, 8, .35, .25, 'Main_Connection', '入口到谜题房间'),
+            protoEntity('Path', 3, -3, 0, .35, 6, .25, 'Loop_Connection', '谜题房间到奖励房间'),
+            protoEntity('PlayerSpawn', -7, 0, 0, 1.2, 1.2, 1.8, 'Player_Start', '入口出生点'),
+            protoEntity('PuzzleZone', 3, 0, 0, 5, 4, 1, 'Puzzle_Key_A', '解开后获得 Key_A', { purpose: '解谜' }),
+            protoEntity('ItemSpawn', 3, 1.5, 0, 1, 1, 1, 'Key_A', '打开回路门的钥匙', { itemType: 'Key' }),
+            protoEntity('TriggerZone', 0, -6, 0, 3, 2, 1, 'Trigger_Open_Loop', '获得 Key_A 后打开捷径', { triggerType: 'OnEnter', action: 'OpenShortcut' }),
+            protoEntity('CombatZone', -5, -3, 0, 5, 3, 1, 'Optional_Combat', '可选小战斗，提供资源奖励', { purpose: '可选战斗' }),
+            protoEntity('SafeZone', 3, -6, 0, 5, 4, 1, 'Reward_Safe_Zone', '完成环路后的安全奖励区', { purpose: '奖励' })
+          ]
+        }
       };
+      return prototypes[kind];
     }
 
-    function defaultProperties(type) {
-      const base = {};
-      if (['Block', 'Platform', 'Wall', 'Ramp', 'Stairs'].includes(type)) base.collision = true;
-      if (type === 'EnemySpawn') Object.assign(base, { enemyType: 'Melee', count: 1, difficulty: 1 });
-      if (type === 'TriggerZone') Object.assign(base, { triggerType: 'OnEnter', target: '', action: 'Open', once: true });
-      if (['CombatZone', 'SafeZone', 'PuzzleZone'].includes(type)) Object.assign(base, { rhythm: type.replace('Zone', ''), purpose: '' });
-      if (type === 'CameraZone') Object.assign(base, { cameraMode: 'Bounds' });
-      return base;
+    function generateSketchFromPrompt() {
+      const prompt = (document.getElementById('aiPrompt')?.value || '').toLowerCase();
+      if (prompt.includes('追逐') || prompt.includes('chase') || prompt.includes('corridor') || prompt.includes('走廊')) return applyPrototype('chase-run');
+      if (prompt.includes('3d') || prompt.includes('战斗') || prompt.includes('boss') || prompt.includes('combat')) return applyPrototype('combat-room');
+      if (prompt.includes('俯视') || prompt.includes('top') || prompt.includes('探索') || prompt.includes('loop') || prompt.includes('解谜')) return applyPrototype('topdown-loop');
+      return applyPrototype('side-beats');
     }
 
-    function addEntity(type) {
+    function tidyPrototypeLayout() {
+      if (!state.doc.entities.length) return showToast('当前没有对象可整理');
+      pushHistory();
+      const order = ['Block', 'Platform', 'Wall', 'Ramp', 'Stairs', 'Path', 'CameraZone', 'SafeZone', 'PuzzleZone', 'CombatZone', 'TriggerZone', 'PlayerSpawn', 'EnemySpawn', 'ItemSpawn', 'Checkpoint', 'Note'];
+      state.doc.entities.forEach(item => {
+        item.transform.position.x = snap(item.transform.position.x);
+        item.transform.position.y = snap(item.transform.position.y);
+        item.transform.position.z = Math.max(0, snap(item.transform.position.z));
+        item.transform.scale.x = Math.max(.25, snap(item.transform.scale.x));
+        item.transform.scale.y = Math.max(.25, snap(item.transform.scale.y));
+        item.transform.scale.z = Math.max(.25, snap(item.transform.scale.z));
+        if (['Wall', 'Ramp', 'Stairs'].includes(item.type)) item.transform.position.z = findFloorTopZ(item);
+      });
+      state.doc.entities.sort((a, b) => order.indexOf(a.type) - order.indexOf(b.type));
+      state.selectedId = state.doc.entities[0]?.id || null;
+      updateAll();
+      showToast('已吸附网格并整理图层顺序');
+    }
+    function addEntity(type, position = null) {
       pushHistory();
       const preset = TYPES[type];
       const count = state.doc.entities.filter(item => item.type === type).length + 1;
-      const next = entity(type, count * 1.5 - 1.5, count * -1.2 + 1.2, type.includes('Zone') ? .5 : 0, preset.w, preset.h, preset.d, `${type}_${String(count).padStart(2, '0')}`, '');
+      const pos = position || { x: count * 1.5 - 1.5, y: count * -1.2 + 1.2, z: type.includes('Zone') ? .5 : 0 };
+      const next = entity(type, snap(pos.x), snap(pos.y), snap(pos.z || 0), preset.w, preset.h, preset.d, `${type}_${String(count).padStart(2, '0')}`, '');
       if (type === 'Note') next.note = '玩法意图备注';
       state.doc.entities.push(next);
       state.selectedId = next.id;
       updateAll();
+      return next;
     }
 
+    function placeEntityAtPoint(point, rect) {
+      const position = placementPosition(point, rect, state.placeType);
+      addEntity(state.placeType, position);
+      showToast(`${TYPES[state.placeType].label} 已放置`);
+    }
+
+    function startPlacingEntity(point, rect) {
+      const type = state.placeType;
+      const position = placementPosition(point, rect, type);
+      const placed = addEntity(type, position);
+      if (isDrawableType(type)) {
+        state.drag = {
+          mode: 'draw-place',
+          entityId: placed.id,
+          startWorld: position,
+          type,
+          originalScale: { ...placed.transform.scale }
+        };
+      } else {
+        showToast(`${TYPES[type].label} 已放置`);
+      }
+    }
+
+    function placementPosition(point, rect, type) {
+      return state.view === '3d'
+        ? { ...screenToIsoGround(point.x, point.y, rect, 0), z: type.includes('Zone') ? .5 : 0 }
+        : { ...screenToWorld(point.x, point.y, rect), z: 0 };
+    }
+
+    function isDrawableType(type) {
+      return !['PlayerSpawn', 'EnemySpawn', 'ItemSpawn', 'Checkpoint', 'Note'].includes(type);
+    }
     function updateSettings(partial) {
       pushHistory();
       if (partial.name !== undefined) state.doc.name = partial.name;
@@ -1145,6 +1465,7 @@
       el.objectCount.textContent = state.doc.entities.length;
       document.getElementById('view3dTools').style.display = state.view === '3d' ? 'flex' : 'none';
       document.querySelectorAll('[data-tool]').forEach(button => button.classList.toggle('active', button.dataset.tool === state.tool));
+      updatePlacementButtons();
       updateCameraControls();
       render();
       renderInspector();
@@ -1318,7 +1639,7 @@
         ctx.fillStyle = 'rgba(255,255,255,.08)';
         ctx.strokeStyle = 'rgba(255,255,255,.35)';
         roundRect(-box.w / 2, -box.h / 2, box.w, box.h, 7, true, true);
-        ctx.fillStyle = '#edf2f7';
+        ctx.fillStyle = '#26342f';
         ctx.font = '12px sans-serif';
         wrapLabel(item.note || item.name, -box.w / 2 + 8, -box.h / 2 + 17, box.w - 16);
       } else {
@@ -1328,14 +1649,14 @@
         roundRect(-box.w / 2, -box.h / 2, box.w, box.h, 6, true, true);
       }
       if (item.type !== 'Note') {
-        ctx.fillStyle = '#edf2f7';
+        ctx.fillStyle = '#26342f';
         ctx.font = '12px sans-serif';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'top';
         ctx.fillText(item.name, -box.w / 2 + 6, -box.h / 2 + 6);
       }
       if (selected) {
-        ctx.strokeStyle = '#ffffff';
+        ctx.strokeStyle = '#18b894';
         ctx.lineWidth = 1.5;
         ctx.setLineDash([4, 4]);
         ctx.strokeRect(-box.w / 2 - 4, -box.h / 2 - 4, box.w + 8, box.h + 8);
@@ -1367,9 +1688,9 @@
 
     function drawIsoGrid(rect) {
       ctx.save();
-      ctx.fillStyle = '#414344';
+      ctx.fillStyle = '#f4f6f1';
       ctx.fillRect(0, 0, rect.width, rect.height);
-      ctx.strokeStyle = 'rgba(255,255,255,.18)';
+      ctx.strokeStyle = 'rgba(93, 112, 101, .18)';
       ctx.lineWidth = 1;
       for (let i = -24; i <= 24; i++) {
         const a = isoToScreen(-24, i, 0, rect);
@@ -1379,7 +1700,7 @@
         line(a.x, a.y, b.x, b.y);
         line(c.x, c.y, d.x, d.y);
       }
-      ctx.strokeStyle = 'rgba(255,255,255,.38)';
+      ctx.strokeStyle = 'rgba(42, 57, 50, .28)';
       const x0 = isoToScreen(-24, 0, 0, rect);
       const x1 = isoToScreen(24, 0, 0, rect);
       const y0 = isoToScreen(0, -24, 0, rect);
@@ -1441,7 +1762,7 @@
         ctx.arc(center.x, center.y, 10, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
-        ctx.fillStyle = '#edf2f7';
+        ctx.fillStyle = '#26342f';
         ctx.font = '12px sans-serif';
         ctx.fillText(item.name, center.x + 12, center.y - 12);
         ctx.restore();
@@ -1454,7 +1775,7 @@
       const s = item.transform.scale;
       const label = isoToScreen(p.x, p.y, p.z + Math.max(.15, s.z), rect);
       ctx.save();
-      ctx.fillStyle = '#edf2f7';
+      ctx.fillStyle = '#26342f';
       ctx.font = '12px sans-serif';
       ctx.fillText(item.name, label.x + 4, label.y - 6);
       ctx.restore();
@@ -1508,7 +1829,7 @@
     function drawRotationGizmo(center, axes) {
       const radius = state.view === '3d' ? 72 : 62;
       ctx.globalAlpha = .24;
-      ctx.strokeStyle = '#ffffff';
+      ctx.strokeStyle = '#18b894';
       ctx.lineWidth = 1.3;
       ctx.beginPath();
       ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
@@ -1825,6 +2146,11 @@
         el.canvas.setPointerCapture?.(event.pointerId);
         return;
       }
+      if (state.placeType && !hitGizmo(point, rect) && !hitTest(point, rect)) {
+        startPlacingEntity(point, rect);
+        el.canvas.setPointerCapture?.(event.pointerId);
+        return;
+      }
       const gizmo = hitGizmo(point, rect);
       if (gizmo) {
         const selected = getSelected();
@@ -1833,7 +2159,7 @@
           mode: gizmo.mode,
           axis: gizmo.axis,
           start: point,
-          original: structuredClone(selected.transform),
+          original: clone(selected.transform),
           center: gizmo.center,
           vector: gizmo.vector,
           startAngle: Math.atan2(point.y - gizmo.center.y, point.x - gizmo.center.x)
@@ -1872,7 +2198,7 @@
             mode: 'gizmo-rotate',
             axis: defaultRotateAxis(),
             start: point,
-            original: structuredClone(selected.transform),
+            original: clone(selected.transform),
             center,
             startAngle: Math.atan2(point.y - center.y, point.x - center.x)
           };
@@ -1880,14 +2206,14 @@
           state.drag = {
             mode: 'gizmo-scale-uniform',
             start: point,
-            original: structuredClone(selected.transform),
+            original: clone(selected.transform),
             center
           };
         } else {
           state.drag = {
             mode: state.view === '3d' ? 'move3d' : (resize ? 'resize' : 'move'),
             start: point,
-            original: structuredClone(selected.transform),
+            original: clone(selected.transform),
             startWorld3d: state.view === '3d' ? screenToIsoGround(point.x, point.y, rect, selected.transform.position.z) : null
           };
         }
@@ -1939,6 +2265,23 @@
         state.camera3d.pitch = state.drag.camera.pitch - (point.y - state.drag.start.y) * 0.01;
         updateCameraControls();
         render();
+        return;
+      }
+      if (state.drag.mode === 'draw-place') {
+        const placed = state.doc.entities.find(item => item.id === state.drag.entityId);
+        if (!placed) return;
+        const current = placementPosition(point, rect, state.drag.type);
+        const minSize = Math.max(.25, state.doc.settings.gridSize);
+        const width = Math.max(minSize, Math.abs(current.x - state.drag.startWorld.x));
+        const height = Math.max(minSize, Math.abs(current.y - state.drag.startWorld.y));
+        placed.transform.position.x = snap((current.x + state.drag.startWorld.x) / 2);
+        placed.transform.position.y = snap((current.y + state.drag.startWorld.y) / 2);
+        placed.transform.scale.x = snap(width);
+        placed.transform.scale.y = snap(height);
+        if (state.view === '3d') placed.transform.scale.z = state.drag.originalScale.z;
+        render();
+        renderInspector();
+        renderEntityList();
         return;
       }
       const selected = getSelected();
@@ -2017,8 +2360,10 @@
       if (event?.pointerId !== undefined) activePointers.delete(event.pointerId);
       if (activePointers.size < 2) state.touchGesture = null;
       if (state.drag) {
+        const wasDrawing = state.drag.mode === 'draw-place';
         state.drag = null;
         state.guides3d = [];
+        if (wasDrawing) showToast('构件已创建');
         updateAll();
       }
     }
@@ -2253,7 +2598,7 @@
       const selected = getSelected();
       if (!selected) return;
       pushHistory();
-      const copy = structuredClone(selected);
+      const copy = clone(selected);
       copy.id = id(selected.type.toLowerCase());
       copy.name = `${selected.name}_Copy`;
       copy.transform.position.x += 1;
@@ -2326,8 +2671,11 @@
     }
 
     function saveLocal() {
-      localStorage.setItem('level-whitebox-doc', JSON.stringify(state.doc));
-      showToast('已保存到浏览器本地');
+      if (writeLocalDoc(JSON.stringify(state.doc))) {
+        showToast('已保存到浏览器本地');
+      } else {
+        showToast('当前环境不支持本地保存，请导出 JSON');
+      }
     }
 
     function importJson(event) {
@@ -2353,6 +2701,11 @@
 
     function buildMarkdown() {
       const groups = groupBy(state.doc.entities, item => item.type);
+      const zones = ['SafeZone', 'PuzzleZone', 'CombatZone', 'TriggerZone', 'CameraZone']
+        .flatMap(type => groups[type] || []);
+      const triggers = groups.TriggerZone || [];
+      const points = ['PlayerSpawn', 'EnemySpawn', 'ItemSpawn', 'Checkpoint']
+        .flatMap(type => groups[type] || []);
       const lines = [
         `# ${state.doc.name} Design Document`,
         '',
@@ -2361,23 +2714,41 @@
         `- Unit: ${state.doc.settings.unit}`,
         `- Grid Size: ${state.doc.settings.gridSize}`,
         `- Object Count: ${state.doc.entities.length}`,
+        `- Player Jump Distance: ${state.doc.settings.playerJumpDistance}`,
+        `- Player Dash Distance: ${state.doc.settings.playerDashDistance}`,
         '',
-        '## Player Spawn'
+        '## Level Rhythm',
+        '| Order | Area | Type | Purpose | Design Intent |',
+        '| --- | --- | --- | --- | --- |'
       ];
-      (groups.PlayerSpawn || []).forEach(item => lines.push(`- ${item.name}: ${posText(item)}`));
-      lines.push('', '## Gameplay Zones');
-      ['CombatZone', 'SafeZone', 'PuzzleZone', 'TriggerZone', 'CameraZone'].forEach(type => {
-        (groups[type] || []).forEach(item => lines.push(`- ${item.name} (${type}): ${item.note || item.properties.purpose || 'No note'}`));
-      });
-      lines.push('', '## Spawns And Items');
-      ['EnemySpawn', 'ItemSpawn', 'Checkpoint'].forEach(type => {
-        (groups[type] || []).forEach(item => lines.push(`- ${item.name} (${type}): ${posText(item)}${item.note ? ` - ${item.note}` : ''}`));
-      });
-      lines.push('', '## Geometry');
+      if (zones.length) {
+        zones.forEach((item, index) => lines.push(`| ${index + 1} | ${item.name} | ${TYPES[item.type].zh} | ${item.properties.purpose || item.properties.tag || '-'} | ${item.note || '-'} |`));
+      } else {
+        lines.push('| - | - | - | - | No gameplay zones yet |');
+      }
+      lines.push('', '## Critical Path');
+      (groups.Path || []).forEach(item => lines.push(`- ${item.name}: ${item.note || '主路线'} (${posText(item)}, size ${sizeText(item)})`));
+      if (!(groups.Path || []).length) lines.push('- No route line yet.');
+      lines.push('', '## Spawn / Resource Points', '| Object | Type | Position | Count / Item | Note |', '| --- | --- | --- | --- | --- |');
+      if (points.length) {
+        points.forEach(item => {
+          const detail = item.type === 'EnemySpawn' ? `${item.properties.enemyType || 'Enemy'} x${item.properties.count || 1}` : item.type === 'ItemSpawn' ? (item.properties.itemType || 'Item') : '-';
+          lines.push(`| ${item.name} | ${TYPES[item.type].zh} | ${posText(item)} | ${detail} | ${item.note || '-'} |`);
+        });
+      } else {
+        lines.push('| - | - | - | - | No spawn or resource points yet |');
+      }
+      lines.push('', '## Trigger Logic', '| Trigger | Type | Action | Target / Note |', '| --- | --- | --- | --- |');
+      if (triggers.length) {
+        triggers.forEach(item => lines.push(`| ${item.name} | ${item.properties.triggerType || 'OnEnter'} | ${item.properties.action || '-'} | ${item.note || '-'} |`));
+      } else {
+        lines.push('| - | - | - | No trigger zones yet |');
+      }
+      lines.push('', '## Geometry Blockout');
       ['Block', 'Platform', 'Wall', 'Ramp', 'Stairs'].forEach(type => {
-        (groups[type] || []).forEach(item => lines.push(`- ${item.name} (${type}): ${posText(item)}, size ${sizeText(item)}`));
+        (groups[type] || []).forEach(item => lines.push(`- ${item.name} (${TYPES[type].zh}): ${posText(item)}, size ${sizeText(item)}${item.note ? ` - ${item.note}` : ''}`));
       });
-      lines.push('', '## Notes');
+      lines.push('', '## Open Design Notes');
       state.doc.entities.filter(item => item.note).forEach(item => lines.push(`- ${item.name}: ${item.note}`));
       return lines.join('\n');
     }
@@ -2854,3 +3225,10 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
