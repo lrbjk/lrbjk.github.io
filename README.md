@@ -1,2 +1,0 @@
-# lrbjk.github.io
-blog
