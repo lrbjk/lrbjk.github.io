@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>lirb的博客小站——让Boss与玩家真正“打起来”——《漫威蜘蛛侠2》Boss战设计分析 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" href="/imgs/shortcut-icon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/css/public.css?v=20260506-dark" />
+  <link rel="stylesheet" href="/css/layout.css?v=20260506-dark" />
+  <link rel="stylesheet" href="/css/iconfont.css?v=20260506-dark" />
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/jquery.pjax.min.js"></script>
+
+  <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+  <script>
+    document.title = `lirb的博客小站——让Boss与玩家真正“打起来”——《漫威蜘蛛侠2》Boss战设计分析`
+  </script>
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<style>
+  .load {
+    width: 100%;
+    height: 100vh;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(255, 255, 255, .12), transparent 28%),
+      #050505;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 9999;
+  }
+  .load-circle {
+    width: 56px;
+    height: 56px;
+    border: 2px solid rgba(255, 255, 255, .16);
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: rotate 1s linear infinite;
+  }
+  .load-circle-inner {
+    width: 28px;
+    height: 28px;
+    border: 2px solid #fff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: rotate-reverse .7s linear infinite;
+  }
+  .load-text {
+    margin-top: 18px;
+    font-size: 12px;
+    letter-spacing: 0;
+    color: #a1a1aa;
+    display: flex;
+  }
+  .load-text span {
+    margin: 0 2px;
+  }
+  @keyframes rotate {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+  }
+  @keyframes rotate-reverse {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(-360deg); }
+  }
+  @keyframes move {
+    0% { transform: translateY(0%) rotate(0) scale(1); }
+    20% { transform: translateY(20%) rotate(10deg) scale(1.2); }
+    80% { transform: translateY(-10%) rotate(-20deg) scale(.8);}
+    100% { transform: translateY(0) rotate(0) scale(1); }
+  }
+
+  .progress {
+    position: fixed;
+    left: 0; top: 0;
+    width: 0;
+    height: 2px;
+    background-color: #fff;
+    transition: all cubic-bezier(0.215, 0.610, 0.355, 1) .1s;
+    z-index: 9999;
+  }
+
+  .to-up {
+    animation: toUp .5s 1;
+  }
+  .gray {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 9999;
+    display: none;
+    pointer-events: none;
+    background-color: #000;
+    mix-blend-mode: color;
+  }
+  @keyframes toUp {
+    from { transform: translateY(15px); opacity: 0; }
+    to { transform: translateY(0) ; opacity: 1; }
+  }
+</style>
+<body>
+  <div id="load" class="load">
+    <div class="load-circle">
+      <div class="load-circle-inner"></div>
+    </div>
+    <p class="load-text">
+      <span>L</span>
+      <span>O</span>
+      <span>A</span>
+      <span>D</span>
+      <span>I</span>
+      <span>N</span>
+      <span>G</span>
+    </p>
+  </div>
+  <div id="container" class="container w-100 vh-100" style="display: none;">
+    <header class="header">
+  <div class="header-wrapper">
+    <div class="header-left">
+      <div class="header-search">
+        <input id="search-input" type="text" class="header-search--input" placeholder="请输入要检索的文章标题" />
+        <span id="search-btn" class="header-search--icon"><i class="iconfont icon-sousuo"></i></span>
+      </div>
+      <div id="search-layer" class="header-search--layer hidden">
+        <p class="title">
+          <span>以下是搜索内容：</span>
+          <span id="close-layer-btn">关闭</span>
+        </p>
+        <ul>
+        </ul>
+      </div>
+    </div>
+    <div class="header-right">
+      <ul class="header-menu">
+        <li>
+          <a href="/">
+            <i class="header-menu--icon iconfont icon-shouye"></i>
+            <span class="header-menu--span">首页</span>
+          </a>
+        </li>
+        <li>
+          <a href="/log">
+            <i class="header-menu--icon iconfont icon-rizhi"></i>
+            <span class="header-menu--span">日志</span>
+          </a>
+        </li>
+        <li>
+          <a href="/link">
+            <i class="header-menu--icon iconfont icon-youqinglianjie"></i>
+            <span class="header-menu--span">友情链接</span>
+          </a>
+        </li>
+        <li>
+          <a href="/about">
+            <i class="header-menu--icon iconfont icon-guanyuwomen"></i>
+            <span class="header-menu--span">关于我</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<script>
+  const ipt = document.querySelector('#search-input')
+  const btn = document.querySelector('#search-btn')
+  const layer = document.querySelector('#search-layer')
+  const posts = JSON.parse(`[{"title":"【从零开始的ARPG】角色基本运动","path":"2024/08/29/Unity-2/"},{"title":"【从零开始的ARPG】角色基本连招","path":"2024/09/11/Unity-3/"},{"title":"【更高级的运动系统】关于在Unity中如何处理角色急停","path":"2025/01/27/Unity-4/"},{"title":"独具风格的怪物——雷狼龙解析","path":"2025/08/17/blog-2/"},{"title":"为什么说卡普空是动作天尊——《鬼泣5》战斗分析#1","path":"2024/09/17/blog-1/"},{"title":"这两周Unity两作品","path":"2024/02/08/first-blog/"},{"title":"Unity2D俯视角敌人巡逻以及追击玩家","path":"2024/07/29/unity-1/"},{"title":"让Boss与玩家真正“打起来”——《漫威蜘蛛侠2》Boss战设计分析","path":"2026/07/29/spider-man-2-boss-design/"}]`)
+  ipt.addEventListener('keyup', e => {
+    if (e.key === 'Enter') {
+      handleSearch()
+    }
+  })
+  btn.addEventListener('click', () => {
+    handleSearch()
+  })
+
+  document.querySelector('#close-layer-btn').addEventListener('click', () => {
+    layer.classList.toggle('hidden')
+  })
+
+  function handleSearch() {
+    if (ipt.value.trim() === '') {
+      return
+    }
+    let html = ''
+    const targetPosts = posts.filter(post => post.title.includes(ipt.value))
+    targetPosts.forEach(post => {
+      html += `
+        <li>
+          <div>
+            <a href="/${post.path}">${post.title.replace(new RegExp(ipt.value), `<span>${ipt.value}</span>`)}</a>
+          </div>
+          <img src="${post.cover || '/imgs/default-cover.webp' }" />
+        </li>
+      `
+    })
+    if (html.trim () === '') {
+      html += '<p class="empty">没有搜索到内容</p>'
+    }
+    layer.querySelector('ul').innerHTML = html
+    layer.classList.remove('hidden')
+  }
+</script>
+ 
+    <section id="main" class="main">
+      <div class="main-left-wrapper">
+<div class="main-left">
+  <div class="main-left--block">
+    <div class="main-left--info">
+      <img src="/imgs/avatar.jpg"" class="main-left--avatar" />
+      <div class="main-left--intro">
+        <p class="main-left--name">Lirb.</p>
+        <div class="main-left--tags">
+          <span class="main-left--tag">Unity</span>
+          <span class="main-left--tag">Gameplaying</span>
+        </div>
+      </div>
+    </div>
+  
+    <div>
+      <div class="main-left--motto">
+        <p>“我们的旅程是星辰大海”</p>
+        <p>“一个简单普通的男孩”</p>
+      </div>
+      <div class="main-left--github">
+        <span class="line"></span>
+        <a target="_blank" rel="noopener" href="https://github.com/lrbjk"><i class="logo iconfont icon-github-fill"></i></a>
+        <span class="line"></span>
+      </div>
+      <div class="main-left--statics">
+        <a href="/categories">
+          <div>
+            <span>0</span>
+            <span>分类</span>
+          </div>
+        </a>
+        <a href="/tags">
+          <div>
+            <span>3</span>
+            <span>标签</span>
+          </div>
+        </a>
+        <a href="/archives">
+          <div>
+            <span>7 </span>
+            <span>归档</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-left--block">
+    <ul class="main-left--menu">
+      
+        <li>
+          <a href="/">
+            <span class="header-menu--span">小站首页</span>
+            <i class="header-menu--icon iconfont icon-shouye"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a href="/log">
+            <span class="header-menu--span">个人日志</span>
+            <i class="header-menu--icon iconfont icon-rizhi"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a href="/link">
+            <span class="header-menu--span">友情链接</span>
+            <i class="header-menu--icon iconfont icon-youqinglianjie"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a href="/about">
+            <span class="header-menu--span">关于自己</span>
+            <i class="header-menu--icon iconfont icon-guanyuwomen"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a href="/tools">
+            <span class="header-menu--span">我的工具</span>
+            <i class="header-menu--icon iconfont icon-gongju"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="main-left--block">
+    <div class="main-left--site">
+      <h5 class="main-left--title">
+        <span>站点信息</span>
+        <i class="iconfont icon-zhandian"></i>
+      </h5>
+      <p class="main-left--subtitle">
+        <span>文章数目：</span>
+        <span>8 篇</span>
+      </p>
+      <p class="main-left--subtitle">
+        <span>最近动态：</span>
+        <span>今天</span>
+      </p>
+      <p class="main-left--subtitle">
+        <span>上线时间：</span>
+        <span>1625天</span>
+      </p>
+      <p class="main-left--subtitle">
+        <span>当前版本：</span>
+        <span>v1.0.2</span>
+      </p>
+    </div>
+  </div>
+</div></div>
+      <div id="main-container" class="main-container">
+
+
+  <link rel="stylesheet" href="/css/partial/article.css?v=20260506-dark" />
+
+
+
+<div class="article-container">
+  <div class="article">
+    <h1 class="article-title">让Boss与玩家真正“打起来”——《漫威蜘蛛侠2》Boss战设计分析</h1>
+    <div class="article-info">
+      <div class="article-info--item">
+        <div class="article-info--info">
+          
+          <div class="article-info--categories">
+            <span>分类：</span>
+            
+          </div>
+          
+          
+          <div class="article-info--tags">
+            <span>标签：</span>
+            <a class="tag-link" href="/tags/%E6%B8%B8%E6%88%8F%E6%9D%82%E8%B0%88/" rel="tag">游戏杂谈</a>
+          </div>
+          
+          <p class="article-info--date">日期：2026-07-29 20:30:00</p>
+        </div>
+        <img src="/2026/07/29/spider-man-2-boss-design/18.png" alt="" class="article-cover">
+      </div>
+    </div>
+    <article class="article-content markdown-body">
+      <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在研究Boss战的设计，正好看了Insomniac Games副游戏总监Adam Noonchester在GDC 2024上的演讲：</p>
+<p><strong>Refining the Rogues Gallery: Building Boss Fights in《Marvel’s Spider-Man 2》</strong></p>
+<p>这次演讲没有把重点放在某一个Boss的具体招式上，而是从攻击、连招、行为图和受击反馈等方面，讲述《漫威蜘蛛侠2》是如何重新搭建Boss战的。</p>
+<p>我认为整场演讲最重要的观点是：</p>
+<p><strong>Boss战的“史诗感”不应该只依靠演出、QTE或者只使用一次的特殊机制，而应该来自玩家一直在使用的核心战斗系统。</strong></p>
+<p>换句话说，Boss不是一个等待玩家破解机制的机关，而是一个真正与玩家交手的对手。</p>
+<img src="/2026/07/29/spider-man-2-boss-design/04.png" style="zoom:80%;">
+
+<h2 id="Boss战的核心体验"><a href="#Boss战的核心体验" class="headerlink" title="Boss战的核心体验"></a>Boss战的核心体验</h2><p>《漫威蜘蛛侠2》希望玩家在Boss战中依然感受到自己是蜘蛛侠。</p>
+<p>玩家拥有普通攻击、蛛网装置、技能、终结技和环境互动等大量能力。如果进入Boss战后，这些能力突然失效，只能按照固定方式破解Boss，那么战斗虽然看上去很特殊，却会破坏玩家在游戏中已经建立的操作习惯。</p>
+<p>所以游戏没有简单地让Boss免疫玩家的能力，而是让Boss对这些能力产生合理的反应。</p>
+<p>玩家使用高消耗技能命中Boss，Boss应该出现明显的受击反馈；玩家抓住空隙完成一套连招，也应该得到完整的输出机会。Boss需要足够强大，但不能通过“不响应玩家”来表现强大。</p>
+<p>这就引出了《漫威蜘蛛侠2》Boss战最基础的设计哲学：</p>
+<p><strong>Back-and-Forth——玩家与Boss轮流取得进攻权。</strong></p>
+<img src="/2026/07/29/spider-man-2-boss-design/13.png" style="zoom:75%;">
+
+<p>玩家攻击，Boss做出反应；随后Boss夺回进攻权，玩家再通过闪避、招架或者走位化解攻击，重新获得自己的回合。</p>
+<p>这样的战斗更像一场势均力敌的决斗，而不是玩家单方面输出一个巨大的血条。</p>
+<h2 id="清晰是攻击设计的前提"><a href="#清晰是攻击设计的前提" class="headerlink" title="清晰是攻击设计的前提"></a>清晰是攻击设计的前提</h2><p>一个攻击动作一般可以分为三个部分：</p>
+<p><strong>前摇（Wind-up）——攻击帧（Active）——后摇（Recovery）</strong></p>
+<p>这三个部分不仅决定招式的速度，也在不断向玩家传递信息。</p>
+<h3 id="前摇：让玩家知道攻击将要发生"><a href="#前摇：让玩家知道攻击将要发生" class="headerlink" title="前摇：让玩家知道攻击将要发生"></a>前摇：让玩家知道攻击将要发生</h3><p>前摇需要通过动作、角色轮廓、特效和音效，清晰地告诉玩家Boss将要做什么。</p>
+<p>例如下劈攻击应该先将武器举高，横扫则应该让武器和身体产生明显的横向运动。玩家即使第一次见到这个招式，也可以通过直觉判断危险来自哪里。</p>
+<p>演讲中给出的前摇时间大致为：</p>
+<ul>
+<li>快速攻击：0.5秒</li>
+<li>普通攻击：0.75秒</li>
+<li>慢速攻击：1.25秒</li>
+</ul>
+<p>人的基础视觉反应时间大约是0.25秒，但游戏中的画面更加复杂。玩家需要先从特效、镜头和其他角色中识别出Boss的动作，并且此时可能还在进行自己的攻击，所以实际需要的反应时间会更长。</p>
+<p>前摇太短，玩家会认为攻击“无法躲避”；前摇太长，又会让攻击失去压力。</p>
+<p>1.25秒的慢速攻击还有另外一个作用：<strong>打破玩家已经形成的闪避节奏。</strong></p>
+<p>《漫威蜘蛛侠2》的一次闪避大约需要0.5秒。如果玩家看到攻击后立刻闪避，可能会在Boss真正命中前就结束无敌时间。慢攻击并不是单纯地降低速度，而是在测试玩家能否等待正确的时机。</p>
+<h3 id="攻击帧：危险必须足够明显"><a href="#攻击帧：危险必须足够明显" class="headerlink" title="攻击帧：危险必须足够明显"></a>攻击帧：危险必须足够明显</h3><p>攻击真正产生伤害的时间一般在0.25秒左右。</p>
+<p>这一段动作应该看上去快速、危险，并且明确展示伤害发生的位置。如果攻击帧短于0.25秒，玩家就很难依靠反应躲避，只能提前预测；如果明显长于0.25秒，则会形成延迟攻击，诱导玩家过早做出防御。</p>
+<p>所以所谓攻击难度，并不只是把动作播放得更快。</p>
+<p><strong>0.5秒的快攻击测试反应，1.25秒的慢攻击测试节奏，而不同的攻击帧又在测试玩家对时机的判断。</strong></p>
+<h3 id="后摇：玩家的反击奖励"><a href="#后摇：玩家的反击奖励" class="headerlink" title="后摇：玩家的反击奖励"></a>后摇：玩家的反击奖励</h3><p>Boss攻击结束后需要清晰的收招动作，告诉玩家危险已经结束。</p>
+<p>当Boss攻击落空时，后摇一般可以达到1.5秒到3秒，给玩家足够的反击机会；当攻击命中玩家时，后摇则缩短到0.5秒到1秒，让玩家无法在受击后立刻反打。</p>
+<p>这实际上是一种很直观的奖惩：</p>
+<p><strong>正确化解Boss的攻击，获得输出时间；被攻击命中，则失去这一轮进攻机会。</strong></p>
+<p>相比直接增加或扣除数值，这种奖励会直接影响战斗节奏，玩家也更容易理解。</p>
+<h2 id="不同攻击应该测试不同的应对方式"><a href="#不同攻击应该测试不同的应对方式" class="headerlink" title="不同攻击应该测试不同的应对方式"></a>不同攻击应该测试不同的应对方式</h2><p>如果Boss的所有攻击都能用相同的时机和按键解决，那么无论招式动画有多少种，实际玩法都只有一种。</p>
+<p>以毒液为例，游戏将攻击大致分成了四类：</p>
+<ul>
+<li>普通攻击：可以闪避或者招架</li>
+<li>招架攻击：要求玩家正面招架</li>
+<li>不可格挡攻击：通常是抓取或者重击，只能闪避</li>
+<li>特殊攻击：例如大范围AOE，迫使玩家离开当前位置</li>
+</ul>
+<img src="/2026/07/29/spider-man-2-boss-design/01.png" style="zoom:80%;">
+
+<p>这些攻击之间的差异不只是伤害和动画，而是玩家需要做出不同的反应。</p>
+<p>设计招式时应该先思考：</p>
+<p><strong>我希望玩家看到这个动作后做什么？这个反应与Boss的其他攻击有什么不同？</strong></p>
+<p>只有攻击真正改变了玩家的决策，它才是一种新的玩法。</p>
+<h2 id="为什么Boss需要连招"><a href="#为什么Boss需要连招" class="headerlink" title="为什么Boss需要连招"></a>为什么Boss需要连招</h2><p>如果Boss只是从技能池中随机选择单个攻击，很容易出现几个问题：</p>
+<p>同一个招式连续出现；玩家不知道什么时候能够反击；Boss的动作互相拼接，战斗节奏显得混乱。</p>
+<img src="/2026/07/29/spider-man-2-boss-design/02.png" style="zoom:75%;">
+
+<p>连招的作用是将单独的招式组织成一句完整的话。</p>
+<p>一个连招需要有明确的起手、连续攻击和收尾。玩家看到起手后进入防御状态，在中间连续应对，看到收尾动作后知道自己的进攻回合已经到来。</p>
+<img src="/2026/07/29/spider-man-2-boss-design/03.png" style="zoom:75%;">
+
+<p>连招中间的攻击通常拥有更短的前摇和后摇。例如中间攻击的0.5秒前摇加上前一招0.25秒的未命中后摇，仍然构成了0.75秒的反应间隔。</p>
+<p>也就是说，连招看上去更加连续和激烈，但没有凭空夺走玩家的反应时间。</p>
+<p>连招的最后一击通常会拥有更长的后摇，并将玩家击飞或者拉开距离。它一方面表现出收尾攻击的力量，另一方面让玩家和Boss重新回到立回状态，为下一轮攻防做准备。</p>
+<h3 id="起手和结尾需要清晰"><a href="#起手和结尾需要清晰" class="headerlink" title="起手和结尾需要清晰"></a>起手和结尾需要清晰</h3><p>对于拥有大量组合的Boss，玩家经常会产生一个疑问：</p>
+<p><strong>“Boss的攻击到底结束了吗？”</strong></p>
+<p>如果同一个动作既能作为连招起手，又能作为连招结尾，玩家就无法判断下一次攻击是否还会出现。</p>
+<p>所以起手和结尾应该拥有相对独特的动作，明确告诉玩家连招从哪里开始、在哪里结束。</p>
+<img src="/2026/07/29/spider-man-2-boss-design/04.png" style="zoom:75%;">
+
+<h2 id="连招应该是一组分支，而不是固定答案"><a href="#连招应该是一组分支，而不是固定答案" class="headerlink" title="连招应该是一组分支，而不是固定答案"></a>连招应该是一组分支，而不是固定答案</h2><p>玩家熟悉固定连招后，很容易把Boss战变成背板：看到起手，便立刻知道之后的每一个动作。</p>
+<p>《漫威蜘蛛侠2》的做法是使用分支连招。相同的起手可以进入不同的中段和结尾，让玩家识别出连招后仍然需要观察Boss，而不是完全依靠记忆操作。</p>
+<img src="/2026/07/29/spider-man-2-boss-design/05.png" style="zoom:80%;">
+
+<p>但是分支并非越多越好。</p>
+<p><strong>设计需要增加的是决策复杂度，而不是单纯增加组合数量。</strong></p>
+<p>如果十条连招最后都要求玩家连续闪避，那么它们只是十种动画；如果一条连招可以根据距离、阶段和玩家状态，分别要求招架、闪避或者拉开位置，那么有限的动作也能产生足够丰富的战斗。</p>
+<h3 id="让Boss展示自己的招式"><a href="#让Boss展示自己的招式" class="headerlink" title="让Boss展示自己的招式"></a>让Boss展示自己的招式</h3><p>仅仅给Boss添加大量招式，并不代表玩家一定能看到它们。</p>
+<p>攻击还会受到距离、视线、寻路空间、冷却时间和当前阶段等条件限制。一些条件苛刻的技能可能在整场战斗中一次都没有满足，最后成为玩家“从来没见过的招式”。</p>
+<img src="/2026/07/29/spider-man-2-boss-design/06.png" style="zoom:75%;">
+
+<p>单纯使用随机权重也无法彻底解决这个问题。</p>
+<p>团队会记录Boss最近32次可用招式，比较每个招式的预期使用率和实际使用率。如果某个招式出现得少于预期，就动态提高它之后的选择权重。</p>
+<img src="/2026/07/29/spider-man-2-boss-design/07.png" style="zoom:80%;">
+
+<p>这个设计很值得借鉴：</p>
+<p><strong>Boss AI的随机不是完全不可控的随机，而是在维持自然感的同时，主动管理玩家看到的内容。</strong></p>
+<h2 id="用Combo-Graph组织复杂逻辑"><a href="#用Combo-Graph组织复杂逻辑" class="headerlink" title="用Combo Graph组织复杂逻辑"></a>用Combo Graph组织复杂逻辑</h2><p>随着Boss阶段、攻击条件和连招分支不断增加，传统的属性面板会变得很难维护。因此团队制作了图形化的Combo Graph，用节点组织攻击的选择条件、参数和后续行为。</p>
+<img src="/2026/07/29/spider-man-2-boss-design/09.png" style="zoom:90%;">
+
+<p>不过Combo Graph并不等于完整的Boss行为树。</p>
+<p>它主要负责和招式有关的数据：</p>
+<ul>
+<li>招式的前置条件</li>
+<li>招式被选择后的准备</li>
+<li>前摇、攻击帧和后摇等参数</li>
+<li>招式结束后的连招分支</li>
+</ul>
+<img src="/2026/07/29/spider-man-2-boss-design/08.png" style="zoom:75%;">
+
+<p>更高层的决策仍然由行为系统负责，例如Boss现在应该巡逻、调整位置、进行演出还是开始攻击；Combo Graph负责在决定攻击以后，选择并组织具体的招式；最底层状态再实际播放动画、移动角色并产生判定。</p>
+<p>可以将它简单理解为三层：</p>
+<p><strong>决策树负责“现在要做什么”；行为负责“选择哪一组动作”；状态负责“把动作表现出来”。</strong></p>
+<p>图形化工具最大的优势并不只是看起来直观，而是可以把常用的条件和连招制作成子图，在不同阶段甚至不同敌人之间复用。</p>
+<img src="/2026/07/29/spider-man-2-boss-design/12.png" style="zoom:85%;">
+
+<p>Boss设计师只需要组合已有模块，再针对Boss的独特能力增加少量定制逻辑。</p>
+<h2 id="Boss-AI如何决定下一步行动"><a href="#Boss-AI如何决定下一步行动" class="headerlink" title="Boss AI如何决定下一步行动"></a>Boss AI如何决定下一步行动</h2><p>前面讲了攻击和连招的设计，但这些内容只回答了“Boss会做什么”，还没有回答另一个更重要的问题：</p>
+<p><strong>Boss为什么会在这个时机使用这个招式？</strong></p>
+<p>Boss AI并不是每隔一段时间从技能列表中随机抽取一个招式。一次完整的出招决策大致会经过以下流程：</p>
+<p><strong>感知战场信息 → 制定高层行为 → 筛选可用招式 → 调整选择权重 → 执行连招 → 记录结果</strong></p>
+<h3 id="行为栈：将决策和动作分开"><a href="#行为栈：将决策和动作分开" class="headerlink" title="行为栈：将决策和动作分开"></a>行为栈：将决策和动作分开</h3><p>Boss AI可以分为三个层级。</p>
+<p>第一层是决策树，负责高层行为。它会判断Boss目前应该进攻、调整位置、进行特殊演出、处理受击，还是暂时脱离战斗。</p>
+<p>第二层是行为。高层决定“需要进攻”以后，这一层才会进入Combo Graph，根据当前情况选择具体连招。</p>
+<p>第三层是状态。它负责播放动画、驱动位移、生成攻击判定，并在前摇、命中、落空和后摇等时机向上层发送信号。</p>
+<p>三层结构将“为什么行动”“选择什么行动”和“如何执行行动”分开。设计师修改一条连招时，不需要重新编写整个Boss的决策；程序调整底层移动和动画时，也不会改变上层的战斗意图。</p>
+<h3 id="先排除不能使用的招式"><a href="#先排除不能使用的招式" class="headerlink" title="先排除不能使用的招式"></a>先排除不能使用的招式</h3><p>Boss准备攻击时，AI首先不会考虑“哪一招最强”，而是检查“哪些招式现在能够正常使用”。</p>
+<p>常见条件包括：</p>
+<ul>
+<li>当前处于哪个战斗阶段</li>
+<li>玩家与Boss之间的距离和角度</li>
+<li>Boss是否能看见玩家</li>
+<li>招式需要的移动路径是否畅通</li>
+<li>周围是否有足够的攻击空间</li>
+<li>招式是否正在冷却</li>
+<li>Boss最近是否已经使用过相同动作</li>
+<li>当前是否存在更高优先级的任务</li>
+</ul>
+<img src="/2026/07/29/spider-man-2-boss-design/10.png" style="zoom:85%;">
+
+<p>图中的蜥蜴人咬击会先检查战斗阶段和个人冷却，只有条件通过后才会进入真正的攻击节点。</p>
+<p>这一步非常重要。如果没有距离和寻路检查，Boss可能隔着很远使用近战攻击；如果不检查空间，飞扑可能撞到墙壁；如果没有阶段限制，第二阶段招式可能提前出现。</p>
+<h3 id="Boss要主动为攻击创造条件"><a href="#Boss要主动为攻击创造条件" class="headerlink" title="Boss要主动为攻击创造条件"></a>Boss要主动为攻击创造条件</h3><p>仅仅将不满足条件的招式排除还不够。</p>
+<p>如果一个招式要求玩家位于特定距离，而Boss永远不会主动调整位置，那么这个招式可能整场战斗都无法使用。因此AI不仅要选择攻击，还要主动创造攻击所需的条件。</p>
+<img src="/2026/07/29/spider-man-2-boss-design/11.png" style="zoom:85%;">
+
+<p>当玩家太近时，Boss可以先后退或者脱离；距离太远时，则先接近目标；靠近场地边缘或者没有合适路径时，需要重新定位后再判断攻击。</p>
+<p>这也是Boss“看上去聪明”的重要原因。玩家观察到的不只是一个随机出招的角色，而是一个会为了下一次攻击改变站位的对手。</p>
+<p>不过定位逻辑也不能无限叠加在Combo Graph中。图中的案例将距离、寻路、等待时间和移动全部混在连招内，最后很容易变得复杂且难以维护。更合适的方式是让高层行为负责站位，Combo Graph专心描述招式内部流程。</p>
+<h3 id="硬条件筛选，软权重选择"><a href="#硬条件筛选，软权重选择" class="headerlink" title="硬条件筛选，软权重选择"></a>硬条件筛选，软权重选择</h3><p>经过阶段、距离、视线和冷却等硬条件筛选后，AI会得到一组“当前可用招式”。</p>
+<p>接下来才是权重选择。</p>
+<p>每个招式拥有设计师配置的基础权重，但最终结果还会参考最近的使用记录。团队保存Boss最近32次可用招式，计算每个招式的预期使用率和实际使用率：</p>
+<p><strong>预期使用率 &#x3D; 招式基础权重 ÷ 当前所有可用招式的总权重</strong></p>
+<p><strong>实际使用率 &#x3D; 最近记录中的使用次数 ÷ 最近记录中的有效选择次数</strong></p>
+<p>如果实际使用率低于预期，系统会临时提高这个招式的权重；已经频繁出现的招式则不会继续获得额外补偿。</p>
+<p>这样做不会让Boss按照固定顺序循环技能，但能够减少某个招式因为连续随机失败而始终无法展示的问题。</p>
+<p>从体验上看，玩家会觉得Boss的出招具有变化；从制作角度看，设计师也能更可靠地让玩家看到为Boss准备的完整招式库。</p>
+<h3 id="战斗阶段管理招式池"><a href="#战斗阶段管理招式池" class="headerlink" title="战斗阶段管理招式池"></a>战斗阶段管理招式池</h3><p>Boss阶段不应该只是血量下降后提高攻击力。</p>
+<p>不同阶段可以开放新的连招分支、改变已有招式的结尾，或者改变Boss对距离的偏好。阶段条件会在招式选择前参与筛选，所以同一套Combo Graph可以根据阶段进入不同子图。</p>
+<p>这使Boss的难度能够逐渐增加：</p>
+<p>第一阶段让玩家认识基础攻击和防御规则；第二阶段在相同规则上增加分支；最后阶段再组合之前学过的内容并提高节奏。</p>
+<p>阶段之间应该增加决策复杂度，而不是突然推翻玩家已经学会的规则。</p>
+<h3 id="连招结束后更新AI记忆"><a href="#连招结束后更新AI记忆" class="headerlink" title="连招结束后更新AI记忆"></a>连招结束后更新AI记忆</h3><p>Boss选择连招以后，AI不能立刻认为自己的回合已经完成。</p>
+<p>只有连招真正进入结尾，或者攻击流程被明确终止后，系统才应该记录招式使用、设置冷却并重置本轮状态。如果在连招中间就清空状态，Boss可能重复选择起手动作，或者在尚未完成攻击时被其他行为抢走控制权。</p>
+<p>因此AI需要记住的不只是“刚才选择了什么”，还包括：</p>
+<ul>
+<li>当前正在执行哪一组连招</li>
+<li>连招进行到哪个阶段</li>
+<li>这次攻击命中还是落空</li>
+<li>玩家已经连续攻击Boss多少次</li>
+<li>Boss距离上一次获得进攻回合过去了多久</li>
+</ul>
+<p>这些短期记忆共同维持了Boss战的节奏。没有记忆的AI只能对当前一帧作出反应；拥有短期记忆后，Boss才能表现出连续的战斗意图。</p>
+<h2 id="Boss需要对玩家保持反应"><a href="#Boss需要对玩家保持反应" class="headerlink" title="Boss需要对玩家保持反应"></a>Boss需要对玩家保持反应</h2><p>玩家的能力非常多，Boss也需要对普通攻击、击飞、蛛网装置、技能和环境互动产生不同反馈。</p>
+<p>在初代《漫威蜘蛛侠》中，这些受击反馈分散在决策树、行为和不同状态中。到了《漫威蜘蛛侠2》，团队将它们整理为React Graph。</p>
+<img src="/2026/07/29/spider-man-2-boss-design/15.png" style="zoom:85%;">
+
+<p>React Graph可以根据玩家的攻击类型决定Boss应该被击退、击飞、撞墙、播放局部受击动画，还是只承受伤害但继续当前动作。</p>
+<img src="/2026/07/29/spider-man-2-boss-design/16.png" style="zoom:75%;">
+
+<p>这套系统解决了两个看似矛盾的问题：</p>
+<p>Boss要对玩家的攻击产生反馈，让技能命中有力量感；Boss又不能被玩家普通攻击无限打断，否则永远无法完成自己的回合。</p>
+<p>因此Boss在进攻时可以进入类似霸体的状态：依然承受伤害，也可以播放局部受击动画，但不会中断当前连招。</p>
+<p>这比直接显示“免疫”更加自然。玩家的攻击依然有效，Boss的进攻节奏也得到了保护。</p>
+<h2 id="Breakout：Boss如何夺回自己的回合"><a href="#Breakout：Boss如何夺回自己的回合" class="headerlink" title="Breakout：Boss如何夺回自己的回合"></a>Breakout：Boss如何夺回自己的回合</h2><p>当玩家持续输出时，Boss需要在合适的时机进行“突围（Breakout）”，通过闪避、格挡或者反击离开玩家的连招，重新进入自己的进攻回合。</p>
+<p>突围主要根据以下条件触发：</p>
+<ul>
+<li>Boss已经连续受到一定次数的攻击</li>
+<li>玩家打出了连招终结技等大型近战攻击</li>
+<li>Boss太长时间没有获得进攻机会</li>
+<li>玩家连续使用技能、装置或者控制能力</li>
+<li>出现重复攻击等特殊情况</li>
+</ul>
+<img src="/2026/07/29/spider-man-2-boss-design/18.png" style="zoom:75%;">
+
+<p>突围的计数不能在Boss尚未完成攻击时立刻重置，否则战斗容易在玩家和Boss之间频繁抢夺控制权。团队会等Boss真正完成一次连招，再认为它已经成功取回自己的回合。</p>
+<img src="/2026/07/29/spider-man-2-boss-design/19.png" style="zoom:85%;">
+
+<p>这里最重要的并不是“防止玩家连续攻击”，而是维持攻防双方的动态平衡。</p>
+<p>玩家每次只能攻击一下，Boss就立刻突围，会让玩家感到自己的招式总被打断；如果Boss始终不突围，又会变成一个不会还手的沙包。</p>
+<p>测试中，Boss承受2次或4次攻击后突围的体验最好：2次大致对应半套连招，4次对应一套完整连招。1次会让玩家觉得Boss反应过快，3次则经常刚好打断连招最后一击。</p>
+<p><strong>好的数值不是看上去最平均的数值，而是符合玩家动作节奏的数值。</strong></p>
+<h2 id="一致性比完全独特更加重要"><a href="#一致性比完全独特更加重要" class="headerlink" title="一致性比完全独特更加重要"></a>一致性比完全独特更加重要</h2><p>Boss设计很容易陷入一个误区：每个Boss都必须拥有完全不同的代码、反应和战斗规则。</p>
+<img src="/2026/07/29/spider-man-2-boss-design/17.png" style="zoom:70%;">
+
+<p>Insomniac最初也进行了大量定制，但测试后发现，Boss之间保持大部分相同、再加入少量差异，玩家体验反而更好。</p>
+<p>原因是玩家需要建立稳定的战斗预期。</p>
+<p>相同颜色的提示应该代表相同的应对方式；成功闪避后应该获得反击机会；高消耗技能命中Boss应该得到对应的受击反馈。玩家理解这些规则后，才能将注意力放在Boss真正独特的地方。</p>
+<p>《漫威蜘蛛侠2》将差异主要放在Boss的核心能力上：</p>
+<p>毒液可以飞行并制造大范围共生体攻击；克莱文会使用钟声眩晕玩家；蜥蜴人会爬墙并重新调整距离；幽灵可以致盲玩家并从阴影中进攻；尖叫会在屋顶和地面之间切换；底片先生则会用负面情绪干扰玩家。</p>
+<p>它们仍然遵守相同的攻防规则，但通过少量核心机制形成了不同的战斗体验。</p>
+<h2 id="对玩家友好不等于降低难度"><a href="#对玩家友好不等于降低难度" class="headerlink" title="对玩家友好不等于降低难度"></a>对玩家友好不等于降低难度</h2><p>很多Boss战的死亡并不是因为玩家没有理解招式，而是Boss将玩家逼到墙角，镜头被遮挡，玩家无法看清攻击。</p>
+<p>因此游戏会标记合适的战斗区域。当Boss和玩家偏离区域、靠近墙角时，Boss会主动重新定位，尽量将战斗拉回能够正常观察和移动的位置。</p>
+<p>这不是在帮助玩家作弊，而是在排除镜头和空间带来的非预期难度。</p>
+<p>游戏还会通过非常明显的颜色、特效和声音提示招架时机，并且让招架在按键后立刻生效。玩家是否成功，取决于有没有识别并抓住时机，而不是角色动画中隐藏的输入延迟。</p>
+<p>清晰与困难并不冲突。</p>
+<p><strong>玩家可以在完全看懂Boss动作的情况下，仍然因为反应、节奏和决策失误而失败。这样的失败才会让人愿意再次挑战。</strong></p>
+<p>难度调整也不应该只修改Boss血量。《漫威蜘蛛侠2》除了调整生命值和伤害倍率，还会改变Boss突围前允许玩家攻击的次数。它直接改变了双方回合的长度，影响远比单纯增加血条更加明显。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>《漫威蜘蛛侠2》的Boss战设计可以归纳成三个关键词：</p>
+<p><strong>清晰、反应、回合。</strong></p>
+<p>清晰，是让玩家能够识别攻击、判断时机和理解自己的失误。</p>
+<p>反应，是让Boss接受玩家能力带来的结果，使每一次攻击和技能都有合理反馈。</p>
+<p>回合，是通过连招、后摇、霸体和突围，在玩家与Boss之间不断交换进攻权。</p>
+<p>从攻击动作到Combo Graph，再到React Graph，这些系统最终都在服务同一个目标：</p>
+<p><strong>让Boss与玩家真正“打起来”。</strong></p>
+<p>一个好的Boss并不是拥有最多招式、最高数值或者最长血条的敌人，而是能够清晰表达自己的意图，对玩家的行为作出回应，并在一来一回的攻防中逐渐改变节奏的对手。</p>
+<p>这也是我认为Boss战最有魅力的地方：</p>
+<p>玩家不是在解一道看过答案就不会再变的题，而是在学习如何与一个越来越熟悉、却仍然需要认真观察的对手交锋。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://gdcvault.com/play/1034367/Refining-the-Rogues-Gallery-Building">GDC Vault：Refining the Rogues Gallery: Building Boss Fights in《Marvel’s Spider-Man 2》</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.playstation.com/en-ae/games/marvels-spider-man-2/whats-new-in-marvels-spider-man-2/">PlayStation：《漫威蜘蛛侠2》的新内容与Boss战介绍</a></li>
+</ul>
+
+    </article>
+    
+    <div class="read-nums">
+      <!-- id 将作为查询条件 -->
+      <span id="2026/07/29/spider-man-2-boss-design/" class="leancloud_visitors" data-flag-title="Your Article Title">
+        <em class="post-meta-item-text">浏览量</em>
+        <i class="leancloud-visitors-count"></i>
+      </span>
+    </div>
+    <div class="comments-intro">
+      <h2>评论区</h2>
+      <p>欢迎你留下宝贵的意见，昵称输入QQ号会显示QQ头像哦~</p>
+    </div>
+    <div id="vcomments" class="vcomments"></div>
+    
+  </div>
+  <div class="article-catelogue">
+    <div class="article-catelogue--wrapper">
+      <div class="catelogue catelogue-1">
+        <h3>目录</h3>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Boss%E6%88%98%E7%9A%84%E6%A0%B8%E5%BF%83%E4%BD%93%E9%AA%8C"><span class="toc-number">2.</span> <span class="toc-text">Boss战的核心体验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%85%E6%99%B0%E6%98%AF%E6%94%BB%E5%87%BB%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%89%8D%E6%8F%90"><span class="toc-number">3.</span> <span class="toc-text">清晰是攻击设计的前提</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E6%91%87%EF%BC%9A%E8%AE%A9%E7%8E%A9%E5%AE%B6%E7%9F%A5%E9%81%93%E6%94%BB%E5%87%BB%E5%B0%86%E8%A6%81%E5%8F%91%E7%94%9F"><span class="toc-number">3.1.</span> <span class="toc-text">前摇：让玩家知道攻击将要发生</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E5%B8%A7%EF%BC%9A%E5%8D%B1%E9%99%A9%E5%BF%85%E9%A1%BB%E8%B6%B3%E5%A4%9F%E6%98%8E%E6%98%BE"><span class="toc-number">3.2.</span> <span class="toc-text">攻击帧：危险必须足够明显</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E6%91%87%EF%BC%9A%E7%8E%A9%E5%AE%B6%E7%9A%84%E5%8F%8D%E5%87%BB%E5%A5%96%E5%8A%B1"><span class="toc-number">3.3.</span> <span class="toc-text">后摇：玩家的反击奖励</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E5%90%8C%E6%94%BB%E5%87%BB%E5%BA%94%E8%AF%A5%E6%B5%8B%E8%AF%95%E4%B8%8D%E5%90%8C%E7%9A%84%E5%BA%94%E5%AF%B9%E6%96%B9%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">不同攻击应该测试不同的应对方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88Boss%E9%9C%80%E8%A6%81%E8%BF%9E%E6%8B%9B"><span class="toc-number">5.</span> <span class="toc-text">为什么Boss需要连招</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%B7%E6%89%8B%E5%92%8C%E7%BB%93%E5%B0%BE%E9%9C%80%E8%A6%81%E6%B8%85%E6%99%B0"><span class="toc-number">5.1.</span> <span class="toc-text">起手和结尾需要清晰</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E6%8B%9B%E5%BA%94%E8%AF%A5%E6%98%AF%E4%B8%80%E7%BB%84%E5%88%86%E6%94%AF%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E5%9B%BA%E5%AE%9A%E7%AD%94%E6%A1%88"><span class="toc-number">6.</span> <span class="toc-text">连招应该是一组分支，而不是固定答案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A9Boss%E5%B1%95%E7%A4%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E6%8B%9B%E5%BC%8F"><span class="toc-number">6.1.</span> <span class="toc-text">让Boss展示自己的招式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8Combo-Graph%E7%BB%84%E7%BB%87%E5%A4%8D%E6%9D%82%E9%80%BB%E8%BE%91"><span class="toc-number">7.</span> <span class="toc-text">用Combo Graph组织复杂逻辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Boss-AI%E5%A6%82%E4%BD%95%E5%86%B3%E5%AE%9A%E4%B8%8B%E4%B8%80%E6%AD%A5%E8%A1%8C%E5%8A%A8"><span class="toc-number">8.</span> <span class="toc-text">Boss AI如何决定下一步行动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%8C%E4%B8%BA%E6%A0%88%EF%BC%9A%E5%B0%86%E5%86%B3%E7%AD%96%E5%92%8C%E5%8A%A8%E4%BD%9C%E5%88%86%E5%BC%80"><span class="toc-number">8.1.</span> <span class="toc-text">行为栈：将决策和动作分开</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%88%E6%8E%92%E9%99%A4%E4%B8%8D%E8%83%BD%E4%BD%BF%E7%94%A8%E7%9A%84%E6%8B%9B%E5%BC%8F"><span class="toc-number">8.2.</span> <span class="toc-text">先排除不能使用的招式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Boss%E8%A6%81%E4%B8%BB%E5%8A%A8%E4%B8%BA%E6%94%BB%E5%87%BB%E5%88%9B%E9%80%A0%E6%9D%A1%E4%BB%B6"><span class="toc-number">8.3.</span> <span class="toc-text">Boss要主动为攻击创造条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AC%E6%9D%A1%E4%BB%B6%E7%AD%9B%E9%80%89%EF%BC%8C%E8%BD%AF%E6%9D%83%E9%87%8D%E9%80%89%E6%8B%A9"><span class="toc-number">8.4.</span> <span class="toc-text">硬条件筛选，软权重选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%98%E6%96%97%E9%98%B6%E6%AE%B5%E7%AE%A1%E7%90%86%E6%8B%9B%E5%BC%8F%E6%B1%A0"><span class="toc-number">8.5.</span> <span class="toc-text">战斗阶段管理招式池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8B%9B%E7%BB%93%E6%9D%9F%E5%90%8E%E6%9B%B4%E6%96%B0AI%E8%AE%B0%E5%BF%86"><span class="toc-number">8.6.</span> <span class="toc-text">连招结束后更新AI记忆</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Boss%E9%9C%80%E8%A6%81%E5%AF%B9%E7%8E%A9%E5%AE%B6%E4%BF%9D%E6%8C%81%E5%8F%8D%E5%BA%94"><span class="toc-number">9.</span> <span class="toc-text">Boss需要对玩家保持反应</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Breakout%EF%BC%9ABoss%E5%A6%82%E4%BD%95%E5%A4%BA%E5%9B%9E%E8%87%AA%E5%B7%B1%E7%9A%84%E5%9B%9E%E5%90%88"><span class="toc-number">10.</span> <span class="toc-text">Breakout：Boss如何夺回自己的回合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E6%AF%94%E5%AE%8C%E5%85%A8%E7%8B%AC%E7%89%B9%E6%9B%B4%E5%8A%A0%E9%87%8D%E8%A6%81"><span class="toc-number">11.</span> <span class="toc-text">一致性比完全独特更加重要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E7%8E%A9%E5%AE%B6%E5%8F%8B%E5%A5%BD%E4%B8%8D%E7%AD%89%E4%BA%8E%E9%99%8D%E4%BD%8E%E9%9A%BE%E5%BA%A6"><span class="toc-number">12.</span> <span class="toc-text">对玩家友好不等于降低难度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">13.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">14.</span> <span class="toc-text">参考</span></a></li></ol>
+      </div>
+      
+        <div class="catelogue catelogue-2">
+           
+          
+            <p>
+              <span>下一篇</span>
+              <a href="/2025/08/17/blog-2/">独具风格的怪物——雷狼龙解析</a>
+            </p>
+          
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // var定义，避免pjax重新进来造成的重复声明错误
+  var config = JSON.parse('{"enable":true,"appId":"Pf8zCXGEH1qsprnWfikVVujL-gzGzoHsz","appKey":"qOqoiUHhH1TGtLRUYURkLRQX","placeholder":"请留下你宝贵的意见吧~","meta":["nick"],"recordIP":true,"visitor":true,"enableQQ":true}')
+  new Valine({
+    el: '#vcomments',
+    appId: config.appId,
+    appKey: config.appKey,
+    placeholder: config.placeholder,
+    meta: config.meta,
+    recordIP: config.recordIP,
+    visitor: config.visitor,
+    enableQQ: config.enableQQ,
+    path: '2026/07/29/spider-man-2-boss-design/'
+  })
+</script>
+
+
+<script>
+  $(document).on('pjax:complete', function() {
+    const tocs = document.querySelector('.toc')
+    const links = tocs ? tocs.querySelectorAll('a') : []
+    links.forEach(link => {
+      link.addEventListener('click', e => {
+        const href = decodeURIComponent(e.href)
+        href.search(/#(.*)/)
+        const id = RegExp.$1
+        const target = document.querySelector('#' + id)
+        const top = target.offsetTop
+        document.documentElement.scrollTo({
+          top: top - 100,
+          behavior: 'smooth'
+        })
+        e.preventDefault()
+      })
+    })
+  })
+</script>
+ 
+
+</div>
+      <div class="main-right-wrapper"><div class="main-right">
+  <div class="main-right--board">
+    <div class="main-right--title">
+      <h5>公告栏</h5>
+      <i class="iconfont icon-gonggao"></i>
+    </div>
+    <div class="main-right--content">
+      这里是lirb的博客网站，会分享一些奇奇怪怪的计算机知识。 
+    </div>
+  </div>
+
+  <div class="operate-items">
+    <div class="operate-item backtop">
+      <i class="iconfont icon-huidaodingbu"></i>
+      <span>回到顶部</span>
+    </div>
+    
+    <div class="operate-item turn-comment hidden">
+      <i class="iconfont icon-pinglun"></i>
+      <span>查看评论</span>
+    </div>
+    
+  </div>
+
+  <div class="main-right--site">
+    <div class="main-right--power">
+      <p>Built with <a href="https://hexo.io/zh-cn/docs/" target="_blank">Hexo</a></p>
+      <p>Theme redesigned by Lirb.</p>
+    </div>
+    <p class="main-right--refer"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/#/Integrated/index"></a> </p>
+  </div>
+</div>
+<script>
+  function setOperateItem () {
+    const reg = /\d{4}\/\d{2}\/\d{2}\/.+/
+    const path = location.pathname
+    const operateDom = document.querySelector('.main-right .operate-items')
+    const commentDom = document.querySelector('.turn-comment')
+    const cateloguDom = document.querySelector('.article-catelogue > .article-catelogue--wrapper');
+
+    if (commentDom) {
+      if (reg.test(path) || path.match(/\/log\/.+/)) {
+        commentDom.classList.remove('hidden')
+        const newDom = operateDom.cloneNode(true);
+        const _backtopDom = newDom.querySelector('.backtop');
+        const _commentDom = newDom.querySelector('.turn-comment');
+        _backtopDom.addEventListener('click', () => backTopEvent());
+        _commentDom.addEventListener('click', () => commentDomEvent());
+        cateloguDom.appendChild(newDom);
+      } else {
+        commentDom.classList.add('hidden')
+      }
+    }
+  }
+
+  setOperateItem()
+  $(document).on('pjax:complete', function() {
+    setOperateItem()
+  })
+
+  document.querySelector('.backtop').addEventListener('click', () => {
+    backTopEvent();
+  })
+  const dom = document.querySelector('.turn-comment')
+  dom && dom.addEventListener('click', () => {
+    commentDomEvent();
+  })
+
+  function backTopEvent() {
+    document.documentElement.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
+
+  function commentDomEvent() {
+    const commentDom = document.querySelector('.comments-intro')
+    if (!commentDom) return
+    const top = commentDom.offsetTop, height = commentDom.offsetHeight
+    document.documentElement.scrollTo({
+      top: top - 2 * height,
+      behavior: 'smooth'
+    })
+  }
+</script>
+</div>
+    </section>
+  </div>
+  <div id="progress" class="progress"></div>
+  <div id="gray" class="gray"></div>
+
+  <script>
+    function initScroll () {
+      document.addEventListener('scroll', () => {
+        const doc = document.documentElement
+        const scrollTop = doc.scrollTop
+        const pageHeight = doc.offsetHeight
+        const clientHeight = doc.clientHeight
+        const ratio = scrollTop / (pageHeight - clientHeight)
+        const progress = document.querySelector('#progress')
+        const avatarImg = document.querySelector('.main-left--avatar')
+        progress.style.width = (100 * ratio) + '%'
+        if (avatarImg) {
+          avatarImg.style.transform = `rotate(${360 * ratio}deg)`
+        }
+      })
+    }
+
+    const rootPath = "/"
+
+    const checkAndSetArticlePageLayout = () => {
+      const path = location.pathname.replace(rootPath, '');
+      if (
+        /^\/?\d{4}\/\d{2}\/\d{2}\/.*/.test(path) ||
+        /^log\/.+/.test(path)
+      ) {
+        $('.main-container, .main-right, .main-right-wrapper').addClass('is-article')
+      } else {
+        $('.main-container, .main-right, .main-right-wrapper').removeClass('is-article')
+      }
+    }
+
+    const gray = "none"
+    const setGrayStyle = () => {
+      if (gray === 'none') {
+        return
+      } else if (gray === 'index') {
+        location.pathname === '/' ? $('#gray').show() : $('#gray').hide()
+      } else if (gray === 'all') {
+        $('#gray').show()
+      }
+    }
+    setGrayStyle()
+
+
+    window.onload = function () {
+      checkAndSetArticlePageLayout()
+      setTimeout(() => {
+        $('#load').slideUp()
+        $('#container').slideToggle()
+        setTimeout(() => {
+          initScroll();
+        }, 500)
+      }, 500)
+    }
+    
+    let status = 0
+    // 对所有链接跳转事件绑定pjax容器container
+    $(document).pjax('a[href^="/"]:not([target="_blank"])', '#main-container', {
+      container: '#main-container',
+      fragment: '#main-container',
+      timeout: 8000
+    })
+
+    $(document).on('pjax:start', function() {
+    })
+    $(document).on('pjax:complete', function() {
+      status = 0
+      $('.main-container').addClass('to-up').on('animationend', function() {
+        $(this).removeClass('to-up')
+      })
+      setGrayStyle()
+      checkAndSetArticlePageLayout()
+    })
+    $(document).on('pjax:popstate', function() {
+      status = -1
+      checkAndSetArticlePageLayout()
+    });
+  </script>
+</body>
+</html>
