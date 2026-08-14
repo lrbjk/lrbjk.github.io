@@ -87,7 +87,7 @@
     document.onpaste=null;
     window.onresize=null;
     document.querySelectorAll('link[href*="styles-v2.css"]').forEach(x=>x.remove());
-    const css=document.createElement('link'); css.rel='stylesheet'; css.href='./styles-v2.css?v=6'; document.head.appendChild(css);
+    const css=document.createElement('link'); css.rel='stylesheet'; css.href='./styles-v2.css?v=7'; document.head.appendChild(css);
     document.body.innerHTML=`<div class="app-shell">
       <header class="topbar"><div class="brand"><span class="brand-mark">CF</span><span>Combat Flow</span></div><button class="project-title" id="projectTitle"></button><div class="save-state" id="saveState"><i></i><span>已保存到本机</span></div><div class="top-actions"><button class="btn ghost" id="undoBtn" title="撤销 Ctrl+Z">↶</button><button class="btn ghost" id="redoBtn" title="重做 Ctrl+Shift+Z">↷</button><button class="btn ghost" id="importBtn">导入</button><button class="btn ghost" id="exportBtn">导出</button><button class="btn primary" id="runBtn">▶ 模拟运行</button><input id="importInput" type="file" accept="application/json,.json" hidden></div></header>
       <div class="workspace"><aside class="left-panel">
